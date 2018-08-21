@@ -50,7 +50,9 @@ public class GridUserController {
     }
 
     @RequestMapping(value = "/account/{accountId}/password", method = RequestMethod.PUT)
-    public ResponseData updatePassword(@PathVariable Long accountId, String old)
+    public ResponseData updatePassword(@PathVariable Long accountId, String old){
+        return null;
+    }
 
     /**
      * 调用此接口进行修改用户信息
