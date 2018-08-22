@@ -45,6 +45,7 @@
             <array>
                 <value>classpath*:UserMapper.xml</value>
                 <value>classpath*:GridUserMapper.xml</value>
+                 <value>classpath*:GridRoleMapper.xml</value>
             </array>
         </property>
     </bean>
