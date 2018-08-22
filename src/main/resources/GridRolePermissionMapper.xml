@@ -3,12 +3,12 @@
 <mapper namespace="dao.GridRolePermissionMapper">
   <resultMap id="BaseResultMap" type="model.GridRolePermission">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="copr_code" jdbcType="VARCHAR" property="coprCode" />
+    <result column="corp_code" jdbcType="VARCHAR" property="coprCode" />
     <result column="role_id" jdbcType="VARCHAR" property="roleId" />
     <result column="permission_id" jdbcType="VARCHAR" property="permissionId" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, copr_code, role_id, permission_id
+    id, corp_code, role_id, permission_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -21,7 +21,7 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="model.GridRolePermission">
-    insert into grid_role_permission (id, copr_code, role_id, 
+    insert into grid_role_permission (id, corp_code, role_id, 
       permission_id)
     values (#{id,jdbcType=INTEGER}, #{coprCode,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}, 
       #{permissionId,jdbcType=VARCHAR})
@@ -33,7 +33,7 @@
         id,
       </if>
       <if test="coprCode != null">
-        copr_code,
+        corp_code,
       </if>
       <if test="roleId != null">
         role_id,
@@ -61,7 +61,7 @@
     update grid_role_permission
     <set>
       <if test="coprCode != null">
-        copr_code = #{coprCode,jdbcType=VARCHAR},
+        corp_code = #{coprCode,jdbcType=VARCHAR},
       </if>
       <if test="roleId != null">
         role_id = #{roleId,jdbcType=VARCHAR},
@@ -74,7 +74,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="model.GridRolePermission">
     update grid_role_permission
-    set copr_code = #{coprCode,jdbcType=VARCHAR},
+    set corp_code = #{coprCode,jdbcType=VARCHAR},
       role_id = #{roleId,jdbcType=VARCHAR},
       permission_id = #{permissionId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}

@@ -3,7 +3,7 @@ package model;
 public class GridRolePermission {
     private Integer id;
 
-    private String coprCode;
+    private String corpCode;
 
     private String roleId;
 
@@ -17,12 +17,12 @@ public class GridRolePermission {
         this.id = id;
     }
 
-    public String getCoprCode() {
-        return coprCode;
+    public String getcorpCode() {
+        return corpCode;
     }
 
-    public void setCoprCode(String coprCode) {
-        this.coprCode = coprCode == null ? null : coprCode.trim();
+    public void setcorpCode(String corpCode) {
+        this.corpCode = corpCode == null ? null : corpCode.trim();
     }
 
     public String getRoleId() {
