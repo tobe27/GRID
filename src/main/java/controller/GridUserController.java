@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import service.GridUserService;
-import sun.security.util.Password;
 import util.Md5Util;
 
 @RestController
@@ -24,13 +23,14 @@ public class GridUserController {
      * @throws Exception
      */
     @RequestMapping(value = "/account",method = RequestMethod.POST)
-    public ResponseData insertGridUser(GridUser gridUser) throws Exception {
+    public ResponseData insertGridUser(GridUser gridUser) {
         String password = Md5Util.createSaltMD5(gridUser.getPassword());
         gridUser.setPassword(password);
-        if (gridUserService.insertSelective(gridUser)) {
+        try {
+            gridUserService.insertSelective(gridUser);
             return new ResponseData().success();
-        }else {
-            return new ResponseData().fail();
+        } catch (Exception e) {
+            return new ResponseData().code(400).message(e.getMessage());
         }
     }
 
@@ -42,20 +42,34 @@ public class GridUserController {
      * @throws Exception
      */
     @RequestMapping(value = "/account/{accountId}/status/{status}", method = RequestMethod.PUT)
-    public ResponseData updateStatus(@PathVariable("accountId") Long accountId, @PathVariable("status") Integer status) throws Exception {
+    public ResponseData updateStatus(@PathVariable("accountId") Long accountId, @PathVariable("status") Integer status){
         GridUser gridUser = new GridUser();
         gridUser.setAccountId(accountId);
         gridUser.setStatus(status);
-        if (gridUserService.updateByPrimaryKeySelective(gridUser)) {
+        try {
+            gridUserService.updateByPrimaryKeySelective(gridUser);
             return new ResponseData().success();
-        }else {
-            return new ResponseData().fail();
+        } catch (Exception e) {
+            return new ResponseData().code(400).message(e.getMessage());
         }
     }
 
+    /**
+     * 调用此接口修改密码
+     * @param accountId
+     * @param oldPassword
+     * @param newPassword
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/account/{accountId}/password", method = RequestMethod.PUT)
-    public ResponseData updatePassword(@PathVariable Long accountId, String oldPassword, String newPassword) throws Exception {
-        GridUser user = gridUserService.selectByPrimaryKey(accountId);
+    public ResponseData updatePassword(@PathVariable Long accountId, String oldPassword, String newPassword){
+        GridUser user;
+        try {
+            user = gridUserService.selectByPrimaryKey(accountId);
+        } catch (Exception e) {
+            return new ResponseData().code(400).message(e.getMessage());
+        }
         if (user == null) {
             return new ResponseData().code(400).message("用户不存在");
         }
@@ -64,9 +78,12 @@ public class GridUserController {
         }
         GridUser gridUser = new GridUser();
         gridUser.setAccountId(accountId);
-        gridUser.setPassword(newPassword);
-
-
+        gridUser.setPassword(Md5Util.createSaltMD5(newPassword));
+        try {
+            gridUserService.updateByPrimaryKeySelective(gridUser);
+        } catch (Exception e) {
+            return new ResponseData().code(400).message(e.getMessage());
+        }
         return new ResponseData().success();
     }
 
@@ -77,12 +94,13 @@ public class GridUserController {
      * @throws Exception
      */
     @RequestMapping(value = "/account/{accountId}", method = RequestMethod.PUT)
-    public ResponseData updateAccount(@PathVariable("accountId") GridUser gridUser) throws Exception {
-        if (gridUserService.updateByPrimaryKeySelective(gridUser)) {
-            return new ResponseData().success();
-        }else {
-            return new ResponseData().fail();
+    public ResponseData updateAccount(@PathVariable("accountId") GridUser gridUser) {
+        try {
+            gridUserService.updateByPrimaryKeySelective(gridUser);
+        } catch (Exception e) {
+            return new ResponseData().code(400).message(e.getMessage());
         }
+        return new ResponseData().success();
     }
 
     /**
@@ -92,8 +110,13 @@ public class GridUserController {
      * @throws Exception
      */
     @RequestMapping(value = "/account/{accountId}", method = RequestMethod.GET)
-    public ResponseData getGridUser(@PathVariable("accountId") Long accountId) throws Exception {
-        GridUser gridUser = gridUserService.selectByPrimaryKey(accountId);
+    public ResponseData getGridUser(@PathVariable("accountId") Long accountId){
+        GridUser gridUser = null;
+        try {
+            gridUser = gridUserService.selectByPrimaryKey(accountId);
+        } catch (Exception e) {
+            return new ResponseData().code(400).message(e.getMessage());
+        }
         if (gridUser == null) {
             return new ResponseData().code(400).message("用户不存在");
         }
