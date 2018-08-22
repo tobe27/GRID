@@ -21,16 +21,16 @@
             <property name="forceBigDecimals" value="false" />
         </javaTypeResolver>
         <!--1.生成Model类存放位置，不用改-->
-        <javaModelGenerator targetPackage="model" targetProject="src/">
+        <javaModelGenerator targetPackage="model" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
         <!--2.生成映射文件存放位置，不用改-->
-        <sqlMapGenerator targetPackage="resources" targetProject="src">
+        <sqlMapGenerator targetPackage="resources" targetProject="src/main">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
         <!--3.生成Dao类存放位置，不用改-->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="dao" targetProject="src">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="dao" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
