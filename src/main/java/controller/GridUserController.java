@@ -51,7 +51,7 @@ public class GridUserController {
 
     @RequestMapping(value = "/account/{accountId}/password", method = RequestMethod.PUT)
     public ResponseData updatePassword(@PathVariable Long accountId, String old){
-        return null;
+        return new ResponseData().success();
     }
 
     /**
