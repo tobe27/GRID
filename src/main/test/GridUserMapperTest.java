@@ -20,9 +20,6 @@ public class GridUserMapperTest {
         gridUser.setPassword("xxx");
         gridUser.setRealName("YYY");
         gridUser.setPhoneNumber(122233L);
-        long now = System.currentTimeMillis();
-        gridUser.setCreatedAt(now);
-        gridUser.setUpdatedAt(now);
         System.out.println(gridUserService.insertSelective(gridUser));
     }
 

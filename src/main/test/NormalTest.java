@@ -16,4 +16,9 @@ public class NormalTest {
             System.out.println("^^^");
 
     }
+
+    @Test
+    public void timeTest() {
+        System.out.println(System.currentTimeMillis());
+    }
 }
