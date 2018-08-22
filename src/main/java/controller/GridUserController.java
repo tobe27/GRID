@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import service.GridUserService;
+import sun.security.util.Password;
+import util.Md5Util;
 
 @RestController
 @RequestMapping("super")
@@ -23,6 +25,8 @@ public class GridUserController {
      */
     @RequestMapping(value = "/account",method = RequestMethod.POST)
     public ResponseData insertGridUser(GridUser gridUser) throws Exception {
+        String password = Md5Util.createSaltMD5(gridUser.getPassword());
+        gridUser.setPassword(password);
         if (gridUserService.insertSelective(gridUser)) {
             return new ResponseData().success();
         }else {
@@ -50,20 +54,30 @@ public class GridUserController {
     }
 
     @RequestMapping(value = "/account/{accountId}/password", method = RequestMethod.PUT)
-    public ResponseData updatePassword(@PathVariable Long accountId, String old){
+    public ResponseData updatePassword(@PathVariable Long accountId, String oldPassword, String newPassword) throws Exception {
+        GridUser user = gridUserService.selectByPrimaryKey(accountId);
+        if (user == null) {
+            return new ResponseData().code(400).message("用户不存在");
+        }
+        if (!Md5Util.createSaltMD5(oldPassword).equals(user.getPassword())) {
+            return new ResponseData().code(400).message("旧密码不正确");
+        }
+        GridUser gridUser = new GridUser();
+        gridUser.setAccountId(accountId);
+        gridUser.setPassword(newPassword);
+
+
         return new ResponseData().success();
     }
 
     /**
      * 调用此接口进行修改用户信息
-     * @param accountId
      * @param gridUser
      * @return
      * @throws Exception
      */
     @RequestMapping(value = "/account/{accountId}", method = RequestMethod.PUT)
-    public ResponseData updateAccount(@PathVariable("accountId") Long accountId, GridUser gridUser) throws Exception {
-        gridUser.setAccountId(accountId);
+    public ResponseData updateAccount(@PathVariable("accountId") GridUser gridUser) throws Exception {
         if (gridUserService.updateByPrimaryKeySelective(gridUser)) {
             return new ResponseData().success();
         }else {
