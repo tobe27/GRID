@@ -24,6 +24,12 @@
   </properties>
 
   <dependencies>
+      <!--PageHelper-->
+      <dependency>
+          <groupId>com.github.pagehelper</groupId>
+          <artifactId>pagehelper</artifactId>
+          <version>5.1.4</version>
+      </dependency>
       <!--Activiti-->
       <dependency>
           <groupId>org.activiti</groupId>

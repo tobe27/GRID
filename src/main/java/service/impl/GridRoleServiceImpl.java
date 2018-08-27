@@ -1,0 +1,144 @@
+package service.impl;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
+import dao.GridRoleMapper;
+import dao.GridRolePermissionMapper;
+import exception.MyException;
+import model.GridRole;
+import model.GridRolePermission;
+import service.GridRoleService;
+@Service
+
+
+public class GridRoleServiceImpl implements GridRoleService {
+	@Autowired
+	private  GridRoleMapper gridRoleMapper;
+	@Autowired
+	private GridRolePermissionMapper  gridRolePermissionMapper;
+
+	
+
+	@Override
+	public boolean insert(GridRole record)throws Exception {
+		try {
+		return gridRoleMapper.insert(record)==1;
+		}catch(Exception e) {
+			  throw new MyException("新增角色出现异常");
+		}
+	}
+    
+	@Override
+	public boolean insertSelective(GridRole record,List<Long> permissionIds) throws Exception{
+		boolean flag=false;
+		record.setCreatedAt(System.currentTimeMillis());
+		try {
+			if(gridRoleMapper.insertSelective(record)==1) {
+				flag=true;
+			}
+			//传入权限id不为空的话创建角色和权限关联
+			if(permissionIds !=null  && permissionIds.size()>0) {
+				
+				GridRolePermission gridRolePermission=new GridRolePermission();
+				gridRolePermission.setRoleId(record.getRoleId());
+				for(Long permissionId:permissionIds) {
+					gridRolePermission.setPermissionId(permissionId);
+					gridRolePermissionMapper.insertSelective(gridRolePermission);
+				}
+			}
+			return flag;
+			}catch(Exception e) {
+				  throw new MyException("新增角色出现异常");
+			}
+		
+		
+	}
+
+	@Override
+	public GridRole selectByPrimaryKey(Long roleId)throws Exception {
+		try {
+			return gridRoleMapper.selectByPrimaryKey(roleId);
+			}catch(Exception e) {
+				  throw new MyException("查询角色出现异常");
+			}
+	
+		
+	}
+
+	@Override
+	public boolean updateByPrimaryKeySelective(GridRole record,List<Long> permissionIds) throws Exception{
+		boolean flag=false;
+		try {
+			record.setUpdatedAt(System.currentTimeMillis());
+			if(gridRoleMapper.updateByPrimaryKeySelective(record)==1) {
+				flag=true;
+			}
+			//传入权限id不为空的话创建角色和权限关联
+			if(permissionIds !=null  && permissionIds.size()>0) {
+				//先删除原有的角色和权限关联
+				gridRolePermissionMapper.deleteByRoleId(record.getRoleId());
+				//再重新插入关联数据
+				GridRolePermission gridRolePermission=new GridRolePermission();
+				gridRolePermission.setRoleId(record.getRoleId());
+				for(Long permissionId:permissionIds) {
+					gridRolePermission.setPermissionId(permissionId);
+					gridRolePermissionMapper.insertSelective(gridRolePermission);
+				}
+			}
+			
+			
+			return flag;
+			}catch(Exception e) {
+				  throw new MyException("修改角色出现异常");
+			}
+	
+		
+	}
+
+	@Override
+	public boolean updateByPrimaryKey(GridRole record)throws Exception {
+		try {
+			return gridRoleMapper.updateByPrimaryKey(record)==1;
+			}catch(Exception e) {
+				  throw new MyException("修改角色出现异常");
+			}
+		
+		
+	}
+
+	@Override
+	public boolean deleteByPrimaryKey(Long roleId) throws Exception {
+		try {
+			return gridRoleMapper.deleteByPrimaryKey(roleId)==1;
+		}catch (Exception e){
+			  throw new MyException("删除角色出现异常");
+		 }
+	}
+
+	@Override
+	public PageInfo<GridRole> getGridRoles(int pageNo,int pageSize, String roleName,String roleScope) throws Exception {
+		
+		PageHelper.startPage(pageNo, pageSize);
+		try {
+			Map<String,Object> map=new HashMap<>();
+			map.put("roleName", roleName);
+			map.put("roleScope", roleScope);
+			List<GridRole> list=gridRoleMapper.getGridRoles(map);
+			PageInfo<GridRole> pageInfo=new PageInfo<>(list);
+			
+			return pageInfo;
+		}catch (Exception e){
+			  throw new MyException("查询角色出现异常");
+		 }
+		
+	}
+
+}

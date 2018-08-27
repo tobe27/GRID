@@ -3,7 +3,7 @@ package exception;
 /**
  * 自定义异常
  */
-public class MyException extends RuntimeException{
+public class MyException extends Exception{
     //异常信息
     private String message;
     //构造器

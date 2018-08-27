@@ -21,20 +21,82 @@
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
   </resultMap>
+    <!--get user with roles-->
+    <resultMap id="userRoleResultMap" type="model.GridUser" extends="BaseResultMap">
+        <collection property="roles" ofType="model.GridRole">
+            <id property="roleId" column="role_id" jdbcType="BIGINT"/>
+            <result property="roleName" column="role_name"/>
+        </collection>
+    </resultMap>
+
 
   <sql id="Base_Column_List">
     account_id, account_name, password, real_name, id_number, sex, phone_number, email, 
     avatar, status, grid_id, corp_code, corp_name, org_code, org_name, created_at, updated_at
   </sql>
 
+    <!--通过主键获取roles-->
+    <select id="getStringRolesByUserPrimaryKey" resultType="String">
+        select gr.role_name
+        from grid_role gr
+        join grid_user_role gur on gur.role_id=gr.role_id
+        WHERE gur.account_id=#{accountId}
+    </select>
+
+    <!--通过主键获取perms-->
+    <select id="getStringPermissionsByUserPrimaryKey"  resultType="String">
+        select  gp.permission_name FROM grid_permission  gp
+        join grid_role_permission  grp on grp.permission_id=gp.permission_id
+        join grid_user_role gur on gur.role_id=grp.role_id
+        where gur.account_id=#{accountId}
+    </select>
 
     <!--查看用户详情-->
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from grid_user
-    where account_id = #{accountId,jdbcType=BIGINT}
+  <select id="getUserByPrimaryKey" parameterType="java.lang.Long" resultMap="userRoleResultMap">
+    select user.*,role.*
+        from grid_user user
+        LEFT join grid_user_role ur on user.account_id = ur.account_id
+        LEFT join grid_role role on role.role_id = ur.role_id
+        WHERE user.account_id=#{accountId}
   </select>
+
+    <select id="getUsersByUniqueIndex" parameterType="model.GridUser"  resultMap="BaseResultMap">
+        select * from grid_user
+        where account_name = #{accountName} or phone_number = #{phoneNumber} or id_number = #{idNumber}
+    </select>
+
+    <!--按条件查询用户列表 with role-->
+    <select id="getUsersByAccountNameOrRealNameOrOrgName" parameterType="model.GridUser"  resultMap="userRoleResultMap">
+        select user.*,role.*
+        from grid_user user
+        LEFT join grid_user_role ur on user.account_id = ur.account_id
+        LEFT join grid_role role on role.role_id = ur.role_id
+        where 1=1
+            <if test="accountName != null">
+                and user.account_name like CONCAT('%',#{accountName},'%')
+            </if>
+            <if test="realName != null">
+                and user.real_name like CONCAT('%',#{realName},'%')
+            </if>
+            <if test="orgName != null">
+                and user.org_name like CONCAT('%',#{orgName},'%')
+            </if>
+    </select>
+
+    <!--byRole查询用户列表 with role-->
+    <select id="getUsersByRole" parameterType="model.GridRole" resultMap="userRoleResultMap">
+        select user.*,role.*
+        from grid_user user
+        LEFT join grid_user_role ur on user.account_id = ur.account_id
+        LEFT join grid_role role on role.role_id = ur.role_id
+        where 1=1
+        <if test="roleName != null">
+            and role.role_name like CONCAT('%',#{roleName},'%')
+        </if>
+        <if test="roleId != null">
+            and role.role_id = #{roleId}
+        </if>
+    </select>
 
     <!--删除用户-->
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
@@ -44,7 +106,7 @@
 
 
     <!--新增用户-->
-  <insert id="insertSelective" parameterType="model.GridUser">
+  <insert id="insertSelective" keyProperty="accountId" useGeneratedKeys="true" parameterType="model.GridUser">
     insert into grid_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="accountId != null">

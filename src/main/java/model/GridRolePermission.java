@@ -1,43 +1,54 @@
 package model;
 
-public class GridRolePermission {
-    private Integer id;
+import java.io.Serializable;
 
-    private String coprCode;
+import lombok.ToString;
 
-    private String roleId;
+@ToString
+public class GridRolePermission implements Serializable{
+	
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3044164911907551652L;
 
-    private String permissionId;
+	private Long id;
 
-    public Integer getId() {
+    private String corpCode;
+
+    private Long roleId;
+
+    private Long permissionId;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getCoprCode() {
-        return coprCode;
+    public String getCorpCode() {
+        return corpCode;
     }
 
-    public void setCoprCode(String coprCode) {
-        this.coprCode = coprCode == null ? null : coprCode.trim();
+    public void setCorpCode(String corpCode) {
+        this.corpCode = corpCode == null ? null : corpCode.trim();
     }
 
-    public String getRoleId() {
+    public Long getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(String roleId) {
-        this.roleId = roleId == null ? null : roleId.trim();
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
-    public String getPermissionId() {
+    public Long getPermissionId() {
         return permissionId;
     }
 
-    public void setPermissionId(String permissionId) {
-        this.permissionId = permissionId == null ? null : permissionId.trim();
+    public void setPermissionId(Long permissionId) {
+        this.permissionId = permissionId;
     }
 }

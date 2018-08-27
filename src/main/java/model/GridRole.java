@@ -1,7 +1,18 @@
 package model;
 
-public class GridRole {
-    private Integer roleId;
+import java.io.Serializable;
+import java.util.List;
+
+import lombok.ToString;
+
+@ToString
+public class GridRole implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4317171768880477614L;
+
+	private Long roleId;
 
     private String roleName;
 
@@ -12,12 +23,14 @@ public class GridRole {
     private Long createdAt;
 
     private Long updatedAt;
+    
+    private List<GridUser> userList;
 
-    public Integer getRoleId() {
+    public Long getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Integer roleId) {
+    public void setRoleId(Long roleId) {
         this.roleId = roleId;
     }
 
@@ -60,4 +73,14 @@ public class GridRole {
     public void setUpdatedAt(Long updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+	public List<GridUser> getUserList() {
+		return userList;
+	}
+
+	public void setUserList(List<GridUser> userList) {
+		this.userList = userList;
+	}
+
+	
 }

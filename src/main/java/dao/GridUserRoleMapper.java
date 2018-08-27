@@ -1,15 +1,18 @@
 package dao;
 
+import java.util.Map;
+
 import model.GridUserRole;
 
 public interface GridUserRoleMapper {
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
+    int deleteByUserRole(Map<String,Object> map);
 
     int insert(GridUserRole record);
 
     int insertSelective(GridUserRole record);
 
-    GridUserRole selectByPrimaryKey(Integer id);
+    GridUserRole selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(GridUserRole record);
 

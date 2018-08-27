@@ -3,6 +3,7 @@ import model.ResponseData;
 import model.User;
 import org.junit.Test;
 import util.JwtUtil;
+import util.Md5Util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class JWTTest {
+
     @Test
     public void jwt(){
         Map<String, Object> map = new HashMap<>();

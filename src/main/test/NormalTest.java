@@ -7,6 +7,7 @@ public class NormalTest {
         GridUser gridUser = new GridUser();
         gridUser.setPassword("");
         String psw = gridUser.getPassword();
+        System.out.println(gridUser);
         if (psw == null)
             System.out.println("null");
         else if (psw.isEmpty())

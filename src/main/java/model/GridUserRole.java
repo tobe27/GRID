@@ -1,19 +1,30 @@
 package model;
 
-public class GridUserRole {
-    private Integer id;
+import java.io.Serializable;
+
+import lombok.ToString;
+
+@ToString
+public class GridUserRole implements Serializable{
+	
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6422109493269521345L;
+
+	private Long id;
 
     private String corpCode;
 
     private Long accountId;
 
-    private String roleId;
+    private Long roleId;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -33,11 +44,11 @@ public class GridUserRole {
         this.accountId = accountId;
     }
 
-    public String getRoleId() {
+    public Long getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(String roleId) {
-        this.roleId = roleId == null ? null : roleId.trim();
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 }

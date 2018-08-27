@@ -1,7 +1,18 @@
 package model;
 
-public class GridPermission {
-    private Integer permissionId;
+import java.io.Serializable;
+
+import lombok.ToString;
+
+@ToString
+public class GridPermission implements Serializable{
+
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3048537483461049908L;
+
+	private Long permissionId;
 
     private String sysCode;
 
@@ -15,11 +26,11 @@ public class GridPermission {
 
     private Long updatedAt;
 
-    public Integer getPermissionId() {
+    public Long getPermissionId() {
         return permissionId;
     }
 
-    public void setPermissionId(Integer permissionId) {
+    public void setPermissionId(Long permissionId) {
         this.permissionId = permissionId;
     }
 
