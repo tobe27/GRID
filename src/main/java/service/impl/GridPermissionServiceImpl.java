@@ -12,8 +12,10 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import dao.GridPermissionMapper;
+import dao.GridRolePermissionMapper;
 import exception.MyException;
 import model.GridPermission;
+import model.GridRolePermission;
 import service.GridPermissionService;
 @Service
 public class GridPermissionServiceImpl implements GridPermissionService {
@@ -22,12 +24,29 @@ public class GridPermissionServiceImpl implements GridPermissionService {
 	
   @Autowired
   private GridPermissionMapper gridPermissionMapper;
+  @Autowired
+  private GridRolePermissionMapper gridRolePermissionMapper;
   
-  
+  /**
+   * 根据key删除权限
+   *
+   * @param  permissionId
+   * @return 
+   * @throws Exception
+   */
   
 	@Override
 	public boolean deleteByPrimaryKey(Long permissionId) throws Exception{
+		//删除权限前先查看系统中有没有角色关联当前的权限
+		GridRolePermission gridRolePermission=new GridRolePermission();
+		gridRolePermission.setPermissionId(permissionId);
+		List<GridRolePermission> list= gridRolePermissionMapper.getGridRolePermissionsByPermissionId(gridRolePermission);
+		if(list!=null && list.size()>0) {
+			 throw new MyException("该权限关联了角色，请先解除角色关联再删除");
+		}
+		
 		try {
+			
 			return gridPermissionMapper.deleteByPrimaryKey(permissionId)==1;
 		}catch (Exception e){
 			  throw new MyException("删除权限出现异常");
@@ -36,6 +55,15 @@ public class GridPermissionServiceImpl implements GridPermissionService {
 		
 	}
 
+	
+	
+	/**
+	   * 新增权限（全参数）
+	   *
+	   * @param  GridPermission
+	   * @return 
+	   * @throws Exception
+	   */
 	@Override
 	public boolean insert(GridPermission record) throws Exception{
 		try {
@@ -48,6 +76,14 @@ public class GridPermissionServiceImpl implements GridPermissionService {
 		
 	}
 
+	
+	/**
+	   * 新增权限（参数可为空）
+	   *
+	   * @param  GridPermission
+	   * @return 
+	   * @throws Exception
+	   */
 	@Override
 	public boolean insertSelective(GridPermission record)throws Exception {
 		record.setCreatedAt(System.currentTimeMillis());
@@ -61,6 +97,15 @@ public class GridPermissionServiceImpl implements GridPermissionService {
 		
 	}
 
+	
+	
+	/**
+	   * 根据主键查询
+	   *
+	   * @param  permissionId
+	   * @return  gridPermission
+	   * @throws Exception
+	   */
 	@Override
 	public GridPermission selectByPrimaryKey(Long permissionId)throws Exception {
 		try {
@@ -71,6 +116,16 @@ public class GridPermissionServiceImpl implements GridPermissionService {
 	
 	
 	}
+	
+	
+	
+	/**
+	   * 修改权限（参数可为空）
+	   *
+	   * @param  permissionId
+	   * @return  
+	   * @throws Exception
+	   */
 
 	@Override
 	public boolean updateByPrimaryKeySelective(GridPermission record)throws Exception {
@@ -84,6 +139,16 @@ public class GridPermissionServiceImpl implements GridPermissionService {
 		
 	}
 
+	
+	
+	
+	/**
+	   * 修改权限（全参数）
+	   *
+	   * @param  GridPermission
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public boolean updateByPrimaryKey(GridPermission record)throws Exception {
 		try {
@@ -95,7 +160,14 @@ public class GridPermissionServiceImpl implements GridPermissionService {
 	
 		
 	}
-
+    
+	/**
+	   * 分页和条件查询权限
+	   *
+	   * @param  pageNo,pageSize,permissionName
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public PageInfo<GridPermission> getGridPermissions(int pageNo, int pageSize, String permissionName)
 			throws Exception {

@@ -24,7 +24,7 @@ public class GridRole implements Serializable{
 
     private Long updatedAt;
     
-    private List<GridUser> userList;
+    private List<GridPermission> permissionList;
 
     public Long getRoleId() {
         return roleId;
@@ -74,12 +74,12 @@ public class GridRole implements Serializable{
         this.updatedAt = updatedAt;
     }
 
-	public List<GridUser> getUserList() {
-		return userList;
+	public List<GridPermission> getPermissionList() {
+		return permissionList;
 	}
 
-	public void setUserList(List<GridUser> userList) {
-		this.userList = userList;
+	public void setUserList(List<GridPermission> permissionList) {
+		this.permissionList = permissionList;
 	}
 
 	

@@ -26,9 +26,9 @@ public class GridUser implements Serializable {
 
     private String avatar;
 
-    private Integer status;
+    private String qrCode;
 
-    private Long gridId;
+    private Integer status;
 
     private String corpCode;
 

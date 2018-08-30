@@ -18,6 +18,7 @@ public class GridUserMapperTest {
     GridUserService gridUserService;
     @Resource
     GridUserMapper gridUserMapper;
+
     @Test
     public void returnId(){
         GridUser user = new GridUser();
@@ -52,12 +53,17 @@ public class GridUserMapperTest {
     @Test
     public void selectTest() throws Exception {
         GridUser gridUser = new GridUser();
-        gridUser.setAccountName("b");
-        gridUser.setRealName("YY");
+        gridUser.setAccountName("a");
+        gridUser.setRealName("1");
+        System.out.println(gridUser);
 //        List<GridUser> users = gridUserMapper.getUsersByAccountNameOrRealNameOrOrgName(gridUser);
 //        List<GridUser> userList = gridUserMapper.getUsersByRoleId(7L);
         GridRole role = new GridRole();
-        List<GridUser> userList = gridUserMapper.getUsersByRole(role);
+        role.setRoleId(7L);
+        List<GridRole> roles = new ArrayList<>();
+        roles.add(role);
+        gridUser.setRoles(roles);
+        List<GridUser> userList = gridUserMapper.getUsersByAccountNameOrRealNameOrOrgName(gridUser);
         System.out.println(JSON.toJSONString(userList,true));
     }
 

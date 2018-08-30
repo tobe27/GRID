@@ -24,6 +24,7 @@ public class GridUserController {
     GridUserRoleService userRoleService;
 
     private Logger logger = LoggerFactory.getLogger(GridUserController.class);
+
     /**
      * 调用此接口进行新增用户
      * @param gridUser 用户实体类
@@ -49,7 +50,7 @@ public class GridUserController {
 
         try {
             //查询数据库校验用户名是否存在
-            if (userService.getUsersByUniqueIndex(gridUser)){
+            if (userService.getUsersByUniqueIndex(gridUser) != null){
                 return new ResponseData().code(400).message("用户名或者号码或者身份证号码已被注册");
             }
 
@@ -64,6 +65,7 @@ public class GridUserController {
                 userRoleService.insert(userRole);
             }
             return new ResponseData().success();
+
         } catch (Exception e) {
             return new ResponseData().code(400).message(e.getMessage());
         }

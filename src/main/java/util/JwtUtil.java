@@ -19,6 +19,8 @@ public class JwtUtil {
     private static byte[] signingSecretBytes = DatatypeConverter.parseBase64Binary(SIGNING_KEY); //转换成Base64编码
     private static final long EXP = 60*60*1000; //有效期为60分钟
 
+    private JwtUtil(){}
+
     /**
      * 生成token，默认60分钟
      * @param payload 载荷
@@ -79,4 +81,5 @@ public class JwtUtil {
             return false;
         }
     }
+
 }

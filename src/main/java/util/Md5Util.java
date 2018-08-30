@@ -5,6 +5,8 @@ import org.apache.shiro.crypto.hash.Md5Hash;
 public class Md5Util {
     private static final String SALT = "www.yzsbank.com";
 
+    private Md5Util(){}
+
     /**
      * 生成加盐MD5
      * @param value 初始值

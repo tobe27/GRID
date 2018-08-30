@@ -15,20 +15,30 @@ public class ResponseData extends LinkedHashMap<String, Object> {
     }
 
     public ResponseData success(){
+        return this.success("success");
+    }
+    public ResponseData success(Object message){
         this.put("code",200);
-        this.put("message", "success");
+        this.put("message", message);
         return this;
     }
 
     public ResponseData fail(){
+        return this.fail("fail");
+    }
+
+    public ResponseData fail(Object message) {
         this.put("code",400);
-        this.put("message", "fail");
+        this.put("message", message);
         return this;
     }
 
-    public ResponseData unauthorized(){
+    public ResponseData unauthorized() {
+        return this.unauthorized("the current user is unauthorized");
+    }
+    public ResponseData unauthorized(Object message){
         this.put("code",401);
-        this.put("message", "the current user is unauthorized");
+        this.put("message", message);
         return this;
     }
 

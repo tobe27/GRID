@@ -12,8 +12,8 @@
     <result column="phone_number" jdbcType="BIGINT" property="phoneNumber" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="qr_code" jdbcType="VARCHAR" property="qrCode" />
     <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="grid_id" jdbcType="BIGINT" property="gridId" />
     <result column="corp_code" jdbcType="VARCHAR" property="corpCode" />
     <result column="corp_name" jdbcType="VARCHAR" property="corpName" />
     <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
@@ -32,7 +32,7 @@
 
   <sql id="Base_Column_List">
     account_id, account_name, password, real_name, id_number, sex, phone_number, email, 
-    avatar, status, grid_id, corp_code, corp_name, org_code, org_name, created_at, updated_at
+    avatar,qr_code, status, corp_code, corp_name, org_code, org_name, created_at, updated_at
   </sql>
 
     <!--通过主键获取roles-->
@@ -136,11 +136,11 @@
       <if test="avatar != null">
         avatar,
       </if>
+      <if test="qrCode != null">
+        qr_code,
+      </if>
       <if test="status != null">
         status,
-      </if>
-      <if test="gridId != null">
-        grid_id,
       </if>
       <if test="corpCode != null">
         corp_code,
@@ -189,11 +189,11 @@
       <if test="avatar != null">
         #{avatar,jdbcType=VARCHAR},
       </if>
+      <if test="qrCode != null">
+        #{qrCode,jdbcType=VARCHAR},
+      </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
-      </if>
-      <if test="gridId != null">
-        #{gridId,jdbcType=BIGINT},
       </if>
       <if test="corpCode != null">
         #{corpCode,jdbcType=VARCHAR},
@@ -244,11 +244,11 @@
       <if test="avatar != null">
         avatar = #{avatar,jdbcType=VARCHAR},
       </if>
+      <if test="qrCode != null">
+        qr_code = #{qrCode,jdbcType=VARCHAR},
+      </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="gridId != null">
-        grid_id = #{gridId,jdbcType=BIGINT},
       </if>
       <if test="corpCode != null">
         corp_code = #{corpCode,jdbcType=VARCHAR},

@@ -20,6 +20,10 @@
     delete from grid_user_role
     where id = #{id,jdbcType=BIGINT}
   </delete>
+  <select id="getGridUserRole" parameterType="model.GridUserRole" resultMap="BaseResultMap">
+  select gur.id,gur.corp_code,gur.account_id,gur.role_id  from grid_user_role   gur  where gur.role_id = #{roleId}
+  
+  </select>
   
   
   <delete id="deleteByUserRole" parameterType="model.GridUserRole">

@@ -12,9 +12,11 @@ import com.github.pagehelper.PageInfo;
 
 import dao.GridRoleMapper;
 import dao.GridRolePermissionMapper;
+import dao.GridUserRoleMapper;
 import exception.MyException;
 import model.GridRole;
 import model.GridRolePermission;
+import model.GridUserRole;
 import service.GridRoleService;
 @Service
 
@@ -24,9 +26,17 @@ public class GridRoleServiceImpl implements GridRoleService {
 	private  GridRoleMapper gridRoleMapper;
 	@Autowired
 	private GridRolePermissionMapper  gridRolePermissionMapper;
+	@Autowired
+	private GridUserRoleMapper gridUserRoleMapper;
 
 	
-
+	/**
+	   * 新增角色（全参数）
+	   *
+	   * @param GridRole
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public boolean insert(GridRole record)throws Exception {
 		try {
@@ -36,6 +46,14 @@ public class GridRoleServiceImpl implements GridRoleService {
 		}
 	}
     
+	
+	/**
+	   * 新增角色（参数可为空）
+	   *
+	   * @param GridRole
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public boolean insertSelective(GridRole record,List<Long> permissionIds) throws Exception{
 		boolean flag=false;
@@ -62,6 +80,15 @@ public class GridRoleServiceImpl implements GridRoleService {
 		
 	}
 
+	
+	
+	/**
+	   * 根据id查询角色
+	   *
+	   * @param roleId
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public GridRole selectByPrimaryKey(Long roleId)throws Exception {
 		try {
@@ -73,6 +100,16 @@ public class GridRoleServiceImpl implements GridRoleService {
 		
 	}
 
+	
+	
+	
+	/**
+	   * 修改权限（参数可为空）
+	   *
+	   * @param GridRole
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public boolean updateByPrimaryKeySelective(GridRole record,List<Long> permissionIds) throws Exception{
 		boolean flag=false;
@@ -103,6 +140,15 @@ public class GridRoleServiceImpl implements GridRoleService {
 		
 	}
 
+	
+	
+	/**
+	   * 修改权限（全参数）
+	   *
+	   * @param GridRole
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public boolean updateByPrimaryKey(GridRole record)throws Exception {
 		try {
@@ -114,15 +160,44 @@ public class GridRoleServiceImpl implements GridRoleService {
 		
 	}
 
+	
+	
+	
+	/**
+	   * 根据id删除角色
+	   *
+	   * @param roleId
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public boolean deleteByPrimaryKey(Long roleId) throws Exception {
+		//删除前查看下系统中有没有用户是关联了当前的角色的
+		GridUserRole gridUserRole=new GridUserRole();
+		gridUserRole.setRoleId(roleId);
+		List<GridUserRole> list=gridUserRoleMapper.getGridUserRole(gridUserRole);
+		
+		if(list!=null && list.size()>0) {
+			throw new MyException("该角色关联了用户，请先解除关联再删除");
+		}
 		try {
+			
 			return gridRoleMapper.deleteByPrimaryKey(roleId)==1;
 		}catch (Exception e){
+			
 			  throw new MyException("删除角色出现异常");
 		 }
 	}
 
+	
+	
+	/**
+	   * 分页和条件获取角色列表
+	   *
+	   * @param pageNo,pageSize,roleName,roleScope
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public PageInfo<GridRole> getGridRoles(int pageNo,int pageSize, String roleName,String roleScope) throws Exception {
 		

@@ -20,6 +20,7 @@ public class NormalTest {
 
     @Test
     public void timeTest() {
+
         System.out.println(System.currentTimeMillis());
     }
 }

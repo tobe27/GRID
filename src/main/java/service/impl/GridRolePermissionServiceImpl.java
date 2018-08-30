@@ -14,6 +14,14 @@ public class GridRolePermissionServiceImpl implements GridRolePermissionService 
    private GridRolePermissionMapper gridRolePermissionMapper;
    
    
+	
+	/**
+	   *根据自增主键删除关联
+	   *
+	   * @param  id
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public boolean deleteByPrimaryKey(Long id) throws Exception {
 		try {
@@ -25,6 +33,15 @@ public class GridRolePermissionServiceImpl implements GridRolePermissionService 
 		
 	}
 
+	
+	
+	/**
+	   *插入角色和权限关联（全参数）
+	   *
+	   * @param  GridRolePermission
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public boolean insert(GridRolePermission record) throws Exception {
    try {		
@@ -34,6 +51,15 @@ public class GridRolePermissionServiceImpl implements GridRolePermissionService 
 		}
 	}
 
+	
+	/**
+	   *插入角色和权限关联（参数可为空）
+	   *
+	   * @param  GridRolePermission
+	   * @return  
+	   * @throws Exception
+	   */
+	
 	@Override
 	public boolean insertSelective(GridRolePermission record) throws Exception {
 		   try {		
@@ -42,7 +68,15 @@ public class GridRolePermissionServiceImpl implements GridRolePermissionService 
 				throw new MyException("插入数据操作出现异常");
 			}
 	}
-
+	
+	
+	/**
+	   *根据主键删除关联
+	   *
+	   * @param  id
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public GridRolePermission selectByPrimaryKey(Long id) throws Exception {
 		   try {		
@@ -51,6 +85,15 @@ public class GridRolePermissionServiceImpl implements GridRolePermissionService 
 				throw new MyException("查询数据出现异常");
 			}
 	}
+	
+	
+	/**
+	   *修改关联（参数可为空）
+	   *
+	   * @param  id
+	   * @return  
+	   * @throws Exception
+	   */
 
 	@Override
 	public boolean updateByPrimaryKeySelective(GridRolePermission record) throws Exception {
@@ -61,6 +104,14 @@ public class GridRolePermissionServiceImpl implements GridRolePermissionService 
 			}
 	}
 
+	
+	/**
+	   *修改关联（全参数）
+	   *
+	   * @param  id
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public boolean updateByPrimaryKey(GridRolePermission record) throws Exception {
 		try {		

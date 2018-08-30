@@ -27,6 +27,11 @@
     where role_id = #{id,jdbcType=BIGINT}
   </delete>
   
+  <select  id="getGridRolePermissionsByPermissionId" parameterType="model.GridRolePermission" resultMap="BaseResultMap">
+  select grp.id,grp.corp_code,grp.role_id,grp.permission_id    from grid_role_permission as grp where grp.permission_id =#{permissionId}
+  </select>
+  
+  
   <insert id="insert" parameterType="model.GridRolePermission">
     insert into grid_role_permission (id, corp_code, role_id, 
       permission_id)

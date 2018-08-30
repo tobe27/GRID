@@ -121,7 +121,7 @@ public class GridRoleController {
 	            return new ResponseData().code(400).message("查询角色信息出错");
 	        }
 	        
-	      
+	     
 			return new ResponseData().success().data(pageInfo.getList()).result("count", pageInfo.getTotal());
 		  
 	  }

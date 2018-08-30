@@ -1,5 +1,7 @@
 package dao;
 
+import java.util.List;
+
 import model.GridRolePermission;
 
 public interface GridRolePermissionMapper {
@@ -15,4 +17,5 @@ public interface GridRolePermissionMapper {
     int updateByPrimaryKeySelective(GridRolePermission record);
 
     int updateByPrimaryKey(GridRolePermission record);
+    List<GridRolePermission> getGridRolePermissionsByPermissionId(GridRolePermission record);
 }

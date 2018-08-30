@@ -16,6 +16,15 @@ public class GridUserRoleServiceImpl implements GridUserRoleService {
 	@Autowired
 	private GridUserRoleMapper gridUserRoleMapper;
 
+	
+	
+	/**
+	   * 根据id删除关联
+	   *
+	   * @param id
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public boolean deleteByPrimaryKey(Long id) throws Exception {
 		try {
@@ -25,6 +34,16 @@ public class GridUserRoleServiceImpl implements GridUserRoleService {
 		 }
 	}
 
+	
+	
+
+	/**
+	   * 插入用户角色关联（全参数）
+	   *
+	   * @param GridUserRole
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public boolean insert(GridUserRole record) throws Exception {
 		try {
@@ -34,6 +53,16 @@ public class GridUserRoleServiceImpl implements GridUserRoleService {
 		 }
 	}
 
+	
+	
+
+	/**
+	   * 插入用户角色关联（参数可为空）
+	   *
+	   * @param GridUserRole
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public boolean insertSelective(GridUserRole record) throws Exception {
 		try {
@@ -42,7 +71,17 @@ public class GridUserRoleServiceImpl implements GridUserRoleService {
 			  throw new MyException("插入数据操作出现异常");
 		 }
 	}
-
+    
+	
+	
+	
+	/**
+	   * 根据id查询关联
+	   *
+	   * @param id
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public GridUserRole selectByPrimaryKey(Long id) throws Exception {
 		try {
@@ -52,6 +91,16 @@ public class GridUserRoleServiceImpl implements GridUserRoleService {
 		 }
 	}
 
+	
+	
+
+	/**
+	   * 修改用户角色关联（参数可为空）
+	   *
+	   * @param GridUserRole
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public boolean updateByPrimaryKeySelective(GridUserRole record) throws Exception {
 		try {
@@ -61,6 +110,15 @@ public class GridUserRoleServiceImpl implements GridUserRoleService {
 		 }
 	}
 
+	
+	
+	/**
+	   * 修改用户角色关联（全参数）
+	   *
+	   * @param GridUserRole
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public boolean updateByPrimaryKey(GridUserRole record) throws Exception {
 		try {
@@ -70,6 +128,15 @@ public class GridUserRoleServiceImpl implements GridUserRoleService {
 		 }
 	}
 
+	
+	
+	/**
+	   * 删除用户的所有关联
+	   *
+	   * @param accountId
+	   * @return  
+	   * @throws Exception
+	   */
 	@Override
 	public boolean deleteByUser( Long accountId) throws Exception {
 		Map<String,Object> map=new HashMap<>();

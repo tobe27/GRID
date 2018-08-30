@@ -9,28 +9,18 @@
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
-    <collection property="userList" column="role_id"   ofType="model.GridUser" select="getGridUsers" >
+    <collection property="permissionList" column="role_id"   ofType="model.GridPermission" select="getGridPermissions" >
     
 		</collection>
   </resultMap>
   
   
-  <resultMap id="GridUserMap1" type="model.GridUser">  
-    <id column="account_id" jdbcType="BIGINT" property="accountId" />
-    <result column="account_name" jdbcType="VARCHAR" property="accountName" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="real_name" jdbcType="VARCHAR" property="realName" />
-    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
-    <result column="sex" jdbcType="INTEGER" property="sex" />
-    <result column="phone_number" jdbcType="BIGINT" property="phoneNumber" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="grid_id" jdbcType="BIGINT" property="gridId" />
-    <result column="corp_code" jdbcType="VARCHAR" property="corpCode" />
-    <result column="corp_name" jdbcType="VARCHAR" property="corpName" />
-    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
-    <result column="org_name" jdbcType="VARCHAR" property="orgName" />
+  <resultMap id="GridPermissionMap" type="model.GridPermission">  
+    <id column="permission_id" jdbcType="BIGINT" property="permissionId" />
+    <result column="sys_code" jdbcType="VARCHAR" property="sysCode" />
+    <result column="permission_name" jdbcType="VARCHAR" property="permissionName" />
+    <result column="permission_type" jdbcType="VARCHAR" property="permissionType" />
+    <result column="permission_url" jdbcType="VARCHAR" property="permissionUrl" />
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
   </resultMap>  
@@ -52,9 +42,9 @@
   </if>  
   </select>
   
-  <select id="getGridUsers" parameterType="java.lang.Long" resultMap="GridUserMap1">
+  <select id="getGridPermissions" parameterType="java.lang.Long" resultMap="GridPermissionMap">
   
-  select gu.* from grid_user gu LEFT JOIN  grid_user_role gur  on gu.account_id=gur.account_id WHERE gur.role_id=#{role_id} and gu.status !=2
+  select gp.* from grid_permission gp LEFT JOIN  grid_role_permission grp on gp.permission_id=grp.permission_id WHERE grp.role_id=#{role_id} 
   
   
   </select>

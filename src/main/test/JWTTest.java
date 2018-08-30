@@ -1,9 +1,7 @@
 import com.alibaba.fastjson.JSON;
 import model.ResponseData;
-import model.User;
 import org.junit.Test;
 import util.JwtUtil;
-import util.Md5Util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +15,7 @@ public class JWTTest {
         Map<String, Object> map = new HashMap<>();
         map.put("name", "name");
         String token = JwtUtil.createToken(map,1000);
-        System.out.println(token);
+        System.out.println(token+":length:"+token.length());
         System.out.println("************************");
         System.out.println("************************");
         System.out.println(JSON.toJSONString(JwtUtil.parseToken(token)));
@@ -35,23 +33,6 @@ public class JWTTest {
         String role = "userx";
         System.out.println(url);
         System.out.println(url.indexOf(role));
-    }
-
-    @Test
-    public void resultmMapTest() {
-        User user = new User();
-        user.setName("www");
-        user.setPassword("yzs");
-        user.setRole("com");
-        User user1 = new User();
-        user1.setName("www");
-        user1.setPassword("yzs");
-        user1.setRole("com");
-        List list = new ArrayList();
-        list.add(user);
-        list.add(user1);
-        ResponseData responseData = new ResponseData();
-        System.out.println(JSON.toJSONString(responseData.code(200).message("success").data(list),true));
     }
 
 }

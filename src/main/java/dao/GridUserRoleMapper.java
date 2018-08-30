@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.List;
 import java.util.Map;
 
 import model.GridUserRole;
@@ -17,4 +18,5 @@ public interface GridUserRoleMapper {
     int updateByPrimaryKeySelective(GridUserRole record);
 
     int updateByPrimaryKey(GridUserRole record);
+    List<GridUserRole> getGridUserRole(GridUserRole record);
 }
