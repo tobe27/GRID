@@ -22,9 +22,8 @@ public class GridUserMapperTest {
     @Test
     public void returnId(){
         GridUser user = new GridUser();
-        long now = System.currentTimeMillis();
         user.setPassword("11111");
-        gridUserMapper.insertSelective(user);
+        System.out.println(gridUserMapper.insertSelective(user));
         System.out.println(user.getAccountId());
     }
 

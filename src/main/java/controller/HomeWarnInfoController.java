@@ -20,13 +20,10 @@ public class HomeWarnInfoController {
      */
     @RequestMapping(value = "/president/home/warn", method = RequestMethod.GET)
     public ResponseData listWarnInfoForPresident(HomeWarnInfo info) {
-        if (info.getAmount() == null || info.getAmountType() == null) {
-            return new ResponseData().code(400).message("金额或者存贷款类型不能为空");
-        }
         try {
             return new ResponseData().success().data(infoService.listInfo(info));
         } catch (Exception e) {
-            return new ResponseData().code(400).message(e.getMessage());
+            return new ResponseData().fail(e.getMessage());
         }
     }
 
@@ -38,13 +35,10 @@ public class HomeWarnInfoController {
      */
     @RequestMapping(value = "/middle/home/warn", method = RequestMethod.GET)
     public ResponseData listWarnInfoForMid(HomeWarnInfo info) {
-        if (info.getAmount() == null || info.getAmountType() == null) {
-            return new ResponseData().code(400).message("金额或者存贷款类型不能为空");
-        }
         try {
             return new ResponseData().success().data(infoService.listInfo(info));
         } catch (Exception e) {
-            return new ResponseData().code(400).message(e.getMessage());
+            return new ResponseData().fail(e.getMessage());
         }
     }
 
@@ -55,16 +49,13 @@ public class HomeWarnInfoController {
      */
     @RequestMapping(value = "/basic/home/warn", method = RequestMethod.GET)
     public ResponseData listWarnInfoForBasic(HomeWarnInfo info) {
-        if (info.getAmount() == null || info.getAmountType() == null) {
-            return new ResponseData().code(400).message("金额或者存贷款类型不能为空");
-        }
         if (info.getOrgCode() == null || info.getOrgLevel() == null) {
-            return new ResponseData().code(400).message("机构代码或者机构级别不能为空");
+            return new ResponseData().fail("机构代码或者机构级别不能为空");
         }
         try {
             return new ResponseData().success().data(infoService.listInfo(info));
         } catch (Exception e) {
-            return new ResponseData().code(400).message(e.getMessage());
+            return new ResponseData().fail(e.getMessage());
         }
     }
 

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.GridUserMapper">
+
+  <resultMap id="BaseResultMap" type="model.GridUser">
+    <id column="account_id" jdbcType="BIGINT" property="accountId" />
+    <result column="account_name" jdbcType="VARCHAR" property="accountName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="phone_number" jdbcType="BIGINT" property="phoneNumber" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="qr_code" jdbcType="VARCHAR" property="qrCode" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="corp_code" jdbcType="VARCHAR" property="corpCode" />
+    <result column="corp_name" jdbcType="VARCHAR" property="corpName" />
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="org_name" jdbcType="VARCHAR" property="orgName" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+  </resultMap>
+    <!--get user with roles-->
+    <resultMap id="userRoleResultMap" type="model.GridUser" extends="BaseResultMap">
+        <collection property="roles" ofType="model.GridRole">
+            <id property="roleId" column="role_id" jdbcType="BIGINT"/>
+            <result property="roleName" column="role_name"/>
+        </collection>
+    </resultMap>
+
+
+  <sql id="Base_Column_List">
+    account_id, account_name, password, real_name, id_number, sex, phone_number, email, 
+    avatar,qr_code, status, corp_code, corp_name, org_code, org_name, created_at, updated_at
+  </sql>
+
+    <!--通过主键获取roles-->
+    <select id="getStringRolesByUserPrimaryKey" resultType="String">
+        select gr.role_name
+        from grid_role gr
+        join grid_user_role gur on gur.role_id=gr.role_id
+        WHERE gur.account_id=#{accountId}
+    </select>
+
+    <!--通过主键获取perms-->
+    <select id="getStringPermissionsByUserPrimaryKey"  resultType="String">
+        select  gp.permission_name FROM grid_permission  gp
+        join grid_role_permission  grp on grp.permission_id=gp.permission_id
+        join grid_user_role gur on gur.role_id=grp.role_id
+        where gur.account_id=#{accountId}
+    </select>
+
+    <!--查看用户详情-->
+  <select id="getUserByPrimaryKey" parameterType="java.lang.Long" resultMap="userRoleResultMap">
+    select user.*,role.*
+        from grid_user user
+        LEFT join grid_user_role ur on user.account_id = ur.account_id
+        LEFT join grid_role role on role.role_id = ur.role_id
+        WHERE user.account_id=#{accountId}
+  </select>
+
+    <select id="getUsersByUniqueIndex" parameterType="model.GridUser"  resultMap="BaseResultMap">
+        select * from grid_user
+        where account_name = #{accountName} or phone_number = #{phoneNumber} or id_number = #{idNumber}
+    </select>
+
+    <!--按条件查询用户列表 with role-->
+    <select id="getUsersByAccountNameOrRealNameOrOrgName" parameterType="model.GridUser"  resultMap="userRoleResultMap">
+        select user.*,role.*
+        from grid_user user
+        LEFT join grid_user_role ur on user.account_id = ur.account_id
+        LEFT join grid_role role on role.role_id = ur.role_id
+        where 1=1
+            <if test="accountName != null">
+                and user.account_name like CONCAT('%',#{accountName},'%')
+            </if>
+            <if test="realName != null">
+                and user.real_name like CONCAT('%',#{realName},'%')
+            </if>
+            <if test="orgName != null">
+                and user.org_name like CONCAT('%',#{orgName},'%')
+            </if>
+    </select>
+
+    <!--byRole查询用户列表 with role-->
+    <select id="getUsersByRole" parameterType="model.GridRole" resultMap="userRoleResultMap">
+        select user.*,role.*
+        from grid_user user
+        LEFT join grid_user_role ur on user.account_id = ur.account_id
+        LEFT join grid_role role on role.role_id = ur.role_id
+        where 1=1
+        <if test="roleName != null">
+            and role.role_name like CONCAT('%',#{roleName},'%')
+        </if>
+        <if test="roleId != null">
+            and role.role_id = #{roleId}
+        </if>
+    </select>
+
+    <!--删除用户-->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from grid_user
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </delete>
+
+
+    <!--新增用户-->
+  <insert id="insertSelective" keyProperty="accountId" useGeneratedKeys="true" parameterType="model.GridUser">
+    insert into grid_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="accountId != null">
+        account_id,
+      </if>
+      <if test="accountName != null">
+        account_name,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="realName != null">
+        real_name,
+      </if>
+      <if test="idNumber != null">
+        id_number,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="phoneNumber != null">
+        phone_number,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="avatar != null">
+        avatar,
+      </if>
+      <if test="qrCode != null">
+        qr_code,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="corpCode != null">
+        corp_code,
+      </if>
+      <if test="corpName != null">
+        corp_name,
+      </if>
+      <if test="orgCode != null">
+        org_code,
+      </if>
+      <if test="orgName != null">
+        org_name,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="accountId != null">
+        #{accountId,jdbcType=BIGINT},
+      </if>
+      <if test="accountName != null">
+        #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=BIGINT},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="avatar != null">
+        #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="qrCode != null">
+        #{qrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="corpCode != null">
+        #{corpCode,jdbcType=VARCHAR},
+      </if>
+      <if test="corpName != null">
+        #{corpName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null">
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null">
+        #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+    <!--编辑用户-->
+  <update id="updateByPrimaryKeySelective" parameterType="model.GridUser">
+    update grid_user
+    <set>
+      <if test="accountName != null">
+        account_name = #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        id_number = #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=BIGINT},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="avatar != null">
+        avatar = #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="qrCode != null">
+        qr_code = #{qrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="corpCode != null">
+        corp_code = #{corpCode,jdbcType=VARCHAR},
+      </if>
+      <if test="corpName != null">
+        corp_name = #{corpName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null">
+        org_code = #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null">
+        org_name = #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -24,39 +24,26 @@ public class RegionController {
      */
     @RequestMapping(value = "/region", method = RequestMethod.POST)
     public ResponseData insertRegion(Region region) {
-        if (region.getRegionCode() == null || region.getRegionName() == null || region.getRegionName().isEmpty()) {
-            return new ResponseData().code(400).message("行政区域代码或名称不能为空");
-        }
-
         try {
-            //插入前判断区域代码是否存在
-            if (regionService.getRegionByPrimaryKey(region.getRegionCode()) != null) {
-                return new ResponseData().code(400).message("行政区域代码已存在");
-            }
             regionService.insertSelective(region);
             return new ResponseData().success();
         } catch (Exception e) {
-            return new ResponseData().code(400).message(e.getMessage());
+            return new ResponseData().fail(e.getMessage());
         }
     }
 
     /**
      * 调用此接口编辑行政区域
-     * @param regionCode
      * @param region
      * @return
      */
     @RequestMapping(value = "/region/{regionCode}", method = RequestMethod.PUT)
-    public ResponseData updateRegion(@PathVariable Long regionCode, Region region) {
-        if (regionCode == null || region.getRegionName() == null || region.getRegionName().isEmpty()) {
-            return new ResponseData().code(400).message("行政区域代码或名称不能为空");
-        }
-        region.setRegionCode(regionCode);
+    public ResponseData updateRegion(Region region) {
         try {
             regionService.updateByPrimaryKeySelective(region);
             return new ResponseData().success();
         } catch (Exception e) {
-            return new ResponseData().code(400).message(e.getMessage());
+            return new ResponseData().fail(e.getMessage());
         }
     }
 
@@ -68,13 +55,13 @@ public class RegionController {
     @RequestMapping(value = "/region/{regionCode}", method = RequestMethod.DELETE)
     public ResponseData deleteRegion(@PathVariable Long regionCode) {
         if (regionCode == null) {
-            return new ResponseData().code(400).message("行政区域代码不能为空");
+            return new ResponseData().fail("行政区域代码不能为空");
         }
         try {
             regionService.deleteByPrimaryKey(regionCode);
             return new ResponseData().success();
         } catch (Exception e) {
-            return new ResponseData().code(400).message(e.getMessage());
+            return new ResponseData().fail(e.getMessage());
         }
     }
 
@@ -86,7 +73,7 @@ public class RegionController {
     @RequestMapping(value = "/region/{regionCode}", method = RequestMethod.GET)
     public ResponseData getRegion(@PathVariable Long regionCode) {
         if (regionCode == null) {
-            return new ResponseData().code(400).message("行政区域代码不能为空");
+            return new ResponseData().fail("行政区域代码不能为空");
         }
 
         try {
@@ -94,7 +81,7 @@ public class RegionController {
             List<Region> nextRegion = regionService.getRegionsByPrimaryKey(regionCode);
             return new ResponseData().success().data(region).result("nextRegion", nextRegion);
         } catch (Exception e) {
-            return new ResponseData().code(400).message(e.getMessage());
+            return new ResponseData().fail(e.getMessage());
         }
     }
 

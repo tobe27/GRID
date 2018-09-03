@@ -27,7 +27,7 @@ public class LoginController {
     private Logger logger = LoggerFactory.getLogger(LoginController.class);
     @RequestMapping(value = "/login",method = RequestMethod.GET)
     public ResponseData login() {
-        return new ResponseData().success();
+        return new ResponseData().redirect("redirect to login");
     }
 
     @RequestMapping(value = "/unauthorized", method = RequestMethod.GET)
@@ -40,23 +40,23 @@ public class LoginController {
     public ResponseData login(GridUser user) {
         if (user.getAccountName() == null || user.getPassword() == null ||
                 user.getAccountName().isEmpty() || user.getPassword().isEmpty()) {
-            return new ResponseData().code(400).message("登录名或密码不能为空");
+            return new ResponseData().fail("登录名或密码不能为空");
         }
         try {
             // 查询用户是否存在
             GridUser gridUser = userService.getUsersByUniqueIndex(user);
             if (gridUser == null) {
-                return new ResponseData().code(400).message("用户不存在");
+                return new ResponseData().fail("用户不存在");
             }
             // 用户密码是否为空
             String saltPassword = gridUser.getPassword();
             if (saltPassword == null || saltPassword.isEmpty()) {
-                return new ResponseData().code(400).message("该用户密码不存在");
+                return new ResponseData().fail("该用户密码不存在");
             }
 
             //验证密码
             if (!Md5Util.verify(saltPassword, user.getPassword())) {
-                return new ResponseData().code(400).message("用户名或密码错误");
+                return new ResponseData().fail("用户名或密码错误");
             }
             //生成JWT
             Map<String, Object> payload = new HashMap<>();
@@ -69,10 +69,9 @@ public class LoginController {
             UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(jwt, jwt);
             subject.login(usernamePasswordToken);
             return new ResponseData().success().data(jwt);
-        } catch (AuthenticationException authEx) {
-            return new ResponseData().code(400).message("shiro认证授权失败");
+
         } catch (Exception e) {
-            return new ResponseData().code(400).message(e.getMessage());
+            return new ResponseData().fail(e.getMessage());
         }
     }
 

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.GridRoleMapper">
+  
+  <resultMap id="BaseResultMap" type="model.GridRole">
+    <id column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="role_scope" jdbcType="VARCHAR" property="roleScope" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+    <collection property="permissionList" column="role_id"   ofType="model.GridPermission" select="getGridPermissions" >
+    
+		</collection>
+  </resultMap>
+  
+  
+  <resultMap id="GridPermissionMap" type="model.GridPermission">  
+    <id column="permission_id" jdbcType="BIGINT" property="permissionId" />
+    <result column="sys_code" jdbcType="VARCHAR" property="sysCode" />
+    <result column="permission_name" jdbcType="VARCHAR" property="permissionName" />
+    <result column="permission_type" jdbcType="VARCHAR" property="permissionType" />
+    <result column="permission_url" jdbcType="VARCHAR" property="permissionUrl" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+  </resultMap>  
+  
+  
+  
+  <sql id="Base_Column_List">
+    role_id, role_name, role_scope, description, created_at, updated_at
+  </sql>
+  
+  <select id="getGridRoles" parameterType="model.GridRole" resultMap="BaseResultMap">
+  select gr.* from grid_role gr  where 1=1
+  <if  test="roleName != null">
+   and gr.role_name  like CONCAT('%',#{roleName},'%')
+  </if>
+  
+   <if test="roleScope != null">
+    and gr.role_scope  like CONCAT('%',#{roleScope},'%')
+  </if>  
+  </select>
+  
+  <select id="getGridPermissions" parameterType="java.lang.Long" resultMap="GridPermissionMap">
+  
+  select gp.* from grid_permission gp LEFT JOIN  grid_role_permission grp on gp.permission_id=grp.permission_id WHERE grp.role_id=#{role_id} 
+  
+  
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from grid_role
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from grid_role
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </delete>
+  
+  
+  
+  <insert id="insert" parameterType="model.GridRole">
+    insert into grid_role (role_id, role_name, role_scope, 
+      description, created_at, updated_at
+      )
+    values (#{roleId,jdbcType=BIGINT}, #{roleName,jdbcType=VARCHAR}, #{roleScope,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{createdAt,jdbcType=BIGINT}, #{updatedAt,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" keyProperty="roleId" useGeneratedKeys="true"  parameterType="model.GridRole">
+    insert into grid_role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="roleName != null">
+        role_name,
+      </if>
+      <if test="roleScope != null">
+        role_scope,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="roleName != null">
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleScope != null">
+        #{roleScope,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="model.GridRole">
+    update grid_role
+    <set>
+      <if test="roleName != null">
+        role_name = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleScope != null">
+        role_scope = #{roleScope,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="model.GridRole">
+    update grid_role
+    set role_name = #{roleName,jdbcType=VARCHAR},
+      role_scope = #{roleScope,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=BIGINT},
+      updated_at = #{updatedAt,jdbcType=BIGINT}
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </update>
+</mapper>

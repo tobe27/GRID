@@ -3,6 +3,7 @@ package service.impl;
 import dao.OrganizationMapper;
 import exception.MyException;
 import model.Organization;
+import model.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.OrganizationService;
@@ -39,10 +40,17 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Override
     public boolean insertSelective(Organization record) throws Exception {
+        if (record.getOrgCode() == null || record.getOrgName() == null || record.getOrgName().isEmpty()) {
+            throw  new MyException("机构代码或者名称不能为空");
+        }
         long now = System.currentTimeMillis();
         record.setCreatedAt(now);
         record.setUpdatedAt(now);
         try {
+            //插入前判断机构代码是否已经存在
+            if (organizationMapper.getOrganizationByOrgCode(record.getOrgCode()) != null) {
+                throw new MyException("机构代码已存在");
+            }
             return organizationMapper.insertSelective(record) == 1;
         } catch (Exception e) {
             throw new MyException("新增机构出现异常");
@@ -90,6 +98,9 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Override
     public boolean updateByOrgCodeSelective(Organization record) throws Exception {
+        if (record.getOrgCode() == null || record.getOrgName() == null || record.getOrgName().isEmpty()) {
+            throw  new MyException("机构代码或者名称不能为空");
+        }
         record.setUpdatedAt(System.currentTimeMillis());
         try {
             return organizationMapper.updateByOrgCodeSelective(record) == 1;

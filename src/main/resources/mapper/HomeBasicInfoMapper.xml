@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.HomeBasicInfoMapper">
+  <resultMap id="BaseResultMap" type="model.HomeBasicInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="family_num" jdbcType="BIGINT" property="familyNum" />
+    <result column="people_num" jdbcType="BIGINT" property="peopleNum" />
+    <result column="credit_ratio" jdbcType="DECIMAL" property="creditRatio" />
+    <result column="credit_num" jdbcType="BIGINT" property="creditNum" />
+    <result column="use_ratio" jdbcType="BIGINT" property="useRatio" />
+    <result column="use_num" jdbcType="BIGINT" property="useNum" />
+    <result column="org_code" jdbcType="BIGINT" property="orgCode" />
+    <result column="use_promote" jdbcType="DECIMAL" property="usePromote" />
+    <result column="account_id" jdbcType="BIGINT" property="accountId" />
+    <result column="craet_at" jdbcType="BIGINT" property="craetAt" />
+    <result column="update_at" jdbcType="BIGINT" property="updateAt" />
+    <result column="deposit" jdbcType="DECIMAL" property="deposit" />
+    <result column="loan" jdbcType="DECIMAL" property="loan" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, family_num, people_num, credit_ratio, credit_num, use_ratio, use_num, org_code, 
+    use_promote, account_id, craet_at, update_at, deposit, loan
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from home_basic_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="getPresidentAndMiddleHomeBasicInfo"  parameterType="java.lang.Long" resultMap="BaseResultMap">
+   select   sum(family_num) as family_num, SUM(people_num) as people_num, 
+(
+(select SUM( hmi.CREDIT_RATIO) from home_middle_info hmi)/(select count(1) from home_middle_info hmi1)
+)  as credit_ratio,
+(
+(select SUM( hmi.use_ratio) from home_middle_info hmi)/(select count(1) from home_middle_info hmi2)
+)  as use_ratio
+from `home_middle_info`
+  
+  
+  </select>
+  
+  <select id="getSubordinateOrgCode"  parameterType="java.util.Map" resultType="java.util.Map">
+  select  GROUP_CONCAT(org_code) as orgCode from  grid_org where pre_org_code=#{orgCode}
+  </select>
+  
+  <select id="getAccountIdsByOrgCodes"  parameterType="java.util.Map" resultType="java.util.Map">
+  select  GROUP_CONCAT(account_id) as accountId  from  grid_user where org_code in
+  
+   <foreach item="item" index="index" collection="orgCode" 
+                         open="(" separator="," close=")">
+                        #{item}
+                </foreach>
+  
+  
+  </select>
+  
+  <select id="getBasicAccountInfo"   parameterType="java.util.Map" resultType="java.util.Map">
+  SELECT 
+   hbi.family_num as familyNum,  hbi.people_num as peopleNum,hbi.credit_ratio as creditRatio,hbi.credit_num as creditNum,hbi.use_ratio as useRatio,
+  hbi.use_num as useNum, hbi.org_code as orgCode,hbi.use_promote as usePromote,hbi.deposit as deposit,hbi.loan as loan,hbi.account_id as accountId,
+  gu.real_name as realName FROM `home_basic_info`  hbi  LEFT JOIN grid_user gu ON hbi.account_id=gu.account_id WHERE hbi.account_id in 
+  
+  <foreach item="item" index="index" collection="accountId" 
+                         open="(" separator="," close=")">
+                        #{item}
+                </foreach>
+                
+        <if test="sortType == 1">
+     ORDER BY hbi.deposit  DESC
+   </if>
+   <if test="sortType == 2">
+     ORDER BY hbi.loan  DESC
+   </if>
+   <if test="sortType == 3">
+     ORDER BY hbi.	credit_ratio  DESC
+   </if>
+    <if test="sortType == 4">
+     ORDER BY hbi.	use_ratio  DESC
+   </if>
+   <if test="sortType == 5">
+     ORDER BY hbi.	use_promote  DESC
+   </if>         
+  
+  
+  </select>
+  
+  <select id="getBasicInfo" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  SELECT   sum(family_num) as family_num, SUM(people_num) as people_num, 
+(
+(select SUM( hbi.CREDIT_RATIO) from home_branch_info hbi)/(select count(1) from home_branch_info hbi1)
+)  as credit_ratio,
+(
+(select SUM( hbi2.use_ratio) from home_branch_info hbi2)/(select count(1) from home_branch_info hbi3)
+)  as use_ratio
+FROM `home_branch_info`
+  </select>
+  
+  <select id="getPresidentAndMiddleBranchInfoSort"  parameterType="model.HomeBasicInfo" resultType="java.util.Map">
+  select hmi.family_num as familyNum,  hmi.people_num as peopleNum,hmi.credit_ratio as creditRatio,hmi.credit_num as creditNum,hmi.use_ratio as useRatio,
+  hmi.use_num as useNum, hmi.org_code as orgCode,hmi.use_promote as usePromote,hmi.deposit as deposit,hmi.loan as loan,
+   go.org_name as orgName from home_middle_info   hmi LEFT JOIN grid_org   go  on hmi.org_code=go.org_code  
+ 
+  <if test="sortType == 1">
+     ORDER BY hmi.deposit  DESC
+   </if>
+   <if test="sortType == 2">
+     ORDER BY hmi.loan  DESC
+   </if>
+   <if test="sortType == 3">
+     ORDER BY hmi.	credit_ratio  DESC
+   </if>
+    <if test="sortType == 4">
+     ORDER BY hmi.	use_ratio  DESC
+   </if>
+   <if test="sortType == 5">
+     ORDER BY hmi.	use_promote  DESC
+   </if>
+   
+  </select>
+  
+  <select id="getPresidentAndMiddleAccountInfoSort"   parameterType="model.HomeBasicInfo" resultType="java.util.Map">
+  SELECT 
+  
+  hbi.family_num as familyNum,  hbi.people_num as peopleNum,hbi.credit_ratio as creditRatio,hbi.credit_num as creditNum,hbi.use_ratio as useRatio,
+  hbi.use_num as useNum, hbi.org_code as orgCode,hbi.use_promote as usePromote,hbi.deposit as deposit,hbi.loan as loan,hbi.account_id as accountId,
+  
+  gu.account_name as accountName  FROM `home_basic_info`  hbi  LEFT JOIN grid_user gu  on  hbi.account_id=gu.account_id 
+  
+  <if test="sortType == 1">
+     ORDER BY hbi.deposit  DESC
+   </if>
+   <if test="sortType == 2">
+     ORDER BY hbi.loan  DESC
+   </if>
+   <if test="sortType == 3">
+     ORDER BY hbi.	credit_ratio  DESC
+   </if>
+    <if test="sortType == 4">
+     ORDER BY hbi.	use_ratio  DESC
+   </if>
+   <if test="sortType == 5">
+     ORDER BY hbi.	use_promote  DESC
+   </if>
+  </select>
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from home_basic_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="model.HomeBasicInfo">
+    insert into home_basic_info (id, family_num, people_num, 
+      credit_ratio, credit_num, use_ratio, 
+      use_num, org_code, use_promote, 
+      account_id, craet_at, update_at, 
+      deposit, loan)
+    values (#{id,jdbcType=BIGINT}, #{familyNum,jdbcType=BIGINT}, #{peopleNum,jdbcType=BIGINT}, 
+      #{creditRatio,jdbcType=DECIMAL}, #{creditNum,jdbcType=BIGINT}, #{useRatio,jdbcType=BIGINT}, 
+      #{useNum,jdbcType=BIGINT}, #{orgCode,jdbcType=BIGINT}, #{usePromote,jdbcType=DECIMAL}, 
+      #{accountId,jdbcType=BIGINT}, #{craetAt,jdbcType=BIGINT}, #{updateAt,jdbcType=BIGINT}, 
+      #{deposit,jdbcType=DECIMAL}, #{loan,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="model.HomeBasicInfo">
+    insert into home_basic_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="familyNum != null">
+        family_num,
+      </if>
+      <if test="peopleNum != null">
+        people_num,
+      </if>
+      <if test="creditRatio != null">
+        credit_ratio,
+      </if>
+      <if test="creditNum != null">
+        credit_num,
+      </if>
+      <if test="useRatio != null">
+        use_ratio,
+      </if>
+      <if test="useNum != null">
+        use_num,
+      </if>
+      <if test="orgCode != null">
+        org_code,
+      </if>
+      <if test="usePromote != null">
+        use_promote,
+      </if>
+      <if test="accountId != null">
+        account_id,
+      </if>
+      <if test="craetAt != null">
+        craet_at,
+      </if>
+      <if test="updateAt != null">
+        update_at,
+      </if>
+      <if test="deposit != null">
+        deposit,
+      </if>
+      <if test="loan != null">
+        loan,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="familyNum != null">
+        #{familyNum,jdbcType=BIGINT},
+      </if>
+      <if test="peopleNum != null">
+        #{peopleNum,jdbcType=BIGINT},
+      </if>
+      <if test="creditRatio != null">
+        #{creditRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="creditNum != null">
+        #{creditNum,jdbcType=BIGINT},
+      </if>
+      <if test="useRatio != null">
+        #{useRatio,jdbcType=BIGINT},
+      </if>
+      <if test="useNum != null">
+        #{useNum,jdbcType=BIGINT},
+      </if>
+      <if test="orgCode != null">
+        #{orgCode,jdbcType=BIGINT},
+      </if>
+      <if test="usePromote != null">
+        #{usePromote,jdbcType=DECIMAL},
+      </if>
+      <if test="accountId != null">
+        #{accountId,jdbcType=BIGINT},
+      </if>
+      <if test="craetAt != null">
+        #{craetAt,jdbcType=BIGINT},
+      </if>
+      <if test="updateAt != null">
+        #{updateAt,jdbcType=BIGINT},
+      </if>
+      <if test="deposit != null">
+        #{deposit,jdbcType=DECIMAL},
+      </if>
+      <if test="loan != null">
+        #{loan,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="model.HomeBasicInfo">
+    update home_basic_info
+    <set>
+      <if test="familyNum != null">
+        family_num = #{familyNum,jdbcType=BIGINT},
+      </if>
+      <if test="peopleNum != null">
+        people_num = #{peopleNum,jdbcType=BIGINT},
+      </if>
+      <if test="creditRatio != null">
+        credit_ratio = #{creditRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="creditNum != null">
+        credit_num = #{creditNum,jdbcType=BIGINT},
+      </if>
+      <if test="useRatio != null">
+        use_ratio = #{useRatio,jdbcType=BIGINT},
+      </if>
+      <if test="useNum != null">
+        use_num = #{useNum,jdbcType=BIGINT},
+      </if>
+      <if test="orgCode != null">
+        org_code = #{orgCode,jdbcType=BIGINT},
+      </if>
+      <if test="usePromote != null">
+        use_promote = #{usePromote,jdbcType=DECIMAL},
+      </if>
+      <if test="accountId != null">
+        account_id = #{accountId,jdbcType=BIGINT},
+      </if>
+      <if test="craetAt != null">
+        craet_at = #{craetAt,jdbcType=BIGINT},
+      </if>
+      <if test="updateAt != null">
+        update_at = #{updateAt,jdbcType=BIGINT},
+      </if>
+      <if test="deposit != null">
+        deposit = #{deposit,jdbcType=DECIMAL},
+      </if>
+      <if test="loan != null">
+        loan = #{loan,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="model.HomeBasicInfo">
+    update home_basic_info
+    set family_num = #{familyNum,jdbcType=BIGINT},
+      people_num = #{peopleNum,jdbcType=BIGINT},
+      credit_ratio = #{creditRatio,jdbcType=DECIMAL},
+      credit_num = #{creditNum,jdbcType=BIGINT},
+      use_ratio = #{useRatio,jdbcType=BIGINT},
+      use_num = #{useNum,jdbcType=BIGINT},
+      org_code = #{orgCode,jdbcType=BIGINT},
+      use_promote = #{usePromote,jdbcType=DECIMAL},
+      account_id = #{accountId,jdbcType=BIGINT},
+      craet_at = #{craetAt,jdbcType=BIGINT},
+      update_at = #{updateAt,jdbcType=BIGINT},
+      deposit = #{deposit,jdbcType=DECIMAL},
+      loan = #{loan,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

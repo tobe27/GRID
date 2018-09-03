@@ -23,6 +23,9 @@ public class HomeWarnInfoServiceImpl implements HomeWarnInfoService {
      */
     @Override
     public List<HomeWarnInfo> listInfo(HomeWarnInfo record) throws Exception {
+        if (record.getAmount() == null || record.getAmountType() == null) {
+            throw new MyException("金额或者存贷款类型不能为空");
+        }
         try {
             return warnInfoMapper.listInfo(record);
         } catch (Exception e) {

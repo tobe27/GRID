@@ -24,39 +24,26 @@ public class OrganizationController {
      */
     @RequestMapping(value = "/org", method = RequestMethod.POST)
     public ResponseData insertOrg(Organization organization) {
-        if (organization.getOrgCode() == null || organization.getOrgName() == null || organization.getOrgName().isEmpty()) {
-            return new ResponseData().code(400).message("机构代码或者名称不能为空");
-        }
-
         try {
-            //插入前判断机构代码是否已经存在
-            if (organizationService.getOrganizationByOrgCode(organization.getOrgCode()) != null) {
-                return new ResponseData().code(400).message("机构代码已存在");
-            }
             organizationService.insertSelective(organization);
             return new ResponseData().success();
         } catch (Exception e) {
-            return new ResponseData().code(400).message(e.getMessage());
+            return new ResponseData().fail(e.getMessage());
         }
     }
 
     /**
      * 调用此接口编辑机构
-     * @param orgCode 机构代码
      * @param organization
      * @return
      */
     @RequestMapping(value = "/org/{orgCode}", method = RequestMethod.PUT)
-    public ResponseData updateOrg(@PathVariable Long orgCode, Organization organization) {
-        if (orgCode == null || organization.getOrgName() == null || organization.getOrgName().isEmpty()) {
-            return new ResponseData().code(400).message("机构代码或者名称不能为空");
-        }
-        organization.setOrgCode(orgCode);
+    public ResponseData updateOrg(Organization organization) {
         try {
             organizationService.updateByOrgCodeSelective(organization);
             return new ResponseData().success();
         } catch (Exception e) {
-            return new ResponseData().code(400).message(e.getMessage());
+            return new ResponseData().fail(e.getMessage());
         }
     }
 
@@ -67,14 +54,11 @@ public class OrganizationController {
      */
     @RequestMapping(value = "/org/{orgCode}", method = RequestMethod.DELETE)
     public ResponseData deleteOrg(@PathVariable Long orgCode) {
-        if (orgCode == null) {
-            return new ResponseData().code(400).message("机构代码不能为空");
-        }
         try {
             organizationService.deleteByOrgCode(orgCode);
             return new ResponseData().success();
         } catch (Exception e) {
-            return new ResponseData().code(400).message(e.getMessage());
+            return new ResponseData().fail(e.getMessage());
         }
     }
 
@@ -85,16 +69,12 @@ public class OrganizationController {
      */
     @RequestMapping(value = "/org/{orgCode}", method = RequestMethod.GET)
     public ResponseData getOrg(@PathVariable Long orgCode) {
-        if (orgCode == null) {
-            return new ResponseData().code(400).message("机构代码不能为空");
-        }
-
         try {
             Organization organization = organizationService.getOrganizationByOrgCode(orgCode);
             List<Organization> nextOrganization = organizationService.getOrganizationsByPreOrgCode(orgCode);
             return new ResponseData().success().data(organization).result("nextOrganization",nextOrganization);
         } catch (Exception e) {
-            return new ResponseData().code(400).message(e.getMessage());
+            return new ResponseData().fail(e.getMessage());
         }
     }
 

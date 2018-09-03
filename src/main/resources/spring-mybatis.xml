@@ -43,16 +43,7 @@
         <!-- 自动扫描mapper.xml文件 -->
         <property name="mapperLocations">
             <array>
-                <value>classpath*:GridUserMapper.xml</value>
-                <value>classpath*:GridRoleMapper.xml</value>
-                <value>classpath*:GridPermissionMapper.xml</value>
-                <value>classpath*:GridRolePermissionMapper.xml</value>
-                <value>classpath*:GridUserRoleMapper.xml</value>
-                <value>classpath*:OrganizationMapper.xml</value>
-                <value>classpath*:RegionMapper.xml</value>
-                <value>classpath*:GridDictionaryMapper.xml</value>
-                <value>classpath*:HomeWarnInfoMapper.xml</value>
-                <value>classpath*:HomeStatisticsInfoMapper.xml</value>
+                <value>classpath*:/mapper/*Mapper.xml</value>
             </array>
         </property>
         <property name="plugins">

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.HomeStatisticsInfoMapper">
+
+  <resultMap id="BaseResultMap" type="model.HomeStatisticsInfo">
+    <result column="org_code" jdbcType="BIGINT" property="orgCode" />
+    <result column="org_level" jdbcType="INTEGER" property="orgLevel" />
+    <result column="people_num" jdbcType="BIGINT" property="peopleNum" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="amount_type" jdbcType="INTEGER" property="amountType" />
+    <result column="time" jdbcType="VARCHAR" property="time" />
+    <result column="time_type" jdbcType="INTEGER" property="timeType" />
+  </resultMap>
+
+    <select id="listInfo" parameterType="model.HomeStatisticsInfo" resultMap="BaseResultMap">
+        select * from home_statistics_info
+        where org_code = #{orgCode}
+        and org_level = #{orgLevel}
+        and time like  CONCAT(#{time},'%')
+        and time_type = #{timeType}
+    </select>
+
+  <insert id="insertSelective" parameterType="model.HomeStatisticsInfo">
+    insert into home_statistics_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orgCode != null">
+        org_code,
+      </if>
+      <if test="orgLevel != null">
+        org_level,
+      </if>
+      <if test="peopleNum != null">
+        people_num,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="amountType != null">
+        amount_type,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="timeType != null">
+        time_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orgCode != null">
+        #{orgCode,jdbcType=BIGINT},
+      </if>
+      <if test="orgLevel != null">
+        #{orgLevel,jdbcType=INTEGER},
+      </if>
+      <if test="peopleNum != null">
+        #{peopleNum,jdbcType=BIGINT},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="amountType != null">
+        #{amountType,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="timeType != null">
+        #{timeType,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

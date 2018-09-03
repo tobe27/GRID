@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.GridDictionaryMapper">
+  <resultMap id="BaseResultMap" type="model.GridDictionary">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="isenable" jdbcType="INTEGER" property="isenable" />
+    <result column="dictionary_key" jdbcType="BIGINT" property="dictionaryKey" />
+    <result column="dictionary_value" jdbcType="VARCHAR" property="dictionaryValue" />
+    <result column="creat_at" jdbcType="BIGINT" property="creatAt" />
+    <result column="update_at" jdbcType="BIGINT" property="updateAt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, type, parent_id, code, name, description, isenable, dictionary_key, dictionary_value, 
+    creat_at, update_at
+  </sql>
+  
+  <delete id="deleteByCode"  parameterType="model.GridDictionary">
+ 
+ delete from  grid_dictionary where code=#{code}
+ 
+ </delete>
+ <select id="getListByName"  parameterType="model.GridDictionary" resultMap="BaseResultMap">
+ select * from grid_dictionary where name=#{name}
+ <if test="code != null">
+   and code !=#{code}
+ </if>
+ </select>
+ 
+ <select id="getList" parameterType="model.GridDictionary" resultMap="BaseResultMap">
+ select type,parent_id,code,name,description,isenable from  grid_dictionary  where 1=1
+   <if test="name != null">
+ 
+   and name  like CONCAT('%',#{name},'%')
+ </if>
+     group by type,parent_id,code,name,description,isenable
+ </select>
+ 
+ <select id="getListByCode" parameterType="model.GridDictionary" resultMap="BaseResultMap">
+ select * from  grid_dictionary where code =#{code}
+ 
+ </select>
+ 
+ 
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from grid_dictionary
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from grid_dictionary
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="model.GridDictionary">
+    insert into grid_dictionary (id, type, parent_id, 
+      code, name, description, 
+      isenable, dictionary_key, dictionary_value, 
+      creat_at, update_at)
+    values (#{id,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, #{parentId,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{isenable,jdbcType=INTEGER}, #{dictionaryKey,jdbcType=BIGINT}, #{dictionaryValue,jdbcType=VARCHAR}, 
+      #{creatAt,jdbcType=BIGINT}, #{updateAt,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="model.GridDictionary">
+    insert into grid_dictionary
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="isenable != null">
+        isenable,
+      </if>
+      <if test="dictionaryKey != null">
+        dictionary_key,
+      </if>
+      <if test="dictionaryValue != null">
+        dictionary_value,
+      </if>
+      <if test="creatAt != null">
+        creat_at,
+      </if>
+      <if test="updateAt != null">
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isenable != null">
+        #{isenable,jdbcType=INTEGER},
+      </if>
+      <if test="dictionaryKey != null">
+        #{dictionaryKey,jdbcType=BIGINT},
+      </if>
+      <if test="dictionaryValue != null">
+        #{dictionaryValue,jdbcType=VARCHAR},
+      </if>
+      <if test="creatAt != null">
+        #{creatAt,jdbcType=BIGINT},
+      </if>
+      <if test="updateAt != null">
+        #{updateAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="model.GridDictionary">
+    update grid_dictionary
+    <set>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isenable != null">
+        isenable = #{isenable,jdbcType=INTEGER},
+      </if>
+      <if test="dictionaryKey != null">
+        dictionary_key = #{dictionaryKey,jdbcType=BIGINT},
+      </if>
+      <if test="dictionaryValue != null">
+        dictionary_value = #{dictionaryValue,jdbcType=VARCHAR},
+      </if>
+      <if test="creatAt != null">
+        creat_at = #{creatAt,jdbcType=BIGINT},
+      </if>
+      <if test="updateAt != null">
+        update_at = #{updateAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="model.GridDictionary">
+    update grid_dictionary
+    set type = #{type,jdbcType=INTEGER},
+      parent_id = #{parentId,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      isenable = #{isenable,jdbcType=INTEGER},
+      dictionary_key = #{dictionaryKey,jdbcType=BIGINT},
+      dictionary_value = #{dictionaryValue,jdbcType=VARCHAR},
+      creat_at = #{creatAt,jdbcType=BIGINT},
+      update_at = #{updateAt,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

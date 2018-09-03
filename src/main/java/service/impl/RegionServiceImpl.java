@@ -39,10 +39,17 @@ public class RegionServiceImpl implements RegionService {
      */
     @Override
     public boolean insertSelective(Region record) throws Exception {
+        if (record.getRegionCode() == null || record.getRegionName() == null || record.getRegionName().isEmpty()) {
+            throw new MyException("行政区域代码或名称不能为空");
+        }
         long now = System.currentTimeMillis();
         record.setCreatedAt(now);
         record.setUpdatedAt(now);
         try {
+            //插入前判断区域代码是否存在
+            if (regionMapper.getRegionByPrimaryKey(record.getRegionCode()) != null) {
+                throw new MyException("行政区域代码已存在");
+            }
             return regionMapper.insertSelective(record) == 1;
         } catch (Exception e){
             throw new MyException("新增行政区域出现异常");
@@ -90,6 +97,9 @@ public class RegionServiceImpl implements RegionService {
      */
     @Override
     public boolean updateByPrimaryKeySelective(Region record) throws Exception {
+        if (record.getRegionCode() == null || record.getRegionName() == null || record.getRegionName().isEmpty()) {
+            throw new MyException("行政区域代码或名称不能为空");
+        }
         long now = System.currentTimeMillis();
         record.setUpdatedAt(now);
         try {
