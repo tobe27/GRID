@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.CustomerInfoMapper">
+  <resultMap id="BaseResultMap" type="model.CustomerInfo">
+    <id column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="marital_status" jdbcType="INTEGER" property="maritalStatus" />
+    <result column="education_level" jdbcType="INTEGER" property="educationLevel" />
+    <result column="nation" jdbcType="VARCHAR" property="nation" />
+    <result column="birthday" jdbcType="VARCHAR" property="birthday" />
+    <result column="native_place" jdbcType="VARCHAR" property="nativePlace" />
+    <result column="phone_number" jdbcType="BIGINT" property="phoneNumber" />
+    <result column="career" jdbcType="VARCHAR" property="career" />
+    <result column="custodian" jdbcType="VARCHAR" property="custodian" />
+    <result column="grid_code" jdbcType="VARCHAR" property="gridCode" />
+    <result column="household_id" jdbcType="BIGINT" property="householdId" />
+    <result column="native_address" jdbcType="VARCHAR" property="nativeAddress" />
+    <result column="residence_address" jdbcType="VARCHAR" property="residenceAddress" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    customer_id, customer_name, sex, id_number, marital_status, education_level, nation, 
+    birthday, native_place, phone_number, career, custodian, grid_code, household_id, 
+    native_address, residence_address, created_at, updated_at
+  </sql>
+
+    <select id="listCustomers" parameterType="model.CustomerInfo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from customer_info
+        where 1 = 1
+        <if test="customerName != null">
+            and customer_name like CONCAT('%',#{customerName},'%')
+        </if>
+        <if test="idNumber != null">
+            and id_number like CONCAT('%',#{idNumber},'%')
+        </if>
+        <if test="householdId != null">
+            and household_id like CONCAT('%',#{householdId},'%')
+        </if>
+        <if test="nativeAddress != null">
+            and native_address like CONCAT('%',#{nativeAddress},'%')
+        </if>
+        <if test="residenceAddress != null">
+            and residence_address like CONCAT('%',#{residenceAddress},'%')
+        </if>
+        order by updated_at DESC
+    </select>
+
+  <select id="getCustomerByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer_info
+    where customer_id = #{customerId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from customer_info
+    where customer_id = #{customerId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertSelective" parameterType="model.CustomerInfo">
+    insert into customer_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="customerName != null">
+        customer_name,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="idNumber != null">
+        id_number,
+      </if>
+      <if test="maritalStatus != null">
+        marital_status,
+      </if>
+      <if test="educationLevel != null">
+        education_level,
+      </if>
+      <if test="nation != null">
+        nation,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="nativePlace != null">
+        native_place,
+      </if>
+      <if test="phoneNumber != null">
+        phone_number,
+      </if>
+      <if test="career != null">
+        career,
+      </if>
+      <if test="custodian != null">
+        custodian,
+      </if>
+      <if test="gridCode != null">
+        grid_code,
+      </if>
+      <if test="householdId != null">
+        household_id,
+      </if>
+      <if test="nativeAddress != null">
+        native_address,
+      </if>
+      <if test="residenceAddress != null">
+        residence_address,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="customerId != null">
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="customerName != null">
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="maritalStatus != null">
+        #{maritalStatus,jdbcType=INTEGER},
+      </if>
+      <if test="educationLevel != null">
+        #{educationLevel,jdbcType=INTEGER},
+      </if>
+      <if test="nation != null">
+        #{nation,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="nativePlace != null">
+        #{nativePlace,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=BIGINT},
+      </if>
+      <if test="career != null">
+        #{career,jdbcType=VARCHAR},
+      </if>
+      <if test="custodian != null">
+        #{custodian,jdbcType=VARCHAR},
+      </if>
+      <if test="gridCode != null">
+        #{gridCode,jdbcType=VARCHAR},
+      </if>
+      <if test="householdId != null">
+        #{householdId,jdbcType=BIGINT},
+      </if>
+      <if test="nativeAddress != null">
+        #{nativeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="residenceAddress != null">
+        #{residenceAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="model.CustomerInfo">
+    update customer_info
+    <set>
+      <if test="customerName != null">
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="idNumber != null">
+        id_number = #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="maritalStatus != null">
+        marital_status = #{maritalStatus,jdbcType=INTEGER},
+      </if>
+      <if test="educationLevel != null">
+        education_level = #{educationLevel,jdbcType=INTEGER},
+      </if>
+      <if test="nation != null">
+        nation = #{nation,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="nativePlace != null">
+        native_place = #{nativePlace,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=BIGINT},
+      </if>
+      <if test="career != null">
+        career = #{career,jdbcType=VARCHAR},
+      </if>
+      <if test="custodian != null">
+        custodian = #{custodian,jdbcType=VARCHAR},
+      </if>
+      <if test="gridCode != null">
+        grid_code = #{gridCode,jdbcType=VARCHAR},
+      </if>
+      <if test="householdId != null">
+        household_id = #{householdId,jdbcType=BIGINT},
+      </if>
+      <if test="nativeAddress != null">
+        native_address = #{nativeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="residenceAddress != null">
+        residence_address = #{residenceAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where customer_id = #{customerId,jdbcType=BIGINT}
+  </update>
+
+</mapper>

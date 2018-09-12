@@ -1,10 +1,17 @@
 package model;
 
+import java.io.Serializable;
+
 import lombok.ToString;
 
 @ ToString
-public class GridDictionary {
-    private Long id;
+public class GridDictionary implements Serializable {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4783185209846070470L;
+
+	private Long id;
 
     private Integer type;
 

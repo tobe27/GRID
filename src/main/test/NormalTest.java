@@ -1,26 +1,26 @@
 import model.GridUser;
 import org.junit.Test;
+import util.ValidUtil;
 
 public class NormalTest {
     @Test
     public void nullTest() {
-        GridUser gridUser = new GridUser();
-        gridUser.setPassword("");
-        String psw = gridUser.getPassword();
-        System.out.println(gridUser);
-        if (psw == null)
-            System.out.println("null");
-        else if (psw.isEmpty())
-            System.out.println("isEmpty");
-
-        else if (psw.equals(""))
-            System.out.println("^^^");
-
+        GridUser user = new GridUser();
+        user.setPassword("1xxx");
+        user.setPhoneNumber(15555413245L);
+        String email = "_xxx@x.con.cn";
+        System.out.println(ValidUtil.notEmpty(user));
+        System.out.println(ValidUtil.length(user.getPassword(),5));
+        System.out.println(ValidUtil.loginName(user.getPassword(),5));
+        System.out.println(ValidUtil.phone(String.valueOf(user.getPhoneNumber())));
+        System.out.println(ValidUtil.number(String.valueOf(user.getPassword())));
+        System.out.println(ValidUtil.email(email));
     }
 
     @Test
     public void timeTest() {
-
+        String id_type = "xx";
+        System.out.println(id_type);
         System.out.println(System.currentTimeMillis());
     }
 }

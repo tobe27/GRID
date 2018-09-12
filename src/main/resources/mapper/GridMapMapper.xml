@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.GridMapMapper">
+  <resultMap id="BaseResultMap" type="model.GridMap">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="grid_code" jdbcType="VARCHAR" property="gridCode" />
+    <result column="grid_name" jdbcType="VARCHAR" property="gridName" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="grand_id" jdbcType="VARCHAR" property="grandId" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="coordinate" jdbcType="VARCHAR" property="coordinate" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+    <result column="delete_flag" jdbcType="INTEGER" property="deleteFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, grid_code, grid_name, type, grand_id, parent_id, coordinate, created_at, updated_at, 
+    delete_flag
+  </sql>
+  <insert id="batchSave" >
+  insert into grid_map   (grid_code,grid_name,type,grand_id,parent_id,coordinate,delete_flag,created_at,updated_at )
+  VALUES
+  <foreach  collection="list" item="item" separator=",">
+        (#{item.gridCode}, #{item.gridName}, #{item.type},#{item.grandId},  #{item.parentId}, #{item.coordinate}, #{item.deleteFlag}, #{item.createdAt}, #{item.updatedAt})
+    </foreach>
+  
+  </insert>
+  <select id="getGridMapList" parameterType="java.util.Map"  resultMap="BaseResultMap">
+  select * from grid_map where grid_code = #{gridCode} and delete_flag !=1 
+  
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from grid_map
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <update id="setDeleteFlag"  parameterType="java.util.Map">
+  
+  update grid_map set delete_flag=1 where grid_code = #{gridCode}
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from grid_map
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="model.GridMap">
+    insert into grid_map (id, grid_code, grid_name, 
+      type, grand_id, parent_id, 
+      coordinate, created_at, updated_at, 
+      delete_flag)
+    values (#{id,jdbcType=BIGINT}, #{gridCode,jdbcType=VARCHAR}, #{gridName,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{grandId,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
+      #{coordinate,jdbcType=VARCHAR}, #{createdAt,jdbcType=BIGINT}, #{updatedAt,jdbcType=BIGINT}, 
+      #{deleteFlag,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="model.GridMap">
+    insert into grid_map
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="gridCode != null">
+        grid_code,
+      </if>
+      <if test="gridName != null">
+        grid_name,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="grandId != null">
+        grand_id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="coordinate != null">
+        coordinate,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="gridCode != null">
+        #{gridCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gridName != null">
+        #{gridName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="grandId != null">
+        #{grandId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="coordinate != null">
+        #{coordinate,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+      <if test="deleteFlag != null">
+        #{deleteFlag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="model.GridMap">
+    update grid_map
+    <set>
+      <if test="gridCode != null">
+        grid_code = #{gridCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gridName != null">
+        grid_name = #{gridName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="grandId != null">
+        grand_id = #{grandId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="coordinate != null">
+        coordinate = #{coordinate,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag = #{deleteFlag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="model.GridMap">
+    update grid_map
+    set grid_code = #{gridCode,jdbcType=VARCHAR},
+      grid_name = #{gridName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      grand_id = #{grandId,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=VARCHAR},
+      coordinate = #{coordinate,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=BIGINT},
+      updated_at = #{updatedAt,jdbcType=BIGINT},
+      delete_flag = #{deleteFlag,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

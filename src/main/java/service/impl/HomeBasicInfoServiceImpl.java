@@ -183,7 +183,6 @@ public class HomeBasicInfoServiceImpl implements HomeBasicInfoService {
 		}
 		return homeBasicInfoMapper.getBasicAccountInfo(map);
 		
-		
     }catch(Exception e) {
     	throw new MyException("查询首页数据异常");
 		}

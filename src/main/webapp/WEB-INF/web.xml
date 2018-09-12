@@ -38,6 +38,15 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
+    <!--解决跨域-->
+    <filter>
+        <filter-name>cors</filter-name>
+        <filter-class>filter.CORSFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>cors</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <!-- 4.1 编码过滤器 -->
     <filter>
         <filter-name>encodingFilter</filter-name>

@@ -45,7 +45,7 @@ public class GridUserMapperTest {
         gridUser.setPassword("xxx");
         gridUser.setRealName("YYY");
         gridUser.setPhoneNumber(122233L);
-        System.out.println(gridUserService.insertSelective(gridUser));
+        //System.out.println(gridUserService.insertSelective(gridUser));
     }
 
 
@@ -71,7 +71,7 @@ public class GridUserMapperTest {
         GridUser gridUser = new GridUser();
         gridUser.setAccountId(1L);
         gridUser.setStatus(2);
-        System.out.println(gridUserService.updateByPrimaryKeySelective(gridUser));
+        //System.out.println(gridUserService.updateByPrimaryKeySelective(gridUser));
         System.out.println(gridUserService.deleteByPrimaryKey(2L));
     }
 

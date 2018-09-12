@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.GridInfoMapper">
+  <resultMap id="BaseResultMap" type="model.GridInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="grid_code" jdbcType="VARCHAR" property="gridCode" />
+    <result column="grid_name" jdbcType="VARCHAR" property="gridName" />
+    <result column="org_code" jdbcType="BIGINT" property="orgCode" />
+    <result column="grid_type" jdbcType="INTEGER" property="gridType" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="account_id" jdbcType="BIGINT" property="accountId" />
+    <result column="assist_manager" jdbcType="VARCHAR" property="assistManager" />
+    <result column="supervise_manager" jdbcType="VARCHAR" property="superviseManager" />
+    <result column="qr_code" jdbcType="VARCHAR" property="qrCode" />
+    <result column="grid_map" jdbcType="VARCHAR" property="gridMap" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, grid_code, grid_name, org_code, grid_type, description, account_id, assist_manager, 
+    supervise_manager, qr_code, grid_map, created_at, updated_at
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from grid_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from grid_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="model.GridInfo">
+    insert into grid_info (id, grid_code, grid_name, 
+      org_code, grid_type, description, 
+      account_id, assist_manager, supervise_manager, 
+      qr_code, grid_map, created_at, 
+      updated_at)
+    values (#{id,jdbcType=BIGINT}, #{gridCode,jdbcType=VARCHAR}, #{gridName,jdbcType=VARCHAR}, 
+      #{orgCode,jdbcType=BIGINT}, #{gridType,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
+      #{accountId,jdbcType=BIGINT}, #{assistManager,jdbcType=VARCHAR}, #{superviseManager,jdbcType=VARCHAR}, 
+      #{qrCode,jdbcType=VARCHAR}, #{gridMap,jdbcType=VARCHAR}, #{createdAt,jdbcType=BIGINT}, 
+      #{updatedAt,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="model.GridInfo">
+    insert into grid_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="gridCode != null">
+        grid_code,
+      </if>
+      <if test="gridName != null">
+        grid_name,
+      </if>
+      <if test="orgCode != null">
+        org_code,
+      </if>
+      <if test="gridType != null">
+        grid_type,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="accountId != null">
+        account_id,
+      </if>
+      <if test="assistManager != null">
+        assist_manager,
+      </if>
+      <if test="superviseManager != null">
+        supervise_manager,
+      </if>
+      <if test="qrCode != null">
+        qr_code,
+      </if>
+      <if test="gridMap != null">
+        grid_map,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="gridCode != null">
+        #{gridCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gridName != null">
+        #{gridName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null">
+        #{orgCode,jdbcType=BIGINT},
+      </if>
+      <if test="gridType != null">
+        #{gridType,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="accountId != null">
+        #{accountId,jdbcType=BIGINT},
+      </if>
+      <if test="assistManager != null">
+        #{assistManager,jdbcType=VARCHAR},
+      </if>
+      <if test="superviseManager != null">
+        #{superviseManager,jdbcType=VARCHAR},
+      </if>
+      <if test="qrCode != null">
+        #{qrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gridMap != null">
+        #{gridMap,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="model.GridInfo">
+    update grid_info
+    <set>
+      <if test="gridCode != null">
+        grid_code = #{gridCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gridName != null">
+        grid_name = #{gridName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null">
+        org_code = #{orgCode,jdbcType=BIGINT},
+      </if>
+      <if test="gridType != null">
+        grid_type = #{gridType,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="accountId != null">
+        account_id = #{accountId,jdbcType=BIGINT},
+      </if>
+      <if test="assistManager != null">
+        assist_manager = #{assistManager,jdbcType=VARCHAR},
+      </if>
+      <if test="superviseManager != null">
+        supervise_manager = #{superviseManager,jdbcType=VARCHAR},
+      </if>
+      <if test="qrCode != null">
+        qr_code = #{qrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gridMap != null">
+        grid_map = #{gridMap,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="model.GridInfo">
+    update grid_info
+    set grid_code = #{gridCode,jdbcType=VARCHAR},
+      grid_name = #{gridName,jdbcType=VARCHAR},
+      org_code = #{orgCode,jdbcType=BIGINT},
+      grid_type = #{gridType,jdbcType=INTEGER},
+      description = #{description,jdbcType=VARCHAR},
+      account_id = #{accountId,jdbcType=BIGINT},
+      assist_manager = #{assistManager,jdbcType=VARCHAR},
+      supervise_manager = #{superviseManager,jdbcType=VARCHAR},
+      qr_code = #{qrCode,jdbcType=VARCHAR},
+      grid_map = #{gridMap,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=BIGINT},
+      updated_at = #{updatedAt,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

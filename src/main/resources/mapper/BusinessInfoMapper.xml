@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.BusinessInfoMapper">
+	<!-- 插入客户业务信息 -->
+	<insert id="insertSelective" parameterType="java.util.Map">
+		insert into business_info
+		<foreach collection="map.keys" item="key" open="(" close=")"  
+            separator=",">  
+            ${key}  
+        </foreach>  
+        values  
+        <foreach collection="map.values" item="value" open="("  
+            close=")" separator=",">  
+            #{value}  
+        </foreach> 
+	</insert>
+	
+	<!-- 业务信息查讯 -->
+	<select id="getBusinessByPrimaryKey" parameterType="java.lang.String" resultType="java.util.Map">
+		select * from business_info
+		where id_number=#{idNumber}
+	</select>
+	
+	<!-- 修改客户业务信息 -->
+	<update id="updateByPrimaryKeySelective" parameterType="java.util.Map">
+		update business_info
+		set
+		<foreach collection="map.keys" item="key" open="" close=""  
+            separator=",">  
+            ${key} = #{map[${key}]}  
+        </foreach>  
+        where id = #{map[id]}
+	</update>
+	
+	<!-- 修改表结构      添加产品列cloName -->
+	<update id="updateTableStructure" parameterType="java.lang.String">
+		alter table business_info add ${cloName} decimal(20, 2) NULL DEFAULT NULL;
+	</update>
+</mapper>

@@ -32,28 +32,11 @@ public class GridUserController {
      * @throws Exception
      */
     @RequestMapping(value = "/account",method = RequestMethod.POST)
-    public ResponseData insertGridUser(GridUser gridUser,@RequestParam("roleId") List<Long> roleIds) {
-        logger.info("list:"+roleIds.size()+";为空："+roleIds.isEmpty());
-
-        if (roleIds.isEmpty()) {
-            return new ResponseData().fail("roleId列表不能为空");
-        }
-        for (Long roleId : roleIds) {
-            if (roleId == null || roleId == 0) {
-                logger.info("roleId为空");
-                return new ResponseData().fail("roleId不能为空");
-            }
-        }
+    public ResponseData insertGridUser(GridUser gridUser, String roleIds) {
+        logger.info("添加用户及关联角色");
         try {
-            //新增用户
-            if (userService.insertSelective(gridUser)) {
-                //新增用户角色关联表
-                GridUserRole userRole = new GridUserRole();
-                userRole.setAccountId(gridUser.getAccountId());
-                for (Long roleId : roleIds) {
-                    userRole.setRoleId(roleId);
-                    userRoleService.insert(userRole);
-                }
+            //新增用户及角色
+            if (userService.insertSelective(gridUser, roleIds)) {
                 return new ResponseData().success();
             }else {
                 return new ResponseData().fail();
@@ -74,36 +57,14 @@ public class GridUserController {
      */
     @RequestMapping(value = "/account/{accountId}/password", method = RequestMethod.PUT)
     public ResponseData updatePassword(@PathVariable Long accountId, String oldPassword, String newPassword){
-
-        if (oldPassword == null || newPassword==null || oldPassword.isEmpty() || newPassword.isEmpty()) {
-            return new ResponseData().fail("用户密码不能为空");
-        }
-        //数据库查询用户密码
-        GridUser user;
+        GridUser user = new GridUser();
+        user.setAccountId(accountId);
         try {
-            user = userService.getUserByPrimaryKey(accountId);
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
-        if (user == null) {
-            return new ResponseData().fail("用户不存在");
-        }
-        if (user.getPassword() == null || user.getPassword().isEmpty()) {
-            return new ResponseData().fail("该用户密码为空");
-        }
-
-        //校验密码
-        if (!Md5Util.verify(user.getPassword(),oldPassword)) {
-            return new ResponseData().fail("旧密码不正确");
-        }
-
-        //更新用户
-        GridUser gridUser = new GridUser();
-        gridUser.setAccountId(accountId);
-        gridUser.setPassword(Md5Util.createSaltMD5(newPassword));
-        try {
-            userService.updateByPrimaryKeySelective(gridUser);
-            return new ResponseData().success();
+            if (userService.updatePasswordByOldPassword(user, oldPassword, newPassword)) {
+                return new ResponseData().success();
+            } else {
+                return new ResponseData().fail();
+            }
         } catch (Exception e) {
             return new ResponseData().fail(e.getMessage());
         }
@@ -116,36 +77,10 @@ public class GridUserController {
      * @throws Exception
      */
     @RequestMapping(value = "/account/{accountId}", method = RequestMethod.PUT)
-    public ResponseData updateAccount(GridUser gridUser, @RequestParam("roleId") List<Long> roleIds) {
-        if (gridUser.getAccountName() == null || gridUser.getAccountName().isEmpty()) {
-            return new ResponseData().fail("角色名称不能为空");
-        }
-        if (roleIds.isEmpty()) {
-            return new ResponseData().fail("roleId列表不能为空");
-        }
-        for (Long roleId : roleIds) {
-            if (roleId == null || roleId == 0) {
-                logger.info("roleId为空");
-                return new ResponseData().fail("roleId不能为空");
-            }
-        }
-        //如果密码不为空则进行加密存储
-        String password = gridUser.getPassword();
-        if (password != null && !password.isEmpty()) {
-            gridUser.setPassword(Md5Util.createSaltMD5(password));
-        }
+    public ResponseData updateAccount(GridUser gridUser, String roleIds) {
         try {
             //编辑用户
-            if (userService.updateByPrimaryKeySelective(gridUser)) {
-                //删除用户角色关联表的数据
-                userRoleService.deleteByUser(gridUser.getAccountId());
-                //新增用户角色关联表
-                GridUserRole userRole = new GridUserRole();
-                userRole.setAccountId(gridUser.getAccountId());
-                for (Long roleId : roleIds) {
-                    userRole.setRoleId(roleId);
-                    userRoleService.insert(userRole);
-                }
+            if (userService.updateByPrimaryKeySelective(gridUser, roleIds)) {
                 return new ResponseData().success();
             } else {
                 return new ResponseData().fail();

@@ -3,7 +3,8 @@ package exception;
 /**
  * 自定义异常
  */
-public class MyException extends Exception{
+public class MyException extends RuntimeException{
+    private static final long serialVersionUID = 2305653807231756702L;
     //异常信息
     private String message;
     //构造器

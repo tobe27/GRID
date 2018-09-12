@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.FinanceInfoMapper">
+
+  <resultMap id="BaseResultMap" type="model.FinanceInfo">
+    <id column="finance_id" jdbcType="BIGINT" property="financeId" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="industry" jdbcType="INTEGER" property="industry" />
+    <result column="career" jdbcType="VARCHAR" property="career" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="company_address" jdbcType="VARCHAR" property="companyAddress" />
+    <result column="work_year" jdbcType="INTEGER" property="workYear" />
+    <result column="house_number" jdbcType="INTEGER" property="houseNumber" />
+    <result column="house_price" jdbcType="DOUBLE" property="housePrice" />
+    <result column="car_number" jdbcType="INTEGER" property="carNumber" />
+    <result column="car_price" jdbcType="DOUBLE" property="carPrice" />
+    <result column="year_salary" jdbcType="DOUBLE" property="yearSalary" />
+    <result column="shop_number" jdbcType="INTEGER" property="shopNumber" />
+    <result column="shop_price" jdbcType="DOUBLE" property="shopPrice" />
+    <result column="equipment_number" jdbcType="INTEGER" property="equipmentNumber" />
+    <result column="equipment_price" jdbcType="DOUBLE" property="equipmentPrice" />
+    <result column="year_surplus" jdbcType="DOUBLE" property="yearSurplus" />
+    <result column="land_acreage" jdbcType="DOUBLE" property="landAcreage" />
+    <result column="greenhouse_number" jdbcType="INTEGER" property="greenhouseNumber" />
+    <result column="breed_type" jdbcType="VARCHAR" property="breedType" />
+    <result column="breed_number" jdbcType="INTEGER" property="breedNumber" />
+    <result column="company_earnings" jdbcType="DOUBLE" property="companyEarnings" />
+    <result column="other" jdbcType="VARCHAR" property="other" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    finance_id, id_number, industry, career, company_name, company_address, work_year, 
+    house_number, house_price, car_number, car_price, year_salary, shop_number, shop_price, 
+    equipment_number, equipment_price, year_surplus, land_acreage, greenhouse_number, 
+    breed_type, breed_number, company_earnings, other, created_at, updated_at
+  </sql>
+
+  <select id="getFinanceInfoByIdNumber" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from finance_info
+    where id_number = #{idNumber,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByIdNumber" parameterType="java.lang.String">
+    delete from finance_info
+    where id_number = #{idNumber,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insertSelective" parameterType="model.FinanceInfo">
+    insert into finance_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="financeId != null">
+        finance_id,
+      </if>
+      <if test="idNumber != null">
+        id_number,
+      </if>
+      <if test="industry != null">
+        industry,
+      </if>
+      <if test="career != null">
+        career,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="companyAddress != null">
+        company_address,
+      </if>
+      <if test="workYear != null">
+        work_year,
+      </if>
+      <if test="houseNumber != null">
+        house_number,
+      </if>
+      <if test="housePrice != null">
+        house_price,
+      </if>
+      <if test="carNumber != null">
+        car_number,
+      </if>
+      <if test="carPrice != null">
+        car_price,
+      </if>
+      <if test="yearSalary != null">
+        year_salary,
+      </if>
+      <if test="shopNumber != null">
+        shop_number,
+      </if>
+      <if test="shopPrice != null">
+        shop_price,
+      </if>
+      <if test="equipmentNumber != null">
+        equipment_number,
+      </if>
+      <if test="equipmentPrice != null">
+        equipment_price,
+      </if>
+      <if test="yearSurplus != null">
+        year_surplus,
+      </if>
+      <if test="landAcreage != null">
+        land_acreage,
+      </if>
+      <if test="greenhouseNumber != null">
+        greenhouse_number,
+      </if>
+      <if test="breedType != null">
+        breed_type,
+      </if>
+      <if test="breedNumber != null">
+        breed_number,
+      </if>
+      <if test="companyEarnings != null">
+        company_earnings,
+      </if>
+      <if test="other != null">
+        other,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="financeId != null">
+        #{financeId,jdbcType=BIGINT},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="industry != null">
+        #{industry,jdbcType=INTEGER},
+      </if>
+      <if test="career != null">
+        #{career,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyAddress != null">
+        #{companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="workYear != null">
+        #{workYear,jdbcType=INTEGER},
+      </if>
+      <if test="houseNumber != null">
+        #{houseNumber,jdbcType=INTEGER},
+      </if>
+      <if test="housePrice != null">
+        #{housePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="carNumber != null">
+        #{carNumber,jdbcType=INTEGER},
+      </if>
+      <if test="carPrice != null">
+        #{carPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="yearSalary != null">
+        #{yearSalary,jdbcType=DOUBLE},
+      </if>
+      <if test="shopNumber != null">
+        #{shopNumber,jdbcType=INTEGER},
+      </if>
+      <if test="shopPrice != null">
+        #{shopPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="equipmentNumber != null">
+        #{equipmentNumber,jdbcType=INTEGER},
+      </if>
+      <if test="equipmentPrice != null">
+        #{equipmentPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="yearSurplus != null">
+        #{yearSurplus,jdbcType=DOUBLE},
+      </if>
+      <if test="landAcreage != null">
+        #{landAcreage,jdbcType=DOUBLE},
+      </if>
+      <if test="greenhouseNumber != null">
+        #{greenhouseNumber,jdbcType=INTEGER},
+      </if>
+      <if test="breedType != null">
+        #{breedType,jdbcType=VARCHAR},
+      </if>
+      <if test="breedNumber != null">
+        #{breedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="companyEarnings != null">
+        #{companyEarnings,jdbcType=DOUBLE},
+      </if>
+      <if test="other != null">
+        #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByIdNumberSelective" parameterType="model.FinanceInfo">
+    update finance_info
+    <set>
+      <if test="industry != null">
+        industry = #{industry,jdbcType=INTEGER},
+      </if>
+      <if test="career != null">
+        career = #{career,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyAddress != null">
+        company_address = #{companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="workYear != null">
+        work_year = #{workYear,jdbcType=INTEGER},
+      </if>
+      <if test="houseNumber != null">
+        house_number = #{houseNumber,jdbcType=INTEGER},
+      </if>
+      <if test="housePrice != null">
+        house_price = #{housePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="carNumber != null">
+        car_number = #{carNumber,jdbcType=INTEGER},
+      </if>
+      <if test="carPrice != null">
+        car_price = #{carPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="yearSalary != null">
+        year_salary = #{yearSalary,jdbcType=DOUBLE},
+      </if>
+      <if test="shopNumber != null">
+        shop_number = #{shopNumber,jdbcType=INTEGER},
+      </if>
+      <if test="shopPrice != null">
+        shop_price = #{shopPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="equipmentNumber != null">
+        equipment_number = #{equipmentNumber,jdbcType=INTEGER},
+      </if>
+      <if test="equipmentPrice != null">
+        equipment_price = #{equipmentPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="yearSurplus != null">
+        year_surplus = #{yearSurplus,jdbcType=DOUBLE},
+      </if>
+      <if test="landAcreage != null">
+        land_acreage = #{landAcreage,jdbcType=DOUBLE},
+      </if>
+      <if test="greenhouseNumber != null">
+        greenhouse_number = #{greenhouseNumber,jdbcType=INTEGER},
+      </if>
+      <if test="breedType != null">
+        breed_type = #{breedType,jdbcType=VARCHAR},
+      </if>
+      <if test="breedNumber != null">
+        breed_number = #{breedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="companyEarnings != null">
+        company_earnings = #{companyEarnings,jdbcType=DOUBLE},
+      </if>
+      <if test="other != null">
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id_number = #{idNumber,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

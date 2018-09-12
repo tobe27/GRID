@@ -37,7 +37,7 @@ public interface GridUserService {
      * @return
      * @throws Exception
      */
-    boolean insertSelective(GridUser record) throws Exception;
+    boolean insertSelective(GridUser record, String roleIds) throws Exception;
 
     /**
      * 查看账户详情
@@ -77,5 +77,7 @@ public interface GridUserService {
      * @return
      * @throws Exception
      */
-    boolean updateByPrimaryKeySelective(GridUser record) throws Exception;
+    boolean updateByPrimaryKeySelective(GridUser record, String roleIds) throws Exception;
+
+    boolean updatePasswordByOldPassword(GridUser record, String oldPassword, String newPassword);
 }

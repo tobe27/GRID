@@ -63,6 +63,7 @@
     <select id="getUsersByUniqueIndex" parameterType="model.GridUser"  resultMap="BaseResultMap">
         select * from grid_user
         where account_name = #{accountName} or phone_number = #{phoneNumber} or id_number = #{idNumber}
+        order by updated_at DESC
     </select>
 
     <!--按条件查询用户列表 with role-->

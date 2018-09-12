@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.GridReviewMapper">
+  <resultMap id="BaseResultMap" type="model.GridReview">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="grid_code" jdbcType="VARCHAR" property="gridCode" />
+    <result column="grid_name" jdbcType="VARCHAR" property="gridName" />
+    <result column="grid_review_name" jdbcType="VARCHAR" property="gridReviewName" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="duties" jdbcType="VARCHAR" property="duties" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, grid_code, grid_name, grid_review_name, id_number, duties, description, address, 
+    created_at, updated_at
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from grid_review
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from grid_review
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="model.GridReview">
+    insert into grid_review (id, grid_code, grid_name, 
+      grid_review_name, id_number, duties, 
+      description, address, created_at, 
+      updated_at)
+    values (#{id,jdbcType=BIGINT}, #{gridCode,jdbcType=VARCHAR}, #{gridName,jdbcType=VARCHAR}, 
+      #{gridReviewName,jdbcType=VARCHAR}, #{idNumber,jdbcType=VARCHAR}, #{duties,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{createdAt,jdbcType=BIGINT}, 
+      #{updatedAt,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="model.GridReview">
+    insert into grid_review
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="gridCode != null">
+        grid_code,
+      </if>
+      <if test="gridName != null">
+        grid_name,
+      </if>
+      <if test="gridReviewName != null">
+        grid_review_name,
+      </if>
+      <if test="idNumber != null">
+        id_number,
+      </if>
+      <if test="duties != null">
+        duties,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="gridCode != null">
+        #{gridCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gridName != null">
+        #{gridName,jdbcType=VARCHAR},
+      </if>
+      <if test="gridReviewName != null">
+        #{gridReviewName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="duties != null">
+        #{duties,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="model.GridReview">
+    update grid_review
+    <set>
+      <if test="gridCode != null">
+        grid_code = #{gridCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gridName != null">
+        grid_name = #{gridName,jdbcType=VARCHAR},
+      </if>
+      <if test="gridReviewName != null">
+        grid_review_name = #{gridReviewName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        id_number = #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="duties != null">
+        duties = #{duties,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="model.GridReview">
+    update grid_review
+    set grid_code = #{gridCode,jdbcType=VARCHAR},
+      grid_name = #{gridName,jdbcType=VARCHAR},
+      grid_review_name = #{gridReviewName,jdbcType=VARCHAR},
+      id_number = #{idNumber,jdbcType=VARCHAR},
+      duties = #{duties,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=BIGINT},
+      updated_at = #{updatedAt,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

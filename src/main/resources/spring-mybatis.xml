@@ -3,13 +3,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
    http://www.springframework.org/schema/context
    http://www.springframework.org/schema/context/spring-context-4.0.xsd
-   http://www.springframework.org/schema/util
-   http://www.springframework.org/schema/util/spring-util.xsd">
+   http://www.springframework.org/schema/tx
+   http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <!--0.使用注解驱动-->
     <context:annotation-config/>
@@ -17,12 +17,15 @@
     <context:component-scan base-package="dao,model,service,service.impl,util"/>
 
     <!--1.配置资源-->
+
     <bean id="dataSource"
           class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close" >
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
         <property name="url" value="jdbc:mysql://192.168.1.137:3306/db?characterEncoding=utf-8&amp;serverTimezone=GMT%2B8&amp;useSSL=false"/>
+        <!--<property name="url" value="jdbc:mysql://101.132.152.195:3306/grid?characterEncoding=utf-8&amp;serverTimezone=GMT%2B8&amp;useSSL=false"/>-->
         <property name ="username" value="root"/>
         <property name="password" value="123456"/>
+        <!--<property name="password" value="Yzs@123456"/>-->
         <!--连接池一些属性设置-->
         <property name="initialSize" value="1"/>
         <property name="minIdle" value="3" />
@@ -65,8 +68,10 @@
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource" />
     </bean>
+    <!-- 注解方式配置事务 -->
+    <tx:annotation-driven/>
 
-    <!--Shiro-->
+
     <!--Shiro-->
     <!-- Realm实现 -->
     <bean id="statelessRealm" class="shiro.MyStatelessRealm">

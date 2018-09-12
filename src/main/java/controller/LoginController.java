@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import service.GridUserService;
 import util.JwtUtil;
 import util.Md5Util;
+import util.ValidUtil;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,8 +40,7 @@ public class LoginController {
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public ResponseData login(GridUser user) {
-        if (user.getAccountName() == null || user.getPassword() == null ||
-                user.getAccountName().isEmpty() || user.getPassword().isEmpty()) {
+        if (ValidUtil.isEmpty(user.getAccountName()) || ValidUtil.isEmpty(user.getPassword())) {
             return new ResponseData().fail("登录名或密码不能为空");
         }
         try {
@@ -48,14 +49,8 @@ public class LoginController {
             if (gridUser == null) {
                 return new ResponseData().fail("用户不存在");
             }
-            // 用户密码是否为空
-            String saltPassword = gridUser.getPassword();
-            if (saltPassword == null || saltPassword.isEmpty()) {
-                return new ResponseData().fail("该用户密码不存在");
-            }
-
             //验证密码
-            if (!Md5Util.verify(saltPassword, user.getPassword())) {
+            if (!Md5Util.verify(gridUser.getPassword(), user.getPassword())) {
                 return new ResponseData().fail("用户名或密码错误");
             }
             //生成JWT
@@ -68,8 +63,7 @@ public class LoginController {
             Subject subject = SecurityUtils.getSubject();
             UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(jwt, jwt);
             subject.login(usernamePasswordToken);
-            return new ResponseData().success().data(jwt);
-
+            return new ResponseData().success().result("token",jwt).data(gridUser);
         } catch (Exception e) {
             return new ResponseData().fail(e.getMessage());
         }

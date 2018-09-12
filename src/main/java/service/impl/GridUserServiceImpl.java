@@ -4,10 +4,14 @@ import dao.GridUserMapper;
 import exception.MyException;
 import model.GridRole;
 import model.GridUser;
+import model.GridUserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import service.GridUserRoleService;
 import service.GridUserService;
 import util.Md5Util;
+import util.ValidUtil;
 
 import java.util.List;
 import java.util.Set;
@@ -16,6 +20,9 @@ import java.util.Set;
 public class GridUserServiceImpl implements GridUserService {
     @Autowired
     GridUserMapper userMapper;
+
+    @Autowired
+    GridUserRoleService userRoleService;
 
     /**
      * 获取roles
@@ -73,12 +80,16 @@ public class GridUserServiceImpl implements GridUserService {
      * @throws Exception
      */
     @Override
-    public boolean insertSelective(GridUser record) throws Exception {
-        if (record.getAccountName() == null || record.getAccountName().isEmpty()) {
-            throw  new MyException("登录名不能为空");
+    @Transactional
+    public boolean insertSelective(GridUser record, String roleIds) throws Exception {
+        if (ValidUtil.isEmpty(roleIds)) {
+            throw  new MyException("角色ID不能为空");
         }
-        if (record.getPassword() == null || record.getPassword().isEmpty()){
-            throw  new MyException("密码不能为空");
+        if (!ValidUtil.loginName(record.getAccountName(),20)) {
+            throw  new MyException("登录名错误，是2-16位英文、数字、下划线，且英文开头");
+        }
+        if (!ValidUtil.length(record.getPassword(), 6, 20)) {
+            throw  new MyException("密码长度是6-20位");
         }
         // 查询数据库校验用户名是否存在
         if (userMapper.getUsersByUniqueIndex(record) != null){
@@ -93,7 +104,16 @@ public class GridUserServiceImpl implements GridUserService {
         record.setCreatedAt(now);
         record.setUpdatedAt(now);
         try {
-            return this.userMapper.insertSelective(record) == 1;
+            int count = userMapper.insertSelective(record);
+            GridUserRole userRole = new GridUserRole();
+            userRole.setAccountId(record.getAccountId());
+            String[] roleId = roleIds.trim().split(",");
+            for (String id : roleId) {
+                userRole.setRoleId(Long.valueOf(id));
+                userRoleService.insert(userRole);
+            }
+            return count == 1 ;
+
         } catch (Exception e) {
             throw new MyException("新增用户出现异常");
         }
@@ -172,15 +192,75 @@ public class GridUserServiceImpl implements GridUserService {
      * @throws Exception
      */
     @Override
-    public boolean updateByPrimaryKeySelective(GridUser record) throws Exception {
-        if (record.getAccountId() == null) {
-            throw new MyException("用户ID不能为空");
+    @Transactional
+    public boolean updateByPrimaryKeySelective(GridUser record, String roleIds) throws Exception {
+        if (ValidUtil.isEmpty(roleIds)) {
+            throw  new MyException("角色ID不能为空");
         }
+        if (!ValidUtil.loginName(record.getAccountName(),20)) {
+            throw  new MyException("登录名错误，是2-16位英文、数字、下划线，且英文开头");
+        }
+        if (!ValidUtil.length(record.getPassword(), 6, 20)) {
+            throw  new MyException("密码长度是6-20位");
+        }
+        // 查询数据库校验用户名是否存在
+        if (userMapper.getUsersByUniqueIndex(record) != null){
+            throw  new MyException("用户名或者号码或者身份证号码已被注册");
+        }
+
+        // 密码加密
+        String password = Md5Util.createSaltMD5(record.getPassword());
+        record.setPassword(password);
+
         record.setUpdatedAt(System.currentTimeMillis());
         try {
-            return userMapper.updateByPrimaryKeySelective(record) == 1;
+            int count = userMapper.updateByPrimaryKeySelective(record);
+            //删除用户角色关联表的数据
+            userRoleService.deleteByUser(record.getAccountId());
+            //添加用户角色关联表的数据
+            GridUserRole userRole = new GridUserRole();
+            userRole.setAccountId(record.getAccountId());
+            String[] roleId = roleIds.trim().split(",");
+            for (String id : roleId) {
+                userRole.setRoleId(Long.valueOf(id));
+                userRoleService.insert(userRole);
+            }
+            return  count == 1;
         } catch (Exception e) {
             throw new MyException("修改用户出现异常");
         }
+    }
+
+    @Override
+    public boolean updatePasswordByOldPassword(GridUser record, String oldPassword, String newPassword) {
+        if (ValidUtil.isEmpty(record.getAccountId()) || ValidUtil.isEmpty(oldPassword) || ValidUtil.isEmpty(newPassword)) {
+            throw new MyException("请求数据不能为空");
+        }
+        if (!ValidUtil.length(oldPassword, 6, 20) || !ValidUtil.length(newPassword, 6, 20)) {
+            throw new MyException("密码长度为6-20");
+        }
+        GridUser user;
+        try {
+            user = userMapper.getUserByPrimaryKey(record.getAccountId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new MyException("获取客户出现异常");
+        }
+
+        if (user == null) {
+            throw new MyException("用户不存在");
+        }
+
+        if (!Md5Util.verify(user.getPassword(),oldPassword)) {
+            throw new MyException("旧密码不正确");
+        }
+        record.setPassword(Md5Util.createSaltMD5(newPassword));
+        try {
+            return userMapper.updateByPrimaryKeySelective(record) == 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new MyException("修改密码出现异常");
+        }
+
     }
 }

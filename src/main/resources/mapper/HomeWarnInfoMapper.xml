@@ -22,6 +22,7 @@
         <if test="amount != null">
             and amount >= #{amount}
         </if>
+        order by time DESC
     </select>
     
   <insert id="insertSelective" parameterType="model.HomeWarnInfo">

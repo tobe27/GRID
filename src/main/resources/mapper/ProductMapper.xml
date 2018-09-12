@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.ProductDictMapper">
+
+  <resultMap id="BaseResultMap" type="model.ProductDict">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="BIGINT" property="code" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+  </resultMap>
+
+  <!-- 插入银行产品信息 -->
+  <insert id="insertSelective" parameterType="model.ProductDict">
+  	insert into product_dict
+  	<trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+  	</trim>
+  	<trim prefix="values (" suffix=")" suffixOverrides=",">
+  	  <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+  	  <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+  	</trim>
+  </insert>
+  
+  <!-- 查询银行产品最大编码 -->
+  <select id="getMaxCode" resultType="java.lang.String">
+  	select max(code) from product_dict
+  </select>
+  
+  <!-- 修改产品信息 -->
+  <update id="updateByPrimaryKeySelective" parameterType="model.ProductDict">
+  	update product_dict
+  	<set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+  	  <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+  	</set>
+  	where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <!-- 银行产品列表查询 -->
+  <select id="listProducts" resultMap="BaseResultMap">
+  	select id,name,code,state,created_at,updated_at
+  	from product_dict
+  	where 1=1
+  	<if test="state!=null">
+  		and state=#{state}
+  	</if>
+  </select>
+
+  <!-- 修改产品状态 -->
+  <update id="updateProductState" parameterType="model.ProductDict">
+  	update product_dict
+  	set state = #{state,jdbcType=INTEGER},
+    updated_at = #{updatedAt,jdbcType=BIGINT}s
+  	where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <!-- 查询所有开启的银行产品名称及编码 -->
+  <select id="listAllOpenProducts" resultMap="BaseResultMap">
+  	select name,code from product_dict
+  	where state=1
+  </select>
+</mapper>

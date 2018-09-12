@@ -1,10 +1,12 @@
 package model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import lombok.ToString;
 @ToString
-public class HomeBasicInfo {
+public class HomeBasicInfo implements Serializable {
+    private static final long serialVersionUID = 486224276498533954L;
     private Long id;
 
     private Long familyNum;

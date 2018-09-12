@@ -80,7 +80,7 @@ public class GridDictionaryController {
 		 
 	        try {
 	        	gridDictionaryService.addGridDictionaryList(list);
-	            return new ResponseData().success();
+	            return new ResponseData().success().code(200);
 	        } catch (Exception e) {
 	            return new ResponseData().code(400).message(e.getMessage());
 	        }

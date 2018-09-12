@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.ResidentInfoMapper">
+  <resultMap id="BaseResultMap" type="model.ResidentInfo">
+    <id column="resident_id" jdbcType="BIGINT" property="residentId" />
+    <result column="resident_name" jdbcType="VARCHAR" property="residentName" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="nation" jdbcType="VARCHAR" property="nation" />
+    <result column="birthdate" jdbcType="VARCHAR" property="birthdate" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="household_type" jdbcType="VARCHAR" property="householdType" />
+    <result column="relationship" jdbcType="VARCHAR" property="relationship" />
+    <result column="household_id" jdbcType="BIGINT" property="householdId" />
+    <result column="contact" jdbcType="VARCHAR" property="contact" />
+    <result column="is_in_list" jdbcType="VARCHAR" property="isInList" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    resident_id, resident_name, sex, nation, birthdate, id_number, address, household_type, 
+    relationship, household_id, contact, is_in_list, remark, created_at, updated_at
+  </sql>
+
+    <select id="listResidents"  parameterType="model.ResidentInfo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from resident_info
+        where 1 = 1
+        <if test="residentName != null">
+            and resident_name like CONCAT('%',#{residentName},'%')
+        </if>
+        <if test="idNumber != null">
+            and id_number like CONCAT('%',#{idNumber},'%')
+        </if>
+        <if test="householdId != null">
+            and household_id like CONCAT('%',#{householdId},'%')
+        </if>
+        order by updated_at DESC
+    </select>
+
+<insert id="batchSave" >
+  insert into resident_info  (resident_name,sex,nation,birthdate,id_number,address,household_type,relationship,household_id,contact,is_in_list,remark,created_at,updated_at)
+  VALUES
+  <foreach  collection="list" item="item" separator=",">
+        (#{item.residentName}, #{item.sex}, #{item.nation},#{item.birthdate},  #{item.idNumber}, #{item.address}, #{item.householdType}, #{item.relationship}, #{item.householdId}
+        , #{item.contact}, #{item.isInList}, #{item.remark}, #{item.createdAt}, #{item.updatedAt})
+    </foreach>
+
+</insert>
+  <select id="getResidentByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from resident_info
+    where resident_id = #{residentId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from resident_info
+    where resident_id = #{residentId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertSelective" parameterType="model.ResidentInfo">
+    insert into resident_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="residentId != null">
+        resident_id,
+      </if>
+      <if test="residentName != null">
+        resident_name,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="nation != null">
+        nation,
+      </if>
+      <if test="birthdate != null">
+        birthdate,
+      </if>
+      <if test="idNumber != null">
+        id_number,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="householdType != null">
+        household_type,
+      </if>
+      <if test="relationship != null">
+        relationship,
+      </if>
+      <if test="householdId != null">
+        household_id,
+      </if>
+      <if test="contact != null">
+        contact,
+      </if>
+      <if test="isInList != null">
+        is_in_list,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="residentId != null">
+        #{residentId,jdbcType=BIGINT},
+      </if>
+      <if test="residentName != null">
+        #{residentName,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="nation != null">
+        #{nation,jdbcType=VARCHAR},
+      </if>
+      <if test="birthdate != null">
+        #{birthdate,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="householdType != null">
+        #{householdType,jdbcType=VARCHAR},
+      </if>
+      <if test="relationship != null">
+        #{relationship,jdbcType=VARCHAR},
+      </if>
+      <if test="householdId != null">
+        #{householdId,jdbcType=BIGINT},
+      </if>
+      <if test="contact != null">
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="isInList != null">
+        #{isInList,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+
+  <update id="updateByPrimaryKeySelective" parameterType="model.ResidentInfo">
+    update resident_info
+    <set>
+      <if test="residentName != null">
+        resident_name = #{residentName,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="nation != null">
+        nation = #{nation,jdbcType=VARCHAR},
+      </if>
+      <if test="birthdate != null">
+        birthdate = #{birthdate,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        id_number = #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="householdType != null">
+        household_type = #{householdType,jdbcType=VARCHAR},
+      </if>
+      <if test="relationship != null">
+        relationship = #{relationship,jdbcType=VARCHAR},
+      </if>
+      <if test="householdId != null">
+        household_id = #{householdId,jdbcType=BIGINT},
+      </if>
+      <if test="contact != null">
+        contact = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="isInList != null">
+        is_in_list = #{isInList,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where resident_id = #{residentId,jdbcType=BIGINT}
+  </update>
+
+</mapper>
