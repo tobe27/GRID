@@ -10,8 +10,7 @@
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
     <collection property="permissionList" column="role_id"   ofType="model.GridPermission" select="getGridPermissions" >
-    
-		</collection>
+    </collection>
   </resultMap>
   
   
@@ -44,9 +43,10 @@
   
   <select id="getGridPermissions" parameterType="java.lang.Long" resultMap="GridPermissionMap">
   
-  select gp.* from grid_permission gp LEFT JOIN  grid_role_permission grp on gp.permission_id=grp.permission_id WHERE grp.role_id=#{role_id} 
-  
-  
+  select gp.* from grid_permission gp
+  LEFT JOIN  grid_role_permission grp on gp.permission_id=grp.permission_id
+  WHERE grp.role_id=#{role_id}
+
   </select>
   
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">

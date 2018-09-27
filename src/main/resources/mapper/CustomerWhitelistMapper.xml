@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.CustomerWhitelistMapper">
+  <resultMap id="BaseResultMap" type="model.CustomerWhitelist">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="phone_number" jdbcType="BIGINT" property="phoneNumber" />
+    <result column="grid_code" jdbcType="VARCHAR" property="gridCode" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+    <result column="adress" jdbcType="VARCHAR" property="adress" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, customer_name, id_number, phone_number, grid_code, comment, created_at, updated_at, 
+    adress
+  </sql>
+  
+  <select id="getByIdOrIdnumber" parameterType="model.CustomerWhitelist" resultMap="BaseResultMap">
+  select* from customer_whitelist where id_number=#{idNumber}
+  <if test="id != null">
+    and id != #{id,jdbcType=BIGINT}
+  </if>
+  </select>
+  <select id="getWhiteLists" parameterType="model.CustomerWhitelist" resultMap="BaseResultMap">
+  select * from customer_whitelist where 1=1 
+  <if test="customerName != null">
+   and customer_name like  CONCAT('%',#{customerName},'%')
+  </if>
+  <if test="idNumber != null">
+   and id_number like  CONCAT('%',#{idNumber},'%')
+  </if>
+  <if test="gridCode != null">
+   and grid_code = #{gridCode}
+  </if>
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer_whitelist
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from customer_whitelist
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="model.CustomerWhitelist">
+    insert into customer_whitelist (id, customer_name, id_number, 
+      phone_number, grid_code, comment, 
+      created_at, updated_at, adress
+      )
+    values (#{id,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, #{idNumber,jdbcType=VARCHAR}, 
+      #{phoneNumber,jdbcType=BIGINT}, #{gridCode,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR}, 
+      #{createdAt,jdbcType=BIGINT}, #{updatedAt,jdbcType=BIGINT}, #{adress,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="model.CustomerWhitelist">
+    insert into customer_whitelist
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="customerName != null">
+        customer_name,
+      </if>
+      <if test="idNumber != null">
+        id_number,
+      </if>
+      <if test="phoneNumber != null">
+        phone_number,
+      </if>
+      <if test="gridCode != null">
+        grid_code,
+      </if>
+      <if test="comment != null">
+        comment,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="adress != null">
+        adress,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="customerName != null">
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=BIGINT},
+      </if>
+      <if test="gridCode != null">
+        #{gridCode,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+      <if test="adress != null">
+        #{adress,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="model.CustomerWhitelist">
+    update customer_whitelist
+    <set>
+      <if test="customerName != null">
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        id_number = #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=BIGINT},
+      </if>
+      <if test="gridCode != null">
+        grid_code = #{gridCode,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+      <if test="adress != null">
+        adress = #{adress,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="model.CustomerWhitelist">
+    update customer_whitelist
+    set customer_name = #{customerName,jdbcType=VARCHAR},
+      id_number = #{idNumber,jdbcType=VARCHAR},
+      phone_number = #{phoneNumber,jdbcType=BIGINT},
+      grid_code = #{gridCode,jdbcType=VARCHAR},
+      comment = #{comment,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=BIGINT},
+      updated_at = #{updatedAt,jdbcType=BIGINT},
+      adress = #{adress,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

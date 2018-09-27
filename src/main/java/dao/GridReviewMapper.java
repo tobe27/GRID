@@ -1,5 +1,9 @@
 package dao;
 
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
 import model.GridReview;
 
 public interface GridReviewMapper {
@@ -14,4 +18,5 @@ public interface GridReviewMapper {
     int updateByPrimaryKeySelective(GridReview record);
 
     int updateByPrimaryKey(GridReview record);
+    int   deleteByGridCode(Map<String,Object> map);
 }

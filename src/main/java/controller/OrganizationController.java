@@ -23,13 +23,11 @@ public class OrganizationController {
      * @return
      */
     @RequestMapping(value = "/org", method = RequestMethod.POST)
-    public ResponseData insertOrg(Organization organization) {
-        try {
-            organizationService.insertSelective(organization);
-            return new ResponseData().success();
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    public ResponseData insertOrg(Organization organization) throws Exception {
+
+        organizationService.insertSelective(organization);
+        return new ResponseData().success();
+
     }
 
     /**
@@ -38,13 +36,11 @@ public class OrganizationController {
      * @return
      */
     @RequestMapping(value = "/org/{orgCode}", method = RequestMethod.PUT)
-    public ResponseData updateOrg(Organization organization) {
-        try {
-            organizationService.updateByOrgCodeSelective(organization);
-            return new ResponseData().success();
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    public ResponseData updateOrg(Organization organization) throws Exception {
+
+        organizationService.updateByOrgCodeSelective(organization);
+        return new ResponseData().success();
+
     }
 
     /**
@@ -53,13 +49,11 @@ public class OrganizationController {
      * @return
      */
     @RequestMapping(value = "/org/{orgCode}", method = RequestMethod.DELETE)
-    public ResponseData deleteOrg(@PathVariable Long orgCode) {
-        try {
-            organizationService.deleteByOrgCode(orgCode);
-            return new ResponseData().success();
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    public ResponseData deleteOrg(@PathVariable Long orgCode) throws Exception {
+
+        organizationService.deleteByOrgCode(orgCode);
+        return new ResponseData().success();
+
     }
 
     /**
@@ -68,14 +62,12 @@ public class OrganizationController {
      * @return
      */
     @RequestMapping(value = "/org/{orgCode}", method = RequestMethod.GET)
-    public ResponseData getOrg(@PathVariable Long orgCode) {
-        try {
-            Organization organization = organizationService.getOrganizationByOrgCode(orgCode);
-            List<Organization> nextOrganization = organizationService.getOrganizationsByPreOrgCode(orgCode);
-            return new ResponseData().success().data(organization).result("nextOrganization",nextOrganization);
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    public ResponseData getOrg(@PathVariable Long orgCode) throws Exception {
+
+        Organization organization = organizationService.getOrganizationByOrgCode(orgCode);
+        List<Organization> nextOrganization = organizationService.getOrganizationsByPreOrgCode(orgCode);
+        return new ResponseData().success().data(organization).result("nextOrganization",nextOrganization);
+
     }
 
 }

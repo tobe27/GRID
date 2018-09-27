@@ -79,5 +79,5 @@ public interface GridUserService {
      */
     boolean updateByPrimaryKeySelective(GridUser record, String roleIds) throws Exception;
 
-    boolean updatePasswordByOldPassword(GridUser record, String oldPassword, String newPassword);
+    boolean updatePasswordByOldPassword(GridUser record, String oldPassword, String newPassword) throws Exception;
 }

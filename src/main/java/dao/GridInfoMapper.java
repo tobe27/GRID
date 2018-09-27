@@ -1,5 +1,8 @@
 package dao;
 
+import java.util.List;
+import java.util.Map;
+
 import model.GridInfo;
 
 public interface GridInfoMapper {
@@ -14,4 +17,8 @@ public interface GridInfoMapper {
     int updateByPrimaryKeySelective(GridInfo record);
 
     int updateByPrimaryKey(GridInfo record);
+    List<GridInfo> checkSameGridCode(Map<String,Object> map);
+    
+    List<Map<String,Object>> getGridInfoList(Map<String,Object> map);
+    
 }

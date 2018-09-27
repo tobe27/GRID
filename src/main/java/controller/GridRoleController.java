@@ -30,7 +30,7 @@ public class GridRoleController {
      * @throws Exception
      */
 	 @RequestMapping(value = "/role",method = RequestMethod.POST)
-	 public ResponseData insertRole(GridRole gridRole,@RequestParam("permissionIds[]") List<Long> permissionIds) {
+	 public ResponseData insertRole(GridRole gridRole,String permissionIds) {
 	    if(gridRole.getRoleName()==null || "".equals(gridRole.getRoleName())) {
 	    	return new ResponseData().code(400).message("角色名不能为空");
 	    }
@@ -50,7 +50,7 @@ public class GridRoleController {
 	     * @throws Exception
 	     */
 	 @RequestMapping(value = "/role/{roleId}",method = RequestMethod.PUT)
-	 public ResponseData updateRole( GridRole gridRole,@RequestParam("permissionIds[]") List<Long> permissionIds) {
+	 public ResponseData updateRole( GridRole gridRole,String permissionIds) {
 		 if(gridRole.getRoleName()==null || "".equals(gridRole.getRoleName())) {
 		    	return new ResponseData().code(400).message("角色名不能为空");
 		    }

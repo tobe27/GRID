@@ -11,11 +11,11 @@ public interface GridRoleService {
 
 	 boolean insert(GridRole record)throws Exception;
 
-	 boolean insertSelective(GridRole record,List<Long> permissionIds)throws Exception;
+	 boolean insertSelective(GridRole record,String permissionIds)throws Exception;
 
 	    GridRole selectByPrimaryKey(Long roleId)throws Exception;
 
-	    boolean updateByPrimaryKeySelective(GridRole record,List<Long> permissionIds)throws Exception;
+	    boolean updateByPrimaryKeySelective(GridRole record,String permissionIds)throws Exception;
 
 	    boolean updateByPrimaryKey(GridRole record)throws Exception;
 	    PageInfo<GridRole> getGridRoles(int pageNo,int pageSize,String roleName,String roleScope)throws Exception;

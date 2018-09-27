@@ -3,6 +3,7 @@ package model;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 public class CustomerInfo implements Serializable {
@@ -42,6 +43,8 @@ public class CustomerInfo implements Serializable {
     private Long createdAt;
 
     private Long updatedAt;
+
+    private List<TagCustomer> tags;
 
     public Long getCustomerId() {
         return customerId;

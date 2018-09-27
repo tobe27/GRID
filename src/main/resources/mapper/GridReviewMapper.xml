@@ -17,6 +17,9 @@
     id, grid_code, grid_name, grid_review_name, id_number, duties, description, address, 
     created_at, updated_at
   </sql>
+  <delete id="deleteByGridCode" parameterType="java.util.Map">
+  delete from grid_review where grid_code = #{gridCode}
+  </delete>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

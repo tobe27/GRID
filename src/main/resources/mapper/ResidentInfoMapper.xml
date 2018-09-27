@@ -15,12 +15,13 @@
     <result column="contact" jdbcType="VARCHAR" property="contact" />
     <result column="is_in_list" jdbcType="VARCHAR" property="isInList" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="career" jdbcType="VARCHAR" property="career" />
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
   </resultMap>
   <sql id="Base_Column_List">
     resident_id, resident_name, sex, nation, birthdate, id_number, address, household_type, 
-    relationship, household_id, contact, is_in_list, remark, created_at, updated_at
+    relationship, household_id, contact, is_in_list, remark, career, created_at, updated_at
   </sql>
 
     <select id="listResidents"  parameterType="model.ResidentInfo" resultMap="BaseResultMap">
@@ -35,7 +36,7 @@
             and id_number like CONCAT('%',#{idNumber},'%')
         </if>
         <if test="householdId != null">
-            and household_id like CONCAT('%',#{householdId},'%')
+            and household_id = #{householdId}
         </if>
         order by updated_at DESC
     </select>
@@ -103,6 +104,9 @@
       <if test="remark != null">
         remark,
       </if>
+        <if test="career != null">
+            career,
+        </if>
       <if test="createdAt != null">
         created_at,
       </if>
@@ -150,6 +154,9 @@
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
+        <if test="career != null">
+            #{career,jdbcType=VARCHAR},
+        </if>
       <if test="createdAt != null">
         #{createdAt,jdbcType=BIGINT},
       </if>
@@ -199,6 +206,9 @@
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+        <if test="career != null">
+            career = #{career,jdbcType=VARCHAR},
+        </if>
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=BIGINT},
       </if>

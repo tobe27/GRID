@@ -55,7 +55,7 @@ public class GridRoleServiceImpl implements GridRoleService {
 	   * @throws Exception
 	   */
 	@Override
-	public boolean insertSelective(GridRole record,List<Long> permissionIds) throws Exception{
+	public boolean insertSelective(GridRole record,String permissionIds) throws Exception{
 		boolean flag=false;
 		record.setCreatedAt(System.currentTimeMillis());
 		try {
@@ -63,12 +63,12 @@ public class GridRoleServiceImpl implements GridRoleService {
 				flag=true;
 			}
 			//传入权限id不为空的话创建角色和权限关联
-			if(permissionIds !=null  && permissionIds.size()>0) {
+			if(permissionIds !=null) {
 				
 				GridRolePermission gridRolePermission=new GridRolePermission();
 				gridRolePermission.setRoleId(record.getRoleId());
-				for(Long permissionId:permissionIds) {
-					gridRolePermission.setPermissionId(permissionId);
+				for(String permissionId:permissionIds.trim().split(",")) {
+					gridRolePermission.setPermissionId(Long.parseLong(permissionId));
 					gridRolePermissionMapper.insertSelective(gridRolePermission);
 				}
 			}
@@ -111,7 +111,7 @@ public class GridRoleServiceImpl implements GridRoleService {
 	   * @throws Exception
 	   */
 	@Override
-	public boolean updateByPrimaryKeySelective(GridRole record,List<Long> permissionIds) throws Exception{
+	public boolean updateByPrimaryKeySelective(GridRole record,String permissionIds) throws Exception{
 		boolean flag=false;
 		try {
 			record.setUpdatedAt(System.currentTimeMillis());
@@ -119,14 +119,14 @@ public class GridRoleServiceImpl implements GridRoleService {
 				flag=true;
 			}
 			//传入权限id不为空的话创建角色和权限关联
-			if(permissionIds !=null  && permissionIds.size()>0) {
+			if(permissionIds !=null) {
 				//先删除原有的角色和权限关联
 				gridRolePermissionMapper.deleteByRoleId(record.getRoleId());
 				//再重新插入关联数据
 				GridRolePermission gridRolePermission=new GridRolePermission();
 				gridRolePermission.setRoleId(record.getRoleId());
-				for(Long permissionId:permissionIds) {
-					gridRolePermission.setPermissionId(permissionId);
+				for(String permissionId:permissionIds.trim().split(",")) {
+					gridRolePermission.setPermissionId(Long.parseLong(permissionId));
 					gridRolePermissionMapper.insertSelective(gridRolePermission);
 				}
 			}

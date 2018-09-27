@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.CustomerCreditMapper">
+  <resultMap id="BaseResultMap" type="model.CustomerCredit">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="pre_credit _limit" jdbcType="DECIMAL" property="preCreditLimit" />
+    <result column="interest_rate" jdbcType="DECIMAL" property="interestRate" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, id_number, "pre_credit _limit", interest_rate, created_at, updated_at
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer_credit
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from customer_credit
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="model.CustomerCredit">
+    insert into customer_credit (id, id_number, "pre_credit _limit", 
+      interest_rate, created_at, updated_at
+      )
+    values (#{id,jdbcType=BIGINT}, #{idNumber,jdbcType=VARCHAR}, #{preCreditLimit,jdbcType=DECIMAL}, 
+      #{interestRate,jdbcType=DECIMAL}, #{createdAt,jdbcType=BIGINT}, #{updatedAt,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="model.CustomerCredit">
+    insert into customer_credit
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="idNumber != null">
+        id_number,
+      </if>
+      <if test="preCreditLimit != null">
+        "pre_credit _limit",
+      </if>
+      <if test="interestRate != null">
+        interest_rate,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="preCreditLimit != null">
+        #{preCreditLimit,jdbcType=DECIMAL},
+      </if>
+      <if test="interestRate != null">
+        #{interestRate,jdbcType=DECIMAL},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="model.CustomerCredit">
+    update customer_credit
+    <set>
+      <if test="idNumber != null">
+        id_number = #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="preCreditLimit != null">
+        "pre_credit _limit" = #{preCreditLimit,jdbcType=DECIMAL},
+      </if>
+      <if test="interestRate != null">
+        interest_rate = #{interestRate,jdbcType=DECIMAL},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="model.CustomerCredit">
+    update customer_credit
+    set id_number = #{idNumber,jdbcType=VARCHAR},
+      "pre_credit _limit" = #{preCreditLimit,jdbcType=DECIMAL},
+      interest_rate = #{interestRate,jdbcType=DECIMAL},
+      created_at = #{createdAt,jdbcType=BIGINT},
+      updated_at = #{updatedAt,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

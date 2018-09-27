@@ -23,13 +23,11 @@ public class RegionController {
      * @return
      */
     @RequestMapping(value = "/region", method = RequestMethod.POST)
-    public ResponseData insertRegion(Region region) {
-        try {
-            regionService.insertSelective(region);
-            return new ResponseData().success();
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    public ResponseData insertRegion(Region region) throws Exception {
+
+        regionService.insertSelective(region);
+        return new ResponseData().success();
+
     }
 
     /**
@@ -38,13 +36,11 @@ public class RegionController {
      * @return
      */
     @RequestMapping(value = "/region/{regionCode}", method = RequestMethod.PUT)
-    public ResponseData updateRegion(Region region) {
-        try {
-            regionService.updateByPrimaryKeySelective(region);
-            return new ResponseData().success();
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    public ResponseData updateRegion(Region region) throws Exception {
+
+        regionService.updateByPrimaryKeySelective(region);
+        return new ResponseData().success();
+
     }
 
     /**
@@ -53,16 +49,14 @@ public class RegionController {
      * @return
      */
     @RequestMapping(value = "/region/{regionCode}", method = RequestMethod.DELETE)
-    public ResponseData deleteRegion(@PathVariable Long regionCode) {
+    public ResponseData deleteRegion(@PathVariable Long regionCode) throws Exception {
         if (regionCode == null) {
             return new ResponseData().fail("行政区域代码不能为空");
         }
-        try {
-            regionService.deleteByPrimaryKey(regionCode);
-            return new ResponseData().success();
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+
+        regionService.deleteByPrimaryKey(regionCode);
+        return new ResponseData().success();
+
     }
 
     /**
@@ -71,18 +65,15 @@ public class RegionController {
      * @return
      */
     @RequestMapping(value = "/region/{regionCode}", method = RequestMethod.GET)
-    public ResponseData getRegion(@PathVariable Long regionCode) {
+    public ResponseData getRegion(@PathVariable Long regionCode) throws Exception {
         if (regionCode == null) {
             return new ResponseData().fail("行政区域代码不能为空");
         }
 
-        try {
-            Region region = regionService.getRegionByPrimaryKey(regionCode);
-            List<Region> nextRegion = regionService.getRegionsByPrimaryKey(regionCode);
-            return new ResponseData().success().data(region).result("nextRegion", nextRegion);
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+        Region region = regionService.getRegionByPrimaryKey(regionCode);
+        List<Region> nextRegion = regionService.getRegionsByPrimaryKey(regionCode);
+        return new ResponseData().success().data(region).result("nextRegion", nextRegion);
+
     }
 
 }

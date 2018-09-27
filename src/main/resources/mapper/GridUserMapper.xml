@@ -23,10 +23,17 @@
   </resultMap>
     <!--get user with roles-->
     <resultMap id="userRoleResultMap" type="model.GridUser" extends="BaseResultMap">
-        <collection property="roles" ofType="model.GridRole">
-            <id property="roleId" column="role_id" jdbcType="BIGINT"/>
-            <result property="roleName" column="role_name"/>
+        <collection property="roles" column="account_id"   ofType="model.GridRole" select="listRoles" >
         </collection>
+    </resultMap>
+
+    <resultMap id="roleBaseResultMap" type="model.GridRole">
+        <id column="role_id" jdbcType="BIGINT" property="roleId" />
+        <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+        <result column="role_scope" jdbcType="VARCHAR" property="roleScope" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+        <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
     </resultMap>
 
 
@@ -53,14 +60,12 @@
 
     <!--查看用户详情-->
   <select id="getUserByPrimaryKey" parameterType="java.lang.Long" resultMap="userRoleResultMap">
-    select user.*,role.*
+    select user.*
         from grid_user user
-        LEFT join grid_user_role ur on user.account_id = ur.account_id
-        LEFT join grid_role role on role.role_id = ur.role_id
         WHERE user.account_id=#{accountId}
   </select>
 
-    <select id="getUsersByUniqueIndex" parameterType="model.GridUser"  resultMap="BaseResultMap">
+    <select id="getUserByUniqueIndex" parameterType="model.GridUser"  resultMap="BaseResultMap">
         select * from grid_user
         where account_name = #{accountName} or phone_number = #{phoneNumber} or id_number = #{idNumber}
         order by updated_at DESC
@@ -68,10 +73,8 @@
 
     <!--按条件查询用户列表 with role-->
     <select id="getUsersByAccountNameOrRealNameOrOrgName" parameterType="model.GridUser"  resultMap="userRoleResultMap">
-        select user.*,role.*
+        select user.*
         from grid_user user
-        LEFT join grid_user_role ur on user.account_id = ur.account_id
-        LEFT join grid_role role on role.role_id = ur.role_id
         where 1=1
             <if test="accountName != null">
                 and user.account_name like CONCAT('%',#{accountName},'%')
@@ -82,6 +85,14 @@
             <if test="orgName != null">
                 and user.org_name like CONCAT('%',#{orgName},'%')
             </if>
+        order by user.updated_at DESC
+    </select>
+    <!--接上一个SQL语句-->
+    <select id="listRoles" parameterType="java.lang.Long"  resultMap="roleBaseResultMap">
+        select role.*
+        from grid_role role
+        left join grid_user_role gur on role.role_id = gur.role_id
+        where gur.account_id = #{accountId}
     </select>
 
     <!--byRole查询用户列表 with role-->
@@ -97,6 +108,7 @@
         <if test="roleId != null">
             and role.role_id = #{roleId}
         </if>
+        order by user.updated_at DESC
     </select>
 
     <!--删除用户-->

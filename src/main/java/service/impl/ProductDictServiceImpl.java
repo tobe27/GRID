@@ -86,9 +86,6 @@ public class ProductDictServiceImpl implements ProductDictService{
 		if (ValidUtil.isEmpty(record.getId())) {
             throw new MyException("银行产品id不能为空");
         }
-		if (ValidUtil.isEmpty(record.getName())) {
-            throw new MyException("银行产品名称不能为空");
-        }
         record.setUpdatedAt(System.currentTimeMillis());
         try {
             return productDictMapper.updateByPrimaryKeySelective(record) == 1;
@@ -120,7 +117,11 @@ public class ProductDictServiceImpl implements ProductDictService{
 	 * @return
 	 */
 	public List<ProductDict> listAllOpenProducts(){
-		return productDictMapper.listAllOpenProducts();
+		try {
+			return productDictMapper.listAllOpenProducts();
+        } catch (Exception e) {
+            throw new MyException("查询所有开启的银行产品出现异常");
+        }
 	}
 
 }

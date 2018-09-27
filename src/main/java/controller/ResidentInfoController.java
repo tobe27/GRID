@@ -25,16 +25,14 @@ public class ResidentInfoController {
      * @return
      */
     @RequestMapping(value = "/resident/{residentId}", method = RequestMethod.GET)
-    public ResponseData getResident(@PathVariable Long residentId) {
-        try {
-            ResidentInfo info = infoService.getResidentByPrimaryKey(residentId);
-            if (info == null) {
-                return new ResponseData().fail("居民不存在");
-            }
-            return new ResponseData().success().data(info);
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
+    public ResponseData getResident(@PathVariable Long residentId) throws Exception {
+
+        ResidentInfo info = infoService.getResidentByPrimaryKey(residentId);
+        if (info == null) {
+            return new ResponseData().blank();
         }
+        return new ResponseData().success().data(info);
+
     }
 
     /**
@@ -43,21 +41,19 @@ public class ResidentInfoController {
      * @return
      */
     @RequestMapping(value = "/resident/list", method = RequestMethod.GET)
-    public ResponseData listResidents(ResidentInfo info, Integer pageNum, Integer pageSize) {
+    public ResponseData listResidents(ResidentInfo info, Integer pageNum, Integer pageSize) throws Exception {
         if (pageNum == null || pageSize == null) {
             return new ResponseData().fail("页码或者页大小不能为空");
         }
-        try {
-            PageHelper.startPage(pageNum, pageSize);
-            List<ResidentInfo> list = infoService.listResidents(info);
-            if (list == null || list.isEmpty()) {
-                return new ResponseData().fail("居民列表为空");
-            }
-            PageInfo<ResidentInfo> pageInfo = new PageInfo<>(list);
-            return new ResponseData().success().result("count",pageInfo.getTotal()).data(pageInfo.getList());
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
+
+        PageHelper.startPage(pageNum, pageSize);
+        List<ResidentInfo> list = infoService.listResidents(info);
+        if (list == null || list.isEmpty()) {
+            return new ResponseData().blank();
         }
+        PageInfo<ResidentInfo> pageInfo = new PageInfo<>(list);
+        return new ResponseData().success().result("count",pageInfo.getTotal()).data(pageInfo.getList());
+
     }
 
     /**
@@ -66,13 +62,9 @@ public class ResidentInfoController {
      * @return
      */
     @RequestMapping(value = "/resident", method = RequestMethod.POST)
-    public ResponseData insertResident(ResidentInfo info) {
-        try {
-            infoService.insertSelective(info);
-            return new ResponseData().success();
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    public ResponseData insertResident(ResidentInfo info) throws Exception {
+        infoService.insertSelective(info);
+        return new ResponseData().success();
     }
 
     /**
@@ -81,13 +73,11 @@ public class ResidentInfoController {
      * @return
      */
     @RequestMapping(value = "/resident/{residentId}", method = RequestMethod.PUT)
-    public ResponseData updateResident(ResidentInfo info) {
-        try {
-            infoService.updateByPrimaryKeySelective(info);
-            return new ResponseData().success();
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    public ResponseData updateResident(ResidentInfo info) throws Exception {
+
+        infoService.updateByPrimaryKeySelective(info);
+        return new ResponseData().success();
+
     }
 
     /**
@@ -96,13 +86,11 @@ public class ResidentInfoController {
      * @return
      */
     @RequestMapping(value = "/resident/{residentId}", method = RequestMethod.DELETE)
-    public ResponseData deleteResident(@PathVariable Long residentId) {
-        try {
-            infoService.deleteByPrimaryKey(residentId);
-            return new ResponseData().success();
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    public ResponseData deleteResident(@PathVariable Long residentId) throws Exception {
+
+        infoService.deleteByPrimaryKey(residentId);
+        return new ResponseData().success();
+
     }
 
 }

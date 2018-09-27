@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import service.CustomerInfoService;
+import util.ValidUtil;
 
 import java.util.List;
 
@@ -25,16 +26,33 @@ public class CustomerInfoController {
      * @return
      */
     @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.GET)
-    public ResponseData getCustomer(@PathVariable Long customerId) {
-        try {
-            CustomerInfo info = customerInfoService.getCustomerByPrimaryKey(customerId);
-            if (info == null) {
-                return new ResponseData().fail("该客户不存在");
-            }
-            return new ResponseData().success().data(info);
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
+    public ResponseData getCustomer(@PathVariable Long customerId) throws Exception {
+
+        CustomerInfo info = customerInfoService.getCustomerByPrimaryKey(customerId);
+        if (info == null) {
+            return new ResponseData().blank("该客户不存在");
         }
+        return new ResponseData().success().data(info);
+
+    }
+
+    /**
+     * 调用此接口获取客户信息
+     * @param idNumber 身份证
+     * @return
+     */
+    @RequestMapping(value = "/customer/idnumber/{idNumber}", method = RequestMethod.GET)
+    public ResponseData getCustomer(@PathVariable String idNumber) throws Exception {
+        if (!ValidUtil.length(idNumber,18)) {
+            return new ResponseData().fail("身份证号码长度错误");
+        }
+        CustomerInfo info = new CustomerInfo();
+        info.setIdNumber(idNumber);
+        List<CustomerInfo> list = customerInfoService.listCustomers(info);
+        if (list == null || list.isEmpty()) {
+            return new ResponseData().blank("该客户不存在");
+        }
+        return new ResponseData().success().data(list);
     }
 
     /**
@@ -45,21 +63,19 @@ public class CustomerInfoController {
      * @return
      */
     @RequestMapping(value = "/customer/list", method = RequestMethod.GET)
-    public ResponseData listCustomers(CustomerInfo info, Integer pageNum, Integer pageSize) {
+    public ResponseData listCustomers(CustomerInfo info, Integer pageNum, Integer pageSize) throws Exception {
         if (pageNum == null || pageSize == null) {
             return new ResponseData().fail("页码和页大小不能为空");
         }
-        try {
-            PageHelper.startPage(pageNum,pageSize);
-            List<CustomerInfo> list = customerInfoService.listCustomers(info);
-            if (list == null || list.isEmpty()) {
-                return new ResponseData().fail("客户列表不存在");
-            }
-            PageInfo<CustomerInfo> pageInfo = new PageInfo<>(list);
-            return new ResponseData().success().result("count", pageInfo.getTotal()).data(pageInfo.getList());
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
+
+        PageHelper.startPage(pageNum,pageSize);
+        List<CustomerInfo> list = customerInfoService.listCustomers(info);
+        if (list == null || list.isEmpty()) {
+            return new ResponseData().blank("客户列表不存在");
         }
+        PageInfo<CustomerInfo> pageInfo = new PageInfo<>(list);
+        return new ResponseData().success().result("count", pageInfo.getTotal()).data(pageInfo.getList());
+
     }
 
     /**
@@ -68,13 +84,11 @@ public class CustomerInfoController {
      * @return
      */
     @RequestMapping(value = "/customer", method = RequestMethod.POST)
-    public ResponseData insertCustomer(CustomerInfo info) {
-        try {
-            customerInfoService.insertSelective(info);
-            return new ResponseData().success();
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    public ResponseData insertCustomer(CustomerInfo info) throws Exception {
+
+        customerInfoService.insertSelective(info);
+        return new ResponseData().success();
+
     }
 
     /**
@@ -83,13 +97,11 @@ public class CustomerInfoController {
      * @return
      */
     @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.PUT)
-    public ResponseData updateCustomer(CustomerInfo info) {
-        try {
-            customerInfoService.updateByPrimaryKeySelective(info);
-            return new ResponseData().success();
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    public ResponseData updateCustomer(CustomerInfo info) throws Exception {
+
+        customerInfoService.updateByPrimaryKeySelective(info);
+        return new ResponseData().success();
+
     }
 
     /**
@@ -98,13 +110,11 @@ public class CustomerInfoController {
      * @return
      */
     @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.DELETE)
-    public ResponseData deleteCustomer(@PathVariable Long customerId) {
-        try {
-            customerInfoService.deleteByPrimaryKey(customerId);
-            return new ResponseData().success();
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    public ResponseData deleteCustomer(@PathVariable Long customerId) throws Exception {
+
+        customerInfoService.deleteByPrimaryKey(customerId);
+        return new ResponseData().success();
+
     }
 
 

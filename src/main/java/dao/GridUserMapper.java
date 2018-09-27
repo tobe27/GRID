@@ -16,10 +16,10 @@ public interface GridUserMapper {
     int deleteByPrimaryKey(Long accountId);
     //新增用户
     int insertSelective(GridUser record);
-    //查看用户详情
+    //查看用户详情 with role
     GridUser getUserByPrimaryKey(Long accountId);
     //查询唯一索引字段是否存在
-    GridUser getUsersByUniqueIndex(GridUser record);
+    GridUser getUserByUniqueIndex(GridUser record);
     //条件查看用户列表with role
     List<GridUser> getUsersByAccountNameOrRealNameOrOrgName(GridUser record);
     //by role查询用户列表with role

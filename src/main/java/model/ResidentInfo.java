@@ -33,6 +33,8 @@ public class ResidentInfo implements Serializable {
 
     private String remark;
 
+    private String career;
+
     private Long createdAt;
 
     private Long updatedAt;

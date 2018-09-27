@@ -12,7 +12,6 @@ import service.GridUserRoleService;
 import service.GridUserService;
 import util.Md5Util;
 import util.ValidUtil;
-
 import java.util.List;
 import java.util.Set;
 
@@ -92,7 +91,7 @@ public class GridUserServiceImpl implements GridUserService {
             throw  new MyException("密码长度是6-20位");
         }
         // 查询数据库校验用户名是否存在
-        if (userMapper.getUsersByUniqueIndex(record) != null){
+        if (userMapper.getUserByUniqueIndex(record) != null){
             throw  new MyException("用户名或者号码或者身份证号码已被注册");
         }
 
@@ -146,7 +145,7 @@ public class GridUserServiceImpl implements GridUserService {
     @Override
     public GridUser getUsersByUniqueIndex(GridUser record) throws Exception {
         try {
-            return userMapper.getUsersByUniqueIndex(record);
+            return userMapper.getUserByUniqueIndex(record);
         } catch (Exception e) {
             throw new MyException("通过唯一索引查询用户出现异常");
         }
@@ -164,6 +163,7 @@ public class GridUserServiceImpl implements GridUserService {
         try {
             return userMapper.getUsersByAccountNameOrRealNameOrOrgName(record);
         } catch (Exception e) {
+        	e.printStackTrace();
             throw new MyException("查询用户列表出现异常");
         }
     }
@@ -200,17 +200,22 @@ public class GridUserServiceImpl implements GridUserService {
         if (!ValidUtil.loginName(record.getAccountName(),20)) {
             throw  new MyException("登录名错误，是2-16位英文、数字、下划线，且英文开头");
         }
-        if (!ValidUtil.length(record.getPassword(), 6, 20)) {
-            throw  new MyException("密码长度是6-20位");
-        }
         // 查询数据库校验用户名是否存在
-        if (userMapper.getUsersByUniqueIndex(record) != null){
-            throw  new MyException("用户名或者号码或者身份证号码已被注册");
+        GridUser user;
+        if ((user = userMapper.getUserByUniqueIndex(record)) != null){
+            if (!record.getAccountId().equals(user.getAccountId())) {
+                throw new MyException("用户名或者号码或者身份证号码已被注册");
+            }
         }
 
         // 密码加密
-        String password = Md5Util.createSaltMD5(record.getPassword());
-        record.setPassword(password);
+        if (ValidUtil.notEmpty(record.getPassword())) {
+            if (!ValidUtil.length(record.getPassword(), 6, 20)) {
+                throw new MyException("密码长度是6-20位");
+            }
+            String password = Md5Util.createSaltMD5(record.getPassword());
+            record.setPassword(password);
+        }
 
         record.setUpdatedAt(System.currentTimeMillis());
         try {
@@ -232,7 +237,7 @@ public class GridUserServiceImpl implements GridUserService {
     }
 
     @Override
-    public boolean updatePasswordByOldPassword(GridUser record, String oldPassword, String newPassword) {
+    public boolean updatePasswordByOldPassword(GridUser record, String oldPassword, String newPassword) throws Exception{
         if (ValidUtil.isEmpty(record.getAccountId()) || ValidUtil.isEmpty(oldPassword) || ValidUtil.isEmpty(newPassword)) {
             throw new MyException("请求数据不能为空");
         }

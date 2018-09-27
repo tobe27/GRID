@@ -24,7 +24,7 @@ public class BusinessInfoServiceImpl implements BusinessInfoService{
 	 */
 	public Map<String,Object> getBusinessByPrimaryKey(String idNumber) throws MyException {
 		try {
-            return infoMapper.getBusinessByPrimaryKey(idNumber);
+            return infoMapper.getBusinessByIdNumber(idNumber);
         } catch (Exception e) {
             throw new MyException("获取客户业务信息出现异常");
         }

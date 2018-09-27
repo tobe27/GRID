@@ -68,11 +68,11 @@
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
       <if test="state != null">
         state = #{state,jdbcType=INTEGER},
-      </if>
-  	  <if test="createdAt != null">
-        created_at = #{createdAt,jdbcType=BIGINT},
       </if>
       <if test="updatedAt != null">
         updated_at = #{updatedAt,jdbcType=BIGINT},

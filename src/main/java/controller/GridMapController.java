@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import model.GridDictionary;
@@ -32,9 +34,17 @@ public class GridMapController {
 	   */
 	
 	@RequestMapping(value = "/gridmap",method = RequestMethod.POST)
-	 public ResponseData addDirctionaryList(  @RequestBody List<GridMap> list) {
+	 public ResponseData addDirctionaryList(@RequestBody Map<String,Object> map) {
+		if(!map.containsKey("gridCode")|| !map.containsKey("gridName")|| !map.containsKey("coordinate")) {
+			 return new ResponseData().fail("参数异常");
+		}
+		
+      GridMap gridMap=new GridMap();
+      gridMap.setGridCode(map.get("gridCode").toString());
+      gridMap.setGridName(map.get("gridName").toString());
+      gridMap.setCoordinate(map.get("coordinate").toString());
 		try {
-			gridMapService.batchSave(list);
+			gridMapService.insertSelective(gridMap);
 			 return new ResponseData().success();
 		} catch (Exception e) {
 			e.printStackTrace();

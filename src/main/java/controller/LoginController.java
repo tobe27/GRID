@@ -3,7 +3,6 @@ package controller;
 import model.GridUser;
 import model.ResponseData;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -29,7 +28,7 @@ public class LoginController {
     private Logger logger = LoggerFactory.getLogger(LoginController.class);
     @RequestMapping(value = "/login",method = RequestMethod.GET)
     public ResponseData login() {
-        return new ResponseData().redirect("redirect to login");
+        return new ResponseData().redirect();
     }
 
     @RequestMapping(value = "/unauthorized", method = RequestMethod.GET)
@@ -39,34 +38,33 @@ public class LoginController {
 
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public ResponseData login(GridUser user) {
+    public ResponseData login(GridUser user) throws Exception {
         if (ValidUtil.isEmpty(user.getAccountName()) || ValidUtil.isEmpty(user.getPassword())) {
             return new ResponseData().fail("登录名或密码不能为空");
         }
-        try {
-            // 查询用户是否存在
-            GridUser gridUser = userService.getUsersByUniqueIndex(user);
-            if (gridUser == null) {
-                return new ResponseData().fail("用户不存在");
-            }
-            //验证密码
-            if (!Md5Util.verify(gridUser.getPassword(), user.getPassword())) {
-                return new ResponseData().fail("用户名或密码错误");
-            }
-            //生成JWT
-            Map<String, Object> payload = new HashMap<>();
-            payload.put("accountId", gridUser.getAccountId());
-            String jwt = JwtUtil.createToken(payload);
-            logger.info("登录生成JWT："+jwt);
 
-            //Shiro进行认证授权
-            Subject subject = SecurityUtils.getSubject();
-            UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(jwt, jwt);
-            subject.login(usernamePasswordToken);
-            return new ResponseData().success().result("token",jwt).data(gridUser);
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
+        // 查询用户是否存在
+        GridUser gridUser = userService.getUsersByUniqueIndex(user);
+        if (gridUser == null) {
+            return new ResponseData().fail("用户不存在");
         }
+        //验证密码
+        if (!Md5Util.verify(gridUser.getPassword(), user.getPassword())) {
+            return new ResponseData().fail("用户名或密码错误");
+        }
+        //生成JWT
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("accountId", gridUser.getAccountId());
+        String jwt = JwtUtil.createToken(payload);
+        logger.info("登录生成JWT："+jwt);
+
+        //Shiro进行认证授权
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(jwt, jwt);
+        subject.login(usernamePasswordToken);
+
+        GridUser data = userService.getUserByPrimaryKey(gridUser.getAccountId());
+        return new ResponseData().success().result("token",jwt).data(data);
     }
 
 }

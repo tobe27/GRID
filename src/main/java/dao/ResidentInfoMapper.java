@@ -2,10 +2,8 @@ package dao;
 
 import model.ResidentInfo;
 import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 
 public interface ResidentInfoMapper {
     int deleteByPrimaryKey(Long residentId);
@@ -18,5 +16,4 @@ public interface ResidentInfoMapper {
 
     int updateByPrimaryKeySelective(ResidentInfo record);
     int  batchSave(@Param("list")List<ResidentInfo> list);
-
 }

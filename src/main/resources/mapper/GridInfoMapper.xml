@@ -13,9 +13,58 @@
     <result column="supervise_manager" jdbcType="VARCHAR" property="superviseManager" />
     <result column="qr_code" jdbcType="VARCHAR" property="qrCode" />
     <result column="grid_map" jdbcType="VARCHAR" property="gridMap" />
+    
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+    <collection property="listReview" column="grid_code"   ofType="model.GridReview" select="getGridReviews" >
+    </collection>
+  </resultMap>
+  
+  <resultMap id="GridReviewResultMap" type="model.GridReview">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="grid_code" jdbcType="VARCHAR" property="gridCode" />
+    <result column="grid_name" jdbcType="VARCHAR" property="gridName" />
+    <result column="grid_review_name" jdbcType="VARCHAR" property="gridReviewName" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="duties" jdbcType="VARCHAR" property="duties" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
   </resultMap>
+  
+  
+  <select id="getGridReviews" parameterType="java.lang.String" resultMap="GridReviewResultMap">
+  
+  
+  select * from grid_review gr where gr.grid_code = #{grid_code}
+  
+  
+  </select>
+  
+  <select id="getGridInfoList" parameterType="java.util.Map" resultType="java.util.Map">
+  select gi.id as id,gu.real_name as realName , gi.grid_code as gridCode, gi.grid_name as gridName, gi.org_code as orgCode, gi.grid_type as gridType , gi.description as description, gi.account_id as accountId,gi.assist_manager as assistManager, 
+    gi.supervise_manager as superviseManager, gi.qr_code as qrCode, gi.grid_map as gridMap, gi.created_at as createdAt, gi.updated_at as updatedAt 
+  
+    from grid_info gi left join grid_user gu  on gi.account_id=gu.account_id  where 1=1
+    <if test="gridCode != null">
+    and gi.grid_code   like CONCAT('%',#{gridCode},'%')
+    </if >
+     
+    <if test="gridName != null">
+     and gi.grid_name  like CONCAT('%',#{gridName},'%')
+    </if>
+     <if test="orgCode != null">
+    and gi.org_code  like CONCAT('%',#{orgCode},'%')
+    </if>
+     <if test="realName != null">
+     and gu.real_name   like CONCAT('%',#{realName},'%')
+    </if>
+     <if test="gridType != null">
+      and  gi.grid_type = #{gridType}
+    </if>
+    
+  </select>
   <sql id="Base_Column_List">
     id, grid_code, grid_name, org_code, grid_type, description, account_id, assist_manager, 
     supervise_manager, qr_code, grid_map, created_at, updated_at
@@ -42,6 +91,18 @@
       #{qrCode,jdbcType=VARCHAR}, #{gridMap,jdbcType=VARCHAR}, #{createdAt,jdbcType=BIGINT}, 
       #{updatedAt,jdbcType=BIGINT})
   </insert>
+  <select id="checkSameGridCode" parameterType="java.util.Map"  resultMap="BaseResultMap">
+    select * from grid_info where grid_code = #{gridCode}
+    
+    <if test="id !=null">
+    
+       and id !=#{id}
+    </if>
+  
+  </select>
+  
+ 
+  
   <insert id="insertSelective" parameterType="model.GridInfo">
     insert into grid_info
     <trim prefix="(" suffix=")" suffixOverrides=",">

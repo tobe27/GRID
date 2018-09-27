@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.BusinessProductMapper">
+  <resultMap id="BaseResultMap" type="model.BusinessProduct">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="account_name" jdbcType="VARCHAR" property="accountName" />
+    <result column="card_number" jdbcType="VARCHAR" property="cardNumber" />
+    <result column="rate" jdbcType="DECIMAL" property="rate" />
+    <result column="money" jdbcType="DECIMAL" property="money" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+    
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+  </resultMap>
+	
+	<!-- 插入客户业务信息 -->
+	<insert id="insertBusinesss">
+		insert into business_product(id_number,product_code,account_name,card_number,rate,money,created_at,updated_at) 
+        values  
+        <foreach collection="list" item="record" index="j" separator=",">  
+            (#{record.idNumber},#{record.productCode},#{record.accountName},#{record.cardNumber},#{record.rate},#{record.money},#{record.createdAt},#{record.updatedAt})
+        </foreach> 
+	</insert>
+	
+	<!-- 根据身份证号查询办理过的业务信息-->
+	<select id="getBusinesss" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select b.id,b.product_code,
+		b.account_name,b.card_number,b.rate,
+		b.money,b.created_at,b.updated_at,
+		p.name product_name 
+		from business_product b
+		left join product_dict p on b.product_code=p.code
+		where id_number=#{idNumber}
+	</select>
+	
+	<!-- 批量修改业务信息 -->
+	<update id="updateBusinesss">
+		<foreach collection="list" item="record" separator=";" >
+	      update business_product
+	      <set>
+	      	<if test="record.money!=null">
+	      		money=#{record.money},
+	      	</if>
+	      	<if test="record.updatedAt!=null">
+	      		updated_at=#{record.updatedAt}
+	      	</if>
+	      </set>
+	      where id = #{record.id}   
+	    </foreach>
+	</update>
+</mapper>

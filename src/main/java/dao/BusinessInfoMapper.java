@@ -17,7 +17,7 @@ public interface BusinessInfoMapper {
 	 * @param idNumber
 	 * @return
 	 */
-    Map<String,Object> getBusinessByPrimaryKey(String idNumber);
+    Map<String,Object> getBusinessByIdNumber(String idNumber);
     
     /**
      * 修改业务信息

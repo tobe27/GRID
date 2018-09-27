@@ -51,18 +51,20 @@ public class GridUserMapperTest {
 
     @Test
     public void selectTest() throws Exception {
-        GridUser gridUser = new GridUser();
-        gridUser.setAccountName("a");
-        gridUser.setRealName("1");
-        System.out.println(gridUser);
-//        List<GridUser> users = gridUserMapper.getUsersByAccountNameOrRealNameOrOrgName(gridUser);
-//        List<GridUser> userList = gridUserMapper.getUsersByRoleId(7L);
+        //GridUser gridUser = new GridUser();
+        //gridUser.setAccountName("a");
+        //gridUser.setRealName("1");
+        //System.out.println(gridUser);
+        //List<GridUser> users = gridUserMapper.getUsersByAccountNameOrRealNameOrOrgName(gridUser);
         GridRole role = new GridRole();
-        role.setRoleId(7L);
-        List<GridRole> roles = new ArrayList<>();
-        roles.add(role);
-        gridUser.setRoles(roles);
-        List<GridUser> userList = gridUserMapper.getUsersByAccountNameOrRealNameOrOrgName(gridUser);
+        role.setRoleId(12L);
+        List<GridUser> userList = gridUserMapper.getUsersByRole(role);
+//        GridRole role = new GridRole();
+//        role.setRoleId(7L);
+//        List<GridRole> roles = new ArrayList<>();
+//        roles.add(role);
+//        gridUser.setRoles(roles);
+//        List<GridUser> userList = gridUserMapper.getUsersByAccountNameOrRealNameOrOrgName(gridUser);
         System.out.println(JSON.toJSONString(userList,true));
     }
 
@@ -71,7 +73,7 @@ public class GridUserMapperTest {
         GridUser gridUser = new GridUser();
         gridUser.setAccountId(1L);
         gridUser.setStatus(2);
-        //System.out.println(gridUserService.updateByPrimaryKeySelective(gridUser));
+        //System.out.println(gridUserService.updateByIdNumberSelective(gridUser));
         System.out.println(gridUserService.deleteByPrimaryKey(2L));
     }
 

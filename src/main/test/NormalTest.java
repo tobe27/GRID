@@ -2,6 +2,12 @@ import model.GridUser;
 import org.junit.Test;
 import util.ValidUtil;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
 public class NormalTest {
     @Test
     public void nullTest() {
@@ -19,8 +25,15 @@ public class NormalTest {
 
     @Test
     public void timeTest() {
-        String id_type = "xx";
-        System.out.println(id_type);
-        System.out.println(System.currentTimeMillis());
+        long now = System.currentTimeMillis();
+        LocalDate localDate = LocalDate.now();
+        System.out.println(now);
+        System.out.println(localDate);
+        Instant instant = Instant.ofEpochMilli(now);
+        System.out.println(instant);
+        ZoneId zoneId = ZoneId.systemDefault();
+        System.out.println(LocalDateTime.ofInstant(instant, zoneId));
+
+
     }
 }

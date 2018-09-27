@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.DishonestCustomerInfoMapper">
+  <resultMap id="BaseResultMap" type="model.DishonestCustomerInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="performed_name" jdbcType="VARCHAR" property="performedName" />
+    <result column="card_number" jdbcType="VARCHAR" property="cardNumber" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+    <result column="court_name" jdbcType="VARCHAR" property="courtName" />
+    <result column="gist_id" jdbcType="VARCHAR" property="gistId" />
+    <result column="register_date" jdbcType="VARCHAR" property="registerDate" />
+    <result column="case_code" jdbcType="VARCHAR" property="caseCode" />
+    <result column="gist_institution" jdbcType="VARCHAR" property="gistInstitution" />
+    <result column="duty" jdbcType="VARCHAR" property="duty" />
+    <result column="performance" jdbcType="VARCHAR" property="performance" />
+    <result column="concrete_reason" jdbcType="VARCHAR" property="concreteReason" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="published_at" jdbcType="BIGINT" property="publishedAt" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, performed_name, card_number, sex, age, area_name, court_name, gist_id, register_date, 
+    case_code, gist_institution, duty, performance, concrete_reason, type, published_at, 
+    created_at, updated_at
+  </sql>
+
+    <!--获取失信人详情-->
+  <select id="getByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dishonest_customer_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+    <!--模糊-获取失信人列表-->
+    <select id="listByPerformedNameOrCardNumber" parameterType="model.DishonestCustomerInfo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from dishonest_customer_info
+        where  1=1
+        <if test="performedName != null">
+          and performed_name like CONCAT('%',#{performedName},'%')
+        </if>
+        <if test="cardNumber != null">
+          and card_number = #{cardNumber}
+        </if>
+        order by updated_at DESC
+    </select>
+
+    <!--精确-获取失信人列表-->
+    <select id="listByCardNumber" parameterType="model.DishonestCustomerInfo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from dishonest_customer_info
+        where  card_number = #{cardNumber}
+    </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from dishonest_customer_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertSelective" parameterType="model.DishonestCustomerInfo">
+    insert into dishonest_customer_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="performedName != null">
+        performed_name,
+      </if>
+      <if test="cardNumber != null">
+        card_number,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="areaName != null">
+        area_name,
+      </if>
+      <if test="courtName != null">
+        court_name,
+      </if>
+      <if test="gistId != null">
+        gist_id,
+      </if>
+      <if test="registerDate != null">
+        register_date,
+      </if>
+      <if test="caseCode != null">
+        case_code,
+      </if>
+      <if test="gistInstitution != null">
+        gist_institution,
+      </if>
+      <if test="duty != null">
+        duty,
+      </if>
+      <if test="performance != null">
+        performance,
+      </if>
+      <if test="concreteReason != null">
+        concrete_reason,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="publishedAt != null">
+        published_at,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="performedName != null">
+        #{performedName,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNumber != null">
+        #{cardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="areaName != null">
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="courtName != null">
+        #{courtName,jdbcType=VARCHAR},
+      </if>
+      <if test="gistId != null">
+        #{gistId,jdbcType=VARCHAR},
+      </if>
+      <if test="registerDate != null">
+        #{registerDate,jdbcType=VARCHAR},
+      </if>
+      <if test="caseCode != null">
+        #{caseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gistInstitution != null">
+        #{gistInstitution,jdbcType=VARCHAR},
+      </if>
+      <if test="duty != null">
+        #{duty,jdbcType=VARCHAR},
+      </if>
+      <if test="performance != null">
+        #{performance,jdbcType=VARCHAR},
+      </if>
+      <if test="concreteReason != null">
+        #{concreteReason,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="publishedAt != null">
+        #{publishedAt,jdbcType=BIGINT},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="model.DishonestCustomerInfo">
+    update dishonest_customer_info
+    <set>
+      <if test="performedName != null">
+        performed_name = #{performedName,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNumber != null">
+        card_number = #{cardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="areaName != null">
+        area_name = #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="courtName != null">
+        court_name = #{courtName,jdbcType=VARCHAR},
+      </if>
+      <if test="gistId != null">
+        gist_id = #{gistId,jdbcType=VARCHAR},
+      </if>
+      <if test="registerDate != null">
+        register_date = #{registerDate,jdbcType=VARCHAR},
+      </if>
+      <if test="caseCode != null">
+        case_code = #{caseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gistInstitution != null">
+        gist_institution = #{gistInstitution,jdbcType=VARCHAR},
+      </if>
+      <if test="duty != null">
+        duty = #{duty,jdbcType=VARCHAR},
+      </if>
+      <if test="performance != null">
+        performance = #{performance,jdbcType=VARCHAR},
+      </if>
+      <if test="concreteReason != null">
+        concrete_reason = #{concreteReason,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="publishedAt != null">
+        published_at = #{publishedAt,jdbcType=BIGINT},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.CustomerBackToBackPreCreditMapper">
+  <resultMap id="BaseResultMap" type="model.CustomerBackToBackPreCredit">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+    <result column="grid_code" jdbcType="VARCHAR" property="gridCode" />
+    <result column="phone_number" jdbcType="BIGINT" property="phoneNumber" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="income" jdbcType="DECIMAL" property="income" />
+    <result column="spending" jdbcType="DECIMAL" property="spending" />
+    <result column="interest_rate" jdbcType="DECIMAL" property="interestRate" />
+    <result column="rental" jdbcType="DECIMAL" property="rental" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, id_number, customer_name, grid_code, phone_number, address, income, spending, 
+    interest_rate, rental, comment, updated_at, created_at
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer_back_to_back_pre_credit
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="getByIdOrIdnumber" parameterType="model.CustomerWhitelist" resultMap="BaseResultMap">
+  select* from customer_back_to_back_pre_credit where id_number=#{idNumber}
+  <if test="id != null">
+    and id != #{id,jdbcType=BIGINT}
+  </if>
+  </select>
+  <select id="getBackToBackPreCreditList" parameterType="model.CustomerWhitelist" resultMap="BaseResultMap">
+  select * from customer_back_to_back_pre_credit where 1=1 
+  <if test="customerName != null">
+   and customer_name like  CONCAT('%',#{customerName},'%')
+  </if>
+  
+  <if test="idNumber != null">
+   and id_number like  CONCAT('%',#{idNumber},'%')
+  </if>
+  </select>
+  
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from customer_back_to_back_pre_credit
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="model.CustomerBackToBackPreCredit">
+    insert into customer_back_to_back_pre_credit (id, id_number, customer_name, 
+      grid_code, phone_number, address, 
+      income, spending, interest_rate, 
+      rental, comment, updated_at, 
+      created_at)
+    values (#{id,jdbcType=BIGINT}, #{idNumber,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, 
+      #{gridCode,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=BIGINT}, #{address,jdbcType=VARCHAR}, 
+      #{income,jdbcType=DECIMAL}, #{spending,jdbcType=DECIMAL}, #{interestRate,jdbcType=DECIMAL}, 
+      #{rental,jdbcType=DECIMAL}, #{comment,jdbcType=VARCHAR}, #{updatedAt,jdbcType=BIGINT}, 
+      #{createdAt,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="model.CustomerBackToBackPreCredit">
+    insert into customer_back_to_back_pre_credit
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="idNumber != null">
+        id_number,
+      </if>
+      <if test="customerName != null">
+        customer_name,
+      </if>
+      <if test="gridCode != null">
+        grid_code,
+      </if>
+      <if test="phoneNumber != null">
+        phone_number,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="income != null">
+        income,
+      </if>
+      <if test="spending != null">
+        spending,
+      </if>
+      <if test="interestRate != null">
+        interest_rate,
+      </if>
+      <if test="rental != null">
+        rental,
+      </if>
+      <if test="comment != null">
+        comment,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null">
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="gridCode != null">
+        #{gridCode,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=BIGINT},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="income != null">
+        #{income,jdbcType=DECIMAL},
+      </if>
+      <if test="spending != null">
+        #{spending,jdbcType=DECIMAL},
+      </if>
+      <if test="interestRate != null">
+        #{interestRate,jdbcType=DECIMAL},
+      </if>
+      <if test="rental != null">
+        #{rental,jdbcType=DECIMAL},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="model.CustomerBackToBackPreCredit">
+    update customer_back_to_back_pre_credit
+    <set>
+      <if test="idNumber != null">
+        id_number = #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null">
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="gridCode != null">
+        grid_code = #{gridCode,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=BIGINT},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="income != null">
+        income = #{income,jdbcType=DECIMAL},
+      </if>
+      <if test="spending != null">
+        spending = #{spending,jdbcType=DECIMAL},
+      </if>
+      <if test="interestRate != null">
+        interest_rate = #{interestRate,jdbcType=DECIMAL},
+      </if>
+      <if test="rental != null">
+        rental = #{rental,jdbcType=DECIMAL},
+      </if>
+      <if test="comment != null">
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="model.CustomerBackToBackPreCredit">
+    update customer_back_to_back_pre_credit
+    set id_number = #{idNumber,jdbcType=VARCHAR},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      grid_code = #{gridCode,jdbcType=VARCHAR},
+      phone_number = #{phoneNumber,jdbcType=BIGINT},
+      address = #{address,jdbcType=VARCHAR},
+      income = #{income,jdbcType=DECIMAL},
+      spending = #{spending,jdbcType=DECIMAL},
+      interest_rate = #{interestRate,jdbcType=DECIMAL},
+      rental = #{rental,jdbcType=DECIMAL},
+      comment = #{comment,jdbcType=VARCHAR},
+      updated_at = #{updatedAt,jdbcType=BIGINT},
+      created_at = #{createdAt,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

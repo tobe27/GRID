@@ -19,12 +19,10 @@ public class HomeStatisticsInfoController {
      * @return
      */
     @RequestMapping(value = "/president/home/statistics",method = RequestMethod.GET)
-    public ResponseData listInfoForPresident(HomeStatisticsInfo info) {
-        try {
-            return new ResponseData().success().data(infoService.listInfo(info));
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    public ResponseData listInfoForPresident(HomeStatisticsInfo info) throws Exception {
+
+        return new ResponseData().success().data(infoService.listInfo(info));
+
     }
 
     /**
@@ -33,12 +31,10 @@ public class HomeStatisticsInfoController {
      * @return
      */
     @RequestMapping(value = "/middle/home/statistics",method = RequestMethod.GET)
-    public ResponseData listInfoForMid(HomeStatisticsInfo info) {
-        try {
-            return new ResponseData().success().data(infoService.listInfo(info));
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    public ResponseData listInfoForMid(HomeStatisticsInfo info) throws Exception {
+
+        return new ResponseData().success().data(infoService.listInfo(info));
+
     }
 
     /**
@@ -47,11 +43,9 @@ public class HomeStatisticsInfoController {
      * @return
      */
     @RequestMapping(value = "/basic/home/statistics",method = RequestMethod.GET)
-    public ResponseData listInfoForBasic(HomeStatisticsInfo info) {
-        try {
-            return new ResponseData().success().data(infoService.listInfo(info));
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    public ResponseData listInfoForBasic(HomeStatisticsInfo info) throws Exception {
+
+        return new ResponseData().success().data(infoService.listInfo(info));
+
     }
 }

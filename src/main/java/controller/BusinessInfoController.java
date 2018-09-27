@@ -38,46 +38,35 @@ public class BusinessInfoController {
 	 */
 	@RequestMapping(value = "/business/{idNumber}", method = RequestMethod.GET)
 	public ResponseData getBusiness(@PathVariable String idNumber) {
-		try {
-			Map<String,Object> info = businessInfoService.getBusinessByPrimaryKey(idNumber);
-            if (info == null) {
-                return new ResponseData().fail("该客户不存业务信息在");
-            }
-            return new ResponseData().success().data(info);
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
+		Map<String,Object> info = businessInfoService.getBusinessByPrimaryKey(idNumber);
+        if (info == null) {
+            return new ResponseData().fail("该客户不存业务信息在");
         }
+        return new ResponseData().success().data(info);
 	}
 	
 	 /**
-     * 调用此接口新增客户信息
+     * 调用此接口新增客户业务信息
      * @param info
      * @return
+	 * @throws Exception 
      */
-    @RequestMapping(value = "/business/add", method = RequestMethod.POST)
-    public ResponseData insertBusiness(@RequestParam Map<String,Object> info) {
-        try {
-            businessInfoService.insertSelective(info);
-            return new ResponseData().success();
-        } catch (Exception e) {
-        	e.printStackTrace();
-            return new ResponseData().fail(e.getMessage());
-        }
+    @RequestMapping(value = "/business", method = RequestMethod.POST)
+    public ResponseData insertBusiness(@RequestParam Map<String,Object> info) throws Exception {
+    	businessInfoService.insertSelective(info);
+        return new ResponseData().success();
     }
     
     /**
      * 调用此接口编辑客户业务信息
      * @param info
      * @return
+     * @throws Exception 
      */
-    @RequestMapping(value = "/business/update", method = RequestMethod.PUT)
-    public ResponseData updateBusiness(@RequestParam Map<String,Object> info) {
-        try {
-            businessInfoService.updateByPrimaryKeySelective(info);
-            return new ResponseData().success();
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    @RequestMapping(value = "/business/{id}", method = RequestMethod.PUT)
+    public ResponseData updateBusiness(@RequestParam Map<String,Object> info) throws Exception {
+    	businessInfoService.updateByPrimaryKeySelective(info);
+        return new ResponseData().success();
     }
     
 }

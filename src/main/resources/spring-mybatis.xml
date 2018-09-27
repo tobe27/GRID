@@ -21,7 +21,7 @@
     <bean id="dataSource"
           class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close" >
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://192.168.1.137:3306/db?characterEncoding=utf-8&amp;serverTimezone=GMT%2B8&amp;useSSL=false"/>
+        <property name="url" value="jdbc:mysql://192.168.1.137:3306/db?characterEncoding=utf-8&amp;allowMultiQueries=true&amp;serverTimezone=GMT%2B8&amp;useSSL=false"/>
         <!--<property name="url" value="jdbc:mysql://101.132.152.195:3306/grid?characterEncoding=utf-8&amp;serverTimezone=GMT%2B8&amp;useSSL=false"/>-->
         <property name ="username" value="root"/>
         <property name="password" value="123456"/>
@@ -43,6 +43,7 @@
     <bean id ="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <!-- 指定数据源 -->
         <property name="dataSource" ref="dataSource"/>
+           <property name="configLocation" value="classpath:mybatis-config.xml" />
         <!-- 自动扫描mapper.xml文件 -->
         <property name="mapperLocations">
             <array>

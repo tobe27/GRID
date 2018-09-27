@@ -22,8 +22,13 @@
     <servlet>
         <servlet-name>springmvc</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!-- 配置全局异常统一响应处理器,DispatcherServlet源码中对于throwExceptionIfNoHandlerFound 默认是 false -->
         <init-param>
-            <!-- contextConfigLocation 是参数名称，该参数的值包含 Spring MVC 的配置文件路径 -->
+            <param-name>throwExceptionIfNoHandlerFound</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <!-- contextConfigLocation 是参数名称，该参数的值包含 Spring MVC 的配置文件路径 -->
+        <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>classpath*:springmvc-servlet.xml</param-value>
         </init-param>
@@ -91,5 +96,6 @@
     <listener>
         <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
     </listener>
+
 
 </web-app>

@@ -21,16 +21,14 @@ public class FinanceInfoController {
      * @return
      */
     @RequestMapping(value = "/customer/finance/{idNumber}", method = RequestMethod.GET)
-    public ResponseData getFinanceInfo(@PathVariable String idNumber) {
-        try {
-            FinanceInfo info = infoService.getFinanceInfoByIdNumber(idNumber);
-            if (info == null) {
-                return new ResponseData().fail("客户财务信息不存在");
-            }
-            return new ResponseData().success().data(info);
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
+    public ResponseData getFinanceInfo(@PathVariable String idNumber) throws Exception {
+
+        FinanceInfo info = infoService.getFinanceInfoByIdNumber(idNumber);
+        if (info == null) {
+            return new ResponseData().blank("客户财务信息不存在");
         }
+        return new ResponseData().success().data(info);
+
     }
 
     /**
@@ -39,13 +37,11 @@ public class FinanceInfoController {
      * @return
      */
     @RequestMapping(value = "/customer/finance/{idNumber}", method = RequestMethod.DELETE)
-    public ResponseData deleteFinanceInfo(@PathVariable String idNumber) {
-        try {
-            infoService.deleteByIdNumber(idNumber);
-            return new ResponseData().success();
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    public ResponseData deleteFinanceInfo(@PathVariable String idNumber) throws Exception {
+
+        infoService.deleteByIdNumber(idNumber);
+        return new ResponseData().success();
+
     }
 
     /**
@@ -54,13 +50,11 @@ public class FinanceInfoController {
      * @return
      */
     @RequestMapping(value = "/customer/finance/{idNumber}", method = RequestMethod.PUT)
-    public ResponseData updateFinanceInfo(FinanceInfo info) {
-        try {
-            infoService.updateByIdNumberSelective(info);
-            return new ResponseData().success();
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    public ResponseData updateFinanceInfo(FinanceInfo info) throws Exception {
+
+        infoService.updateByIdNumberSelective(info);
+        return new ResponseData().success();
+
     }
 
     /**
@@ -69,13 +63,11 @@ public class FinanceInfoController {
      * @return
      */
     @RequestMapping(value = "/customer/finance", method = RequestMethod.POST)
-    public ResponseData insertFinanceInfo(FinanceInfo info) {
-        try {
-            infoService.insertSelective(info);
-            return new ResponseData().success();
-        } catch (Exception e) {
-            return new ResponseData().fail(e.getMessage());
-        }
+    public ResponseData insertFinanceInfo(FinanceInfo info) throws Exception {
+
+        infoService.insertSelective(info);
+        return new ResponseData().success();
+
     }
 
 }

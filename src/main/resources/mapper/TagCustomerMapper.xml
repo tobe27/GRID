@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.TagCustomerMapper">
+
+  <resultMap id="BaseResultMap" type="model.TagCustomer">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="tag_id" jdbcType="BIGINT" property="tagId" />
+    <result column="tag_name" jdbcType="VARCHAR" property="tagName" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+  </resultMap>
+
+    <resultMap id="CustomerBaseResultMap" type="model.CustomerInfo">
+        <id column="customer_id" jdbcType="BIGINT" property="customerId" />
+        <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+        <result column="sex" jdbcType="INTEGER" property="sex" />
+        <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+        <result column="marital_status" jdbcType="INTEGER" property="maritalStatus" />
+        <result column="education_level" jdbcType="INTEGER" property="educationLevel" />
+        <result column="nation" jdbcType="VARCHAR" property="nation" />
+        <result column="birthday" jdbcType="VARCHAR" property="birthday" />
+        <result column="native_place" jdbcType="VARCHAR" property="nativePlace" />
+        <result column="phone_number" jdbcType="BIGINT" property="phoneNumber" />
+        <result column="career" jdbcType="VARCHAR" property="career" />
+        <result column="custodian" jdbcType="VARCHAR" property="custodian" />
+        <result column="grid_code" jdbcType="VARCHAR" property="gridCode" />
+        <result column="household_id" jdbcType="BIGINT" property="householdId" />
+        <result column="native_address" jdbcType="VARCHAR" property="nativeAddress" />
+        <result column="residence_address" jdbcType="VARCHAR" property="residenceAddress" />
+        <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+        <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+    </resultMap>
+
+
+
+  <sql id="Base_Column_List">
+    id, tag_id, tag_name, id_number, created_at, updated_at
+  </sql>
+
+<update id="updateByPrimaryKeySelective" parameterType="model.TagCustomer">
+    update tag_customer
+    <set>
+      <if test="tagId != null">
+        tag_id = #{tagId,jdbcType=BIGINT},
+      </if>
+      <if test="tagName != null">
+        tag_name = #{tagName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        id_number = #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+    <select id="getListByTagIdAndIdNumber" parameterType="model.TagCustomer" resultMap="BaseResultMap">
+      select * from tag_customer where tag_id =#{tagId}  and id_number= #{idNumber}
+    </select>
+
+    <!--获取客户的标签 - 通过身份证获取客户所有标签-->
+  <select id="listTagsByIdNumber" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tag_customer
+    where id_number = #{idNumber,jdbcType=VARCHAR}
+  </select>
+
+    <!--获取人数 - 通过标签Id获取该标签下的所有人数-->
+  <select id="countCustomersByTagId" parameterType="java.lang.Long" resultType="java.lang.Integer" >
+    select count(*)
+    from tag_customer
+    where tag_id = #{tagId,jdbcType=BIGINT}
+  </select>
+
+    <!--获取标签下客户列表 - 通过标签Id获取该标签下的所有客户-->
+    <select id="listCustomersByTagId" parameterType="java.lang.Long" resultType="model.CustomerInfo" resultMap="CustomerBaseResultMap">
+        select info.*
+        from customer_info info
+        left join tag_customer tc on info.id_number = tc.id_number
+        where tc.tag_id = #{tagId,jdbcType=BIGINT}
+  </select>
+
+    <!--删除关联 - 通过身份证及标签删除标签关联信息-->
+    <delete id="deleteTagByIdNumberAndTagId" parameterType="model.TagCustomer">
+        delete from tag_customer
+        where
+        id_number = #{idNumber,jdbcType=VARCHAR} and tag_id = #{tagId,jdbcType=BIGINT}
+    </delete>
+
+    <!--删除关联 - 通过标签删除标签关联信息-->
+    <delete id="deleteTagByTagId" parameterType="java.lang.Long">
+        delete from tag_customer
+        where
+        tag_id = #{tagId,jdbcType=BIGINT}
+    </delete>
+
+
+    <!--删除标签 - 通过身份证删除所有标签-->
+  <delete id="deleteTagByIdNumber" parameterType="java.lang.String">
+    delete from tag_customer
+    where id_number = #{idNumber,jdbcType=VARCHAR}
+  </delete>
+
+    <!--插入关联表-->
+  <insert id="insertSelective" parameterType="model.TagCustomer">
+    insert into tag_customer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tagId != null">
+        tag_id,
+      </if>
+      <if test="tagName != null">
+        tag_name,
+      </if>
+      <if test="idNumber != null">
+        id_number,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="tagId != null">
+        #{tagId,jdbcType=BIGINT},
+      </if>
+      <if test="tagName != null">
+        #{tagName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+
+</mapper>
