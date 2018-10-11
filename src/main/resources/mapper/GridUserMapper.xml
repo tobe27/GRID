@@ -68,7 +68,7 @@
     <select id="getUserByUniqueIndex" parameterType="model.GridUser"  resultMap="BaseResultMap">
         select * from grid_user
         where account_name = #{accountName} or phone_number = #{phoneNumber} or id_number = #{idNumber}
-        order by updated_at DESC
+        order by created_at DESC
     </select>
 
     <!--按条件查询用户列表 with role-->
@@ -85,7 +85,7 @@
             <if test="orgName != null">
                 and user.org_name like CONCAT('%',#{orgName},'%')
             </if>
-        order by user.updated_at DESC
+        order by user.created_at DESC
     </select>
     <!--接上一个SQL语句-->
     <select id="listRoles" parameterType="java.lang.Long"  resultMap="roleBaseResultMap">
@@ -108,7 +108,7 @@
         <if test="roleId != null">
             and role.role_id = #{roleId}
         </if>
-        order by user.updated_at DESC
+        order by user.created_at DESC
     </select>
 
     <!--删除用户-->

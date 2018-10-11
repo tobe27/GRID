@@ -10,6 +10,9 @@ import service.OrganizationService;
 
 import java.util.List;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
     @Autowired

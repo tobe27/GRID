@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 @Repository
 public interface GridUserMapper {
     //获取roles

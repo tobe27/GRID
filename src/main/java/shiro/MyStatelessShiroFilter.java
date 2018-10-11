@@ -11,6 +11,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * 自定义Shiro过滤器，所有请求的请求头需携带token
+ * @author Created by L.C.Y on 2018-8-28
+ */
 public class MyStatelessShiroFilter extends AccessControlFilter {
     private Logger logger = LoggerFactory.getLogger(MyStatelessShiroFilter.class);
     /**

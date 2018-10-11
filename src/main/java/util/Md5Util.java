@@ -2,6 +2,10 @@ package util;
 
 import org.apache.shiro.crypto.hash.Md5Hash;
 
+/**
+ * 加盐MD5
+ * @author Created by L.C.Y on 2018-9-28
+ */
 public class Md5Util {
     private static final String SALT = "www.yzsbank.com";
 

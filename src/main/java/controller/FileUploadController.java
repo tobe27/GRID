@@ -10,26 +10,18 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.*;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import model.CustomerCredit;
-import model.CustomerCreditDetail;
-import model.ResidentInfo;
-import model.ResponseData;
-import service.CustomerBlackListService;
-import service.CustomerCreditDetailService;
-import service.CustomerCreditService;
-import service.CustomerGreyListService;
-import service.CustomerWhiteListService;
-import service.ResidentInfoService;
+import service.*;
+import util.ExcelUtil;
 import util.OcrUtil;
 import util.PoiUtil;
+import util.ValidUtil;
 
 @RestController
 @RequestMapping("file")
@@ -46,27 +38,17 @@ public class FileUploadController {
 	private CustomerBlackListService customerBlackListService;
 	@Autowired
 	private CustomerCreditDetailService customerCreditDetailService;
+	@Autowired
+    CustomerInfoService customerInfoService;
 
 	private Logger logger = LoggerFactory.getLogger(FileUploadController.class);
 	
 	
-	/**
-     *测试base64
-     * @param file ,gridCode
-     * @return
-     */
-	@RequestMapping (value = "/getbasecode", method = RequestMethod.POST)
-	public ResponseData getBasecode () {
-		File file= new File("E:\\bb.jpg");
-    	String data=OcrUtil.fileToBase64Code(file);
-		data="data:image/jpg;base64,"+data;
-    	return new ResponseData().success().data(data);
-	}
 	
 	
 	/**
      * 调用此接口导入预授信明细表
-     * @param file ,gridCode
+     * @param
      * @return
      */
 	@RequestMapping (value = "/importcreditdetail", method = RequestMethod.POST)
@@ -97,7 +79,7 @@ public class FileUploadController {
 	
 	/**
      * 调用此接口导入整村授信名单库
-     * @param file ,gridCode
+     * @param
      * @return
      */
 	@RequestMapping (value = "/importcreditlist", method = RequestMethod.POST)
@@ -215,8 +197,7 @@ public class FileUploadController {
 	
 		
 	}
-	
-	
+
 	@RequestMapping(value ="/downImport", method = RequestMethod.GET)
 	public void downImport(HttpServletResponse response,HttpServletRequest request) throws UnsupportedEncodingException{
 		String fileName="户籍导入模板.xlsx";
@@ -257,5 +238,35 @@ public class FileUploadController {
 
         }
 	}
+
+    /**
+     * 根据网格号下载客户信息
+     * @param gridCode
+     * @param response
+     * @throws Exception
+     */
+	@RequestMapping(value = "/customer/{gridCode}", method = RequestMethod.GET)
+    public void downloadCustomInfoByGridCode(@PathVariable String gridCode, HttpServletResponse response) throws Exception {
+	    CustomerInfo info = new CustomerInfo();
+        List<CustomerInfo> dataList;
+	    if("0".equals(gridCode)) {
+	        gridCode = "全部";
+	        dataList = customerInfoService.listCustomers(info);
+        } else {
+	        info.setGridCode(gridCode);
+	        dataList = customerInfoService.listCustomers(info);
+        }
+
+        String fileName = gridCode + "网格的客户信息.xlsx";
+	    String sheetName = "客户信息";
+
+	    // 设置导出格式
+	    Workbook workbook = ExcelUtil.output2Workbook(sheetName, dataList);
+	    response.setContentType("application/octet-stream;charset=utf-8");
+	    response.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("gbk"), "iso8859-1"));
+	    response.setCharacterEncoding("UTF-8");
+	    response.flushBuffer();
+	    workbook.write(response.getOutputStream());
+    }
 
 }

@@ -48,7 +48,7 @@
         <if test="cardNumber != null">
           and card_number = #{cardNumber}
         </if>
-        order by updated_at DESC
+        order by created_at DESC
     </select>
 
     <!--精确-获取失信人列表-->

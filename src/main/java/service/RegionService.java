@@ -4,6 +4,9 @@ import model.Region;
 
 import java.util.List;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 public interface RegionService {
     /**
      * 删除区域
@@ -36,6 +39,14 @@ public interface RegionService {
      * @throws Exception
      */
     List<Region> getRegionsByPrimaryKey(Long preRegionCode) throws Exception;
+
+    /**
+     * 获取所有区域列表
+     * @param record
+     * @return
+     * @throws Exception
+     */
+    List<Region> listRegions(Region record) throws Exception;
 
     /**
      * 编辑区域

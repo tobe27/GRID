@@ -4,6 +4,9 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 @Data
 public class GridUser implements Serializable {
     private static final long serialVersionUID = -3644728745266251434L;

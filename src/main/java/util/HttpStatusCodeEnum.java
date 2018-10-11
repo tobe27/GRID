@@ -2,6 +2,7 @@ package util;
 
 /**
  * HTTP状态码
+ * @author Created by L.C.Y on 2018-9-28
  */
 public enum  HttpStatusCodeEnum {
     OK(200), // 请求成功

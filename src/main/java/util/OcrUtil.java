@@ -1,25 +1,24 @@
 package util;
 
 
-import com.alibaba.druid.util.Base64;
 import com.alibaba.fastjson.JSONObject;
-
 import controller.FileUploadController;
 import exception.MyException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * 百度云OCR工具类，识别身份证
+ * @author Created by L.C.Y on 2018-9-28
  */
 public class OcrUtil {
     // Access_Token获取
@@ -30,18 +29,19 @@ public class OcrUtil {
     private static final String API_KEY ="Xb12m5t4jS2n7jREvOgnBHIY";
     private static final String SECRET_KEY = "9XVx9GPcSbSUTZCbSuvdUDDYXiB6MMLa";
     private static Logger logger = LoggerFactory.getLogger(FileUploadController.class);
+
     // 获取百度云OCR的授权access_token
     private static String getAccessToken() {
         return getAccessToken(API_KEY, SECRET_KEY);
     }
-   
+
     /**
      * 获取百度云OCR的授权access_token
      * @param apiKey
      * @param secretKey
      * @return
      */
-    public static String getAccessToken(String apiKey, String secretKey) {
+    private static String getAccessToken(String apiKey, String secretKey) {
         String accessTokenURL = ACCESS_TOKEN_HOST
                 // 1. grant_type为固定参数
                 + "grant_type=client_credentials"
@@ -78,7 +78,7 @@ public class OcrUtil {
      * @param idCardSide 1-正面（头像面），2-反面
      * @return
      */
-    public static String getStringIdentityCard(File image, int idCardSide) throws Exception {
+    public static String getStringIdentityCard(MultipartFile image, int idCardSide) {
 
         String side;
         if (idCardSide == 1) {
@@ -91,7 +91,7 @@ public class OcrUtil {
         // 身份证OCR的http URL+鉴权token
         String OCRUrl = OCR_HOST+"access_token="+getAccessToken();
         // 对图片进行base64处理
-        String imageUrl = encodeImageToBase64(image);
+        String imageUrl = Base64Util.encodeBase64AndURLEncoder(FileConvertUtil.convertMulti2File(image));
         // 请求参数
         String requestParam = "detect_direction=true&id_card_side="+side+"&image="+imageUrl;
 
@@ -125,15 +125,22 @@ public class OcrUtil {
 
     /**
      * 提取OCR识别身份证有效信息
-     * @param value
+     * @param
      * @return
      */
-    public static Map<String, String> getJsonIdCardInfo(String value) {
+    public static Map<String, String> getIdCardInfo(MultipartFile image, int idCardSide) {
+        String value = getStringIdentityCard(image, idCardSide);
+        String side;
+        if (idCardSide == 1) {
+            side = "正面";
+        }else {
+            side = "背面";
+        }
         Map<String, String> map = new HashMap<>();
         JSONObject jsonObject = JSONObject.parseObject(value);
         JSONObject words_result = jsonObject.getJSONObject("words_result");
         if (words_result == null || words_result.isEmpty()) {
-            throw new MyException("请正确提供身份证正反面图片");
+            throw new MyException("请提供身份证"+side+"图片");
         }
         for (String key : words_result.keySet()) {
             JSONObject result = words_result.getJSONObject(key);
@@ -172,80 +179,4 @@ public class OcrUtil {
 
     }
 
-    /**
-     * 对图片url进行Base64编码处理
-     * @param image
-     * @return
-     */
-    public static String encodeImageToBase64(File image) {
-        // 将图片文件转化为字节数组字符串，并对其进行Base64编码处理
-        byte[] data;
-        InputStream inputStream = null;
-        try {
-             inputStream = new FileInputStream(image);
-            data = new byte[inputStream.available()];
-            inputStream.read(data);
-            // 对字节数组Base64编码
-            return URLEncoder.encode(Base64.byteArrayToBase64(data), "UTF-8");
-        } catch (Exception e) {
-            return null;
-        } finally {
-
-            try {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-            } catch (IOException e) {
-                logger.error("关闭输入流异常",e);
-            }
-
-        }
-
-    }
-
-    
-    /**
-     * 对文件进行Base64编码处理
-     * @param image
-     * @return
-     */
-    public static String fileToBase64Code(File image) {
-        // 将图片文件转化为字节数组字符串，并对其进行Base64编码处理
-        byte[] data;
-        InputStream inputStream = null;
-        try {
-             inputStream = new FileInputStream(image);
-            data = new byte[inputStream.available()];
-            inputStream.read(data);
-            inputStream.close();
-
-            // 对字节数组Base64编码
-            return Base64.byteArrayToBase64(data);
-        } catch (Exception e) {
-        	
-            return null;
-        }
-        finally {
-            try {
-                if (inputStream != null) {
-                	inputStream.close();
-                }
-            } catch (IOException e) {
-                logger.error("关闭输出流异常",e);
-            }
-
-            try {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-            } catch (IOException e) {
-                logger.error("关闭输入流异常",e);
-            }
-
-        }
-
-    }
-
-    
-    
 }

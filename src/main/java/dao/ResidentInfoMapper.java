@@ -4,7 +4,9 @@ import model.ResidentInfo;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
-
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 public interface ResidentInfoMapper {
     int deleteByPrimaryKey(Long residentId);
 

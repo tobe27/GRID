@@ -11,6 +11,7 @@ import java.io.IOException;
 
 /**
  * 解决跨域
+ * @author Created by L.C.Y on 2018-8-28
  */
 @Component
 public class CORSFilter extends OncePerRequestFilter {

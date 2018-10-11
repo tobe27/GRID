@@ -3,6 +3,10 @@ package model;
 import lombok.Data;
 
 import java.io.Serializable;
+
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 @Data
 public class TagCustomer implements Serializable {
     private static final long serialVersionUID = 4833108066434850312L;

@@ -8,8 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 
 
 /**
- * @ControllerAdvice是一个@Component，用于定义@ExceptionHandler
+ * @ ControllerAdvice 是一个@Component，用于定义@ExceptionHandler
  * 当有更多异常时，直接在@ExceptionHandler内添加即可
+ * @author Created by L.C.Y on 2018-9-28
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {

@@ -1,3 +1,4 @@
+import com.alibaba.fastjson.JSON;
 import model.Region;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -5,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import service.RegionService;
+import util.TreeUtil;
+
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/spring-mybatis.xml")
@@ -25,9 +29,12 @@ public class RegionMapperTest {
 
     @Test
     public void get() throws Exception {
-        System.out.println(regionService.deleteByPrimaryKey(10000L));
-        System.out.println(regionService.getRegionByPrimaryKey(10000L));
-        System.out.println(regionService.getRegionsByPrimaryKey(10001L));
+        Region region = new Region();
+        List<Region> regionList = regionService.listRegions(region);
+        TreeUtil treeUtil = new TreeUtil();
+        List list = treeUtil.getRegionList(regionList,10000L);
+        System.out.println(JSON.toJSONString(list,true));
+
     }
 
 }

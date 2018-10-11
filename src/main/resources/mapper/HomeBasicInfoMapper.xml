@@ -60,7 +60,7 @@ from `home_middle_info`
    hbi.family_num as familyNum,  hbi.people_num as peopleNum,hbi.credit_ratio as creditRatio,hbi.credit_num as creditNum,hbi.use_ratio as useRatio,
   hbi.use_num as useNum, hbi.org_code as orgCode,hbi.use_promote as usePromote,hbi.deposit as deposit,hbi.loan as loan,hbi.account_id as accountId,
   gu.real_name as realName FROM `home_basic_info`  hbi  LEFT JOIN grid_user gu ON hbi.account_id=gu.account_id WHERE hbi.account_id in 
-  
+   
   <foreach item="item" index="index" collection="accountId" 
                          open="(" separator="," close=")">
                         #{item}

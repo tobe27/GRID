@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 
+import dao.CustomerInfoMapper;
 import dao.GridInfoMapper;
 import dao.GridReviewMapper;
 import exception.MyException;
+import model.CustomerInfo;
 import model.GridInfo;
 import service.GridInfoService;
 @Service 
@@ -20,6 +22,8 @@ public class GridInfoServiceImpl implements GridInfoService {
 	private GridInfoMapper gridInfoMapper;
 	@Autowired
 	private GridReviewMapper gridReviewMapper;
+	@Autowired
+	private CustomerInfoMapper customerInfoMapper;
 	
 	
 	
@@ -37,18 +41,22 @@ public class GridInfoServiceImpl implements GridInfoService {
 			throw new MyException("参数有误");
 		}
 		try {
-			
 			GridInfo gridInfo=gridInfoMapper.selectByPrimaryKey(id);
-			gridInfoMapper.deleteByPrimaryKey(id);
+			//应该加入看看客户信息有没有关联这个网格
+			gridInfo.setDeleteFlag("1");
+			CustomerInfo customerInfo=new CustomerInfo();
+			customerInfo.setGridCode(gridInfo.getGridCode());
+			 if(customerInfoMapper.listCustomers(customerInfo).size()>0) {
+				 throw new MyException("该网格已经关联了客户信息，请先解除关联再删除"); 
+			 }
+			gridInfoMapper.updateByPrimaryKeySelective(gridInfo);
 			Map<String,Object> map=new HashMap<>();
 			map.put("gridCode", gridInfo.getGridCode());
 			gridReviewMapper.deleteByGridCode(map);
 		}catch(Exception e) {
-			throw new MyException("删除网格信息异常");
+			throw new MyException(e.getMessage());
 		}
-	
-		
-		return true;
+	return true;
 	}
 	
 	/**

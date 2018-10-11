@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import service.DishonestCustomerInfoService;
-import util.DishonestUtil;
+import util.QueryDishonestUtil;
 import util.ValidUtil;
 
 import java.util.List;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 @RestController
 @RequestMapping
 public class DishonestCustomerInfoController {
@@ -73,7 +76,7 @@ public class DishonestCustomerInfoController {
         if (ValidUtil.isEmpty(performedName) || ValidUtil.isEmpty(cardNumber)) {
             return new ResponseData().fail("被执行人姓名/名称不能为空");
         }
-        List<DishonestCustomerInfo> list = DishonestUtil.listDishonest(performedName, cardNumber);
+        List<DishonestCustomerInfo> list = QueryDishonestUtil.listDishonest(performedName, cardNumber);
         if (list == null || list.isEmpty()) {
             return new ResponseData().blank("未查询到该客户失信记录");
         }

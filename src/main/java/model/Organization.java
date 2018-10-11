@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 @Data
 public class Organization implements Serializable {
     private static final long serialVersionUID = 6760125305786077678L;

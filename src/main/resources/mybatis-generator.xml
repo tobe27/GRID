@@ -36,7 +36,7 @@
 
         <!--###############只需要修改表名和类名即可###############################################-->
         <!--生成对应表及类名-->
-        <table tableName="dishonest_customer_info" domainObjectName="DishonestCustomerInfo" enableCountByExample="false" enableUpdateByExample="false"
+        <table tableName="family_info" domainObjectName="FamilyInfo" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
 
     </context>

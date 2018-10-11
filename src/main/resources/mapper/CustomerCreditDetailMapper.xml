@@ -12,15 +12,21 @@
     <result column="interest_rate" jdbcType="DECIMAL" property="interestRate" />
     <result column="rental" jdbcType="DECIMAL" property="rental" />
     <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="approval_status" jdbcType="VARCHAR" property="approvalStatus" />
+     <result column="postil" jdbcType="VARCHAR" property="postil" />
+      <result column="attach_flag" jdbcType="VARCHAR" property="attachFlag" />
+    
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
   </resultMap>
   <sql id="Base_Column_List">
     id, customer_name, id_number, grid_code, phone_number, begin_at, end_at, interest_rate, 
-    rental, comment, created_at, updated_at
+    rental, comment, created_at, updated_at,approval_status,postil,attach_flag
   </sql>
   
-  
+  <update id="updateApprovalStatus" parameterType="model.CustomerBlackList" >
+   update   customer_credit_detail  set approval_status=#{approvalStatus} where id=#{id}
+  </update>
   <select id="getByIdOrIdnumber" parameterType="model.CustomerBlackList" resultMap="BaseResultMap">
   select* from customer_credit_detail where id_number=#{idNumber}
   <if test="id != null">
@@ -40,6 +46,15 @@
   <if test="idNumber != null">
    and id_number like  CONCAT('%',#{idNumber},'%')
   </if>
+  <if test='attachFlag !=null'>
+  <if test='attachFlag =="3"'>
+   and attach_flag like  CONCAT('%',#{attachFlag},'%')
+   </if>
+   <if test='attachFlag !="3"'>
+   and attach_flag !=3
+   </if>
+   </if>
+    order by created_at desc
   </select>
   
   
@@ -105,6 +120,17 @@
       <if test="updatedAt != null">
         updated_at,
       </if>
+       <if test="approvalStatus != null">
+        approval_status,
+      </if>
+      <if test=" postil  != null">
+       postil,
+      </if>
+       <if test=" attachFlag  != null">
+       attach_flag,
+      </if>
+      
+      
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -143,6 +169,19 @@
       <if test="updatedAt != null">
         #{updatedAt,jdbcType=BIGINT},
       </if>
+      
+       <if test="approvalStatus != null">
+         #{approvalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test=" postil  != null">
+       #{postil,jdbcType=VARCHAR},
+      </if>
+       <if test=" attachFlag  != null">
+         #{attachFlag,jdbcType=VARCHAR},
+      </if>
+      
+      
+      
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="model.CustomerCreditDetail">
@@ -181,6 +220,16 @@
       <if test="updatedAt != null">
         updated_at = #{updatedAt,jdbcType=BIGINT},
       </if>
+       <if test="approvalStatus != null">
+         #{approvalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test=" postil  != null">
+       #{postil,jdbcType=VARCHAR},
+      </if>
+       <if test=" attachFlag  != null">
+         #{attachFlag,jdbcType=VARCHAR},
+      </if>
+      
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>

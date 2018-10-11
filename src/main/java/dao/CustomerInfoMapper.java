@@ -11,6 +11,8 @@ public interface CustomerInfoMapper {
 
     CustomerInfo getCustomerByPrimaryKey(Long customerId);
 
+    CustomerInfo getCustomerByIdNumber(String idNumber);
+
     List<CustomerInfo> listCustomers(CustomerInfo record);
 
     int updateByPrimaryKeySelective(CustomerInfo record);

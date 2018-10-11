@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.CustomerImageMapper">
+  <resultMap id="BaseResultMap" type="model.CustomerImage">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="grid_code" jdbcType="VARCHAR" property="gridCode" />
+    <result column="original_name" jdbcType="VARCHAR" property="originalName" />
+    <result column="system_name" jdbcType="VARCHAR" property="systemName" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="upload_account_id" jdbcType="BIGINT" property="uploadAccountId" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="delete_flag" jdbcType="VARCHAR" property="deleteFlag" />
+    <result column="delete_path" jdbcType="VARCHAR" property="deletePath" />
+    <result column="delete_time" jdbcType="BIGINT" property="deleteTime" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, customer_name, id_number, grid_code, original_name, system_name, path, upload_account_id, 
+    type, delete_flag, delete_path, delete_time, created_at, updated_at
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer_image
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="getImageListByIdNumberAndType" parameterType="model.CustomerImage"  resultMap="BaseResultMap">
+  select * from customer_image where id_number=#{idNumber} and type   like   CONCAT(#{type},'%') and delete_flag !='1'
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from customer_image
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="model.CustomerImage">
+    insert into customer_image (id, customer_name, id_number, 
+      grid_code, original_name, system_name, 
+      path, upload_account_id, type, 
+      delete_flag, delete_path, delete_time, 
+      created_at, updated_at)
+    values (#{id,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, #{idNumber,jdbcType=VARCHAR}, 
+      #{gridCode,jdbcType=VARCHAR}, #{originalName,jdbcType=VARCHAR}, #{systemName,jdbcType=VARCHAR}, 
+      #{path,jdbcType=VARCHAR}, #{uploadAccountId,jdbcType=BIGINT}, #{type,jdbcType=VARCHAR}, 
+      #{deleteFlag,jdbcType=VARCHAR}, #{deletePath,jdbcType=VARCHAR}, #{deleteTime,jdbcType=BIGINT}, 
+      #{createdAt,jdbcType=BIGINT}, #{updatedAt,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="model.CustomerImage">
+    insert into customer_image
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="customerName != null">
+        customer_name,
+      </if>
+      <if test="idNumber != null">
+        id_number,
+      </if>
+      <if test="gridCode != null">
+        grid_code,
+      </if>
+      <if test="originalName != null">
+        original_name,
+      </if>
+      <if test="systemName != null">
+        system_name,
+      </if>
+      <if test="path != null">
+        path,
+      </if>
+      <if test="uploadAccountId != null">
+        upload_account_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag,
+      </if>
+      <if test="deletePath != null">
+        delete_path,
+      </if>
+      <if test="deleteTime != null">
+        delete_time,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="customerName != null">
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="gridCode != null">
+        #{gridCode,jdbcType=VARCHAR},
+      </if>
+      <if test="originalName != null">
+        #{originalName,jdbcType=VARCHAR},
+      </if>
+      <if test="systemName != null">
+        #{systemName,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null">
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadAccountId != null">
+        #{uploadAccountId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteFlag != null">
+        #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="deletePath != null">
+        #{deletePath,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteTime != null">
+        #{deleteTime,jdbcType=BIGINT},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="model.CustomerImage">
+    update customer_image
+    <set>
+      <if test="customerName != null">
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        id_number = #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="gridCode != null">
+        grid_code = #{gridCode,jdbcType=VARCHAR},
+      </if>
+      <if test="originalName != null">
+        original_name = #{originalName,jdbcType=VARCHAR},
+      </if>
+      <if test="systemName != null">
+        system_name = #{systemName,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null">
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadAccountId != null">
+        upload_account_id = #{uploadAccountId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="deletePath != null">
+        delete_path = #{deletePath,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteTime != null">
+        delete_time = #{deleteTime,jdbcType=BIGINT},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="model.CustomerImage">
+    update customer_image
+    set customer_name = #{customerName,jdbcType=VARCHAR},
+      id_number = #{idNumber,jdbcType=VARCHAR},
+      grid_code = #{gridCode,jdbcType=VARCHAR},
+      original_name = #{originalName,jdbcType=VARCHAR},
+      system_name = #{systemName,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR},
+      upload_account_id = #{uploadAccountId,jdbcType=BIGINT},
+      type = #{type,jdbcType=VARCHAR},
+      delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      delete_path = #{deletePath,jdbcType=VARCHAR},
+      delete_time = #{deleteTime,jdbcType=BIGINT},
+      created_at = #{createdAt,jdbcType=BIGINT},
+      updated_at = #{updatedAt,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

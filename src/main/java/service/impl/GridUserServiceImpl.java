@@ -15,6 +15,9 @@ import util.ValidUtil;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 @Service
 public class GridUserServiceImpl implements GridUserService {
     @Autowired
@@ -198,7 +201,7 @@ public class GridUserServiceImpl implements GridUserService {
             throw  new MyException("角色ID不能为空");
         }
         if (!ValidUtil.loginName(record.getAccountName(),20)) {
-            throw  new MyException("登录名错误，是2-16位英文、数字、下划线，且英文开头");
+            throw  new MyException("登录名错误，是2-20位英文、数字、下划线，且英文开头");
         }
         // 查询数据库校验用户名是否存在
         GridUser user;

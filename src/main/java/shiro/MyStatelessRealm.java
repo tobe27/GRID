@@ -12,6 +12,10 @@ import service.GridUserService;
 import util.JwtUtil;
 import java.util.Set;
 
+/**
+ * 自定义Shiro 的realm，验证登录及授权
+ * @author Created by L.C.Y on 2018-8-28
+ */
 public class MyStatelessRealm extends AuthorizingRealm {
     @Autowired
     GridUserService userService;

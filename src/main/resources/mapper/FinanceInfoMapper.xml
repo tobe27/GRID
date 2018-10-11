@@ -5,7 +5,7 @@
   <resultMap id="BaseResultMap" type="model.FinanceInfo">
     <id column="finance_id" jdbcType="BIGINT" property="financeId" />
     <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
-    <result column="industry" jdbcType="INTEGER" property="industry" />
+    <result column="industry" jdbcType="VARCHAR" property="industry" />
     <result column="career" jdbcType="VARCHAR" property="career" />
     <result column="company_name" jdbcType="VARCHAR" property="companyName" />
     <result column="company_address" jdbcType="VARCHAR" property="companyAddress" />
@@ -136,7 +136,7 @@
         #{idNumber,jdbcType=VARCHAR},
       </if>
       <if test="industry != null">
-        #{industry,jdbcType=INTEGER},
+        #{industry,jdbcType=VARCHAR},
       </if>
       <if test="career != null">
         #{career,jdbcType=VARCHAR},
@@ -211,7 +211,7 @@
     update finance_info
     <set>
       <if test="industry != null">
-        industry = #{industry,jdbcType=INTEGER},
+        industry = #{industry,jdbcType=VARCHAR},
       </if>
       <if test="career != null">
         career = #{career,jdbcType=VARCHAR},

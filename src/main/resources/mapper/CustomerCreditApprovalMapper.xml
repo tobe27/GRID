@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.CustomerCreditApprovalMapper">
+  <resultMap id="BaseResultMap" type="model.CustomerCreditApproval">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="approval_opinion" jdbcType="VARCHAR" property="approvalOpinion" />
+    <result column="approval_name" jdbcType="VARCHAR" property="approvalName" />
+    <result column="approval_account_id" jdbcType="BIGINT" property="approvalAccountId" />
+    <result column="signatureURL" jdbcType="VARCHAR" property="signatureurl" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+    <result column="approval_result" jdbcType="VARCHAR" property="approvalResult" />
+    <result column="approval_node" jdbcType="VARCHAR" property="approvalNode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, id_number, approval_opinion, approval_name, approval_account_id, signatureURL, 
+    created_at, updated_at, approval_result, approval_node
+  </sql>
+  
+  <insert id="batchSave" >
+  insert into customer_credit_approval  (id_number, approval_opinion, approval_name, approval_account_id, signatureURL, 
+    created_at, updated_at, approval_result, approval_node)
+  VALUES
+  <foreach  collection="list" item="item" separator=",">
+        (#{item.idNumber}, #{item.approvalOpinion}, #{item.approvalName},#{item.approvalAccountId},  #{item.signatureurl}, #{item.createdAt}, #{item.updatedAt}, #{item.approvalResult}, #{item.approvalNode})
+    </foreach>
+
+</insert>
+
+<select id="getListByIdNumber" parameterType="model.CustomerCreditApproval" resultMap="BaseResultMap">
+select *  from customer_credit_approval where id_number = #{idNumber} order by created_at
+</select>
+  
+  
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer_credit_approval
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from customer_credit_approval
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="model.CustomerCreditApproval">
+    insert into customer_credit_approval (id, id_number, approval_opinion, 
+      approval_name, approval_account_id, signatureURL, 
+      created_at, updated_at, approval_result, 
+      approval_node)
+    values (#{id,jdbcType=BIGINT}, #{idNumber,jdbcType=VARCHAR}, #{approvalOpinion,jdbcType=VARCHAR}, 
+      #{approvalName,jdbcType=VARCHAR}, #{approvalAccountId,jdbcType=BIGINT}, #{signatureurl,jdbcType=VARCHAR}, 
+      #{createdAt,jdbcType=BIGINT}, #{updatedAt,jdbcType=BIGINT}, #{approvalResult,jdbcType=VARCHAR}, 
+      #{approvalNode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="model.CustomerCreditApproval">
+    insert into customer_credit_approval
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="idNumber != null">
+        id_number,
+      </if>
+      <if test="approvalOpinion != null">
+        approval_opinion,
+      </if>
+      <if test="approvalName != null">
+        approval_name,
+      </if>
+      <if test="approvalAccountId != null">
+        approval_account_id,
+      </if>
+      <if test="signatureurl != null">
+        signatureURL,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="approvalResult != null">
+        approval_result,
+      </if>
+      <if test="approvalNode != null">
+        approval_node,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalOpinion != null">
+        #{approvalOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalName != null">
+        #{approvalName,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalAccountId != null">
+        #{approvalAccountId,jdbcType=BIGINT},
+      </if>
+      <if test="signatureurl != null">
+        #{signatureurl,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+      <if test="approvalResult != null">
+        #{approvalResult,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalNode != null">
+        #{approvalNode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="model.CustomerCreditApproval">
+    update customer_credit_approval
+    <set>
+      <if test="idNumber != null">
+        id_number = #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalOpinion != null">
+        approval_opinion = #{approvalOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalName != null">
+        approval_name = #{approvalName,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalAccountId != null">
+        approval_account_id = #{approvalAccountId,jdbcType=BIGINT},
+      </if>
+      <if test="signatureurl != null">
+        signatureURL = #{signatureurl,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+      <if test="approvalResult != null">
+        approval_result = #{approvalResult,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalNode != null">
+        approval_node = #{approvalNode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="model.CustomerCreditApproval">
+    update customer_credit_approval
+    set id_number = #{idNumber,jdbcType=VARCHAR},
+      approval_opinion = #{approvalOpinion,jdbcType=VARCHAR},
+      approval_name = #{approvalName,jdbcType=VARCHAR},
+      approval_account_id = #{approvalAccountId,jdbcType=BIGINT},
+      signatureURL = #{signatureurl,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=BIGINT},
+      updated_at = #{updatedAt,jdbcType=BIGINT},
+      approval_result = #{approvalResult,jdbcType=VARCHAR},
+      approval_node = #{approvalNode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

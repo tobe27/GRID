@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.FinanceInfoService;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 @Service
 public class FinanceInfoServiceImpl implements FinanceInfoService {
     @Autowired

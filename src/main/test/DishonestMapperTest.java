@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import service.DishonestCustomerInfoService;
-import util.DishonestUtil;
+import util.QueryDishonestUtil;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -17,7 +17,7 @@ public class DishonestMapperTest {
 
     @Test
     public void insertTest() throws Exception {
-        List<DishonestCustomerInfo> list = DishonestUtil.listDishonest("牛高","41041119610****2058");
+        List<DishonestCustomerInfo> list = QueryDishonestUtil.listDishonest("牛高","41041119610****2058");
         if (list == null) {
             System.out.println("null");
         } else {

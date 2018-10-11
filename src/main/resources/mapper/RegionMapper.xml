@@ -25,6 +25,13 @@
         where pre_region_code = #{preRegionCode,jdbcType=BIGINT}
     </select>
 
+    <!--查看所有区域-->
+    <select id="listRegions"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from grid_region
+    </select>
+
     <!--查看区域详情-->
   <select id="getRegionByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 

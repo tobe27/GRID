@@ -10,7 +10,7 @@ public interface CustomerBlackListService {
 	 boolean deleteByPrimaryKey(Long id) throws Exception;
      boolean insertSelective(CustomerBlackList record)throws Exception;
 
-     CustomerBlackList selectByPrimaryKey(Long id)throws Exception;
+      CustomerBlackList selectByPrimaryKey(Long id)throws Exception;
 
 	    boolean updateByPrimaryKeySelective(CustomerBlackList record)throws Exception;
 	    

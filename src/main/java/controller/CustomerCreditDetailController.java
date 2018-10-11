@@ -3,6 +3,7 @@ package controller;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,7 +54,7 @@ public class CustomerCreditDetailController {
 	   */
 	
 	@RequestMapping(value = "/creditdetail/{id}",method = RequestMethod.PUT)
-	 public ResponseData updateCustomerCreditDetail( CustomerCreditDetail customerCreditDetail) {
+	 public ResponseData updateCustomerCreditDetail(CustomerCreditDetail customerCreditDetail) {
 		try {
 			customerCreditDetailService.updateByPrimaryKeySelective(customerCreditDetail);
 			 return new ResponseData().success();
@@ -88,18 +89,14 @@ public class CustomerCreditDetailController {
      */
   @RequestMapping(value = "/creditdetail/list", method = RequestMethod.GET)
   public ResponseData getListByPage(@RequestParam Map<String,Object>  map) {
-	 
 	  PageInfo<CustomerCreditDetail> pageInfo ;
-	 
 	  try {
 		  List<CustomerCreditDetail> list=  customerCreditDetailService.getListByPage(map);
 		  pageInfo=new PageInfo<>(list);
         } catch (Exception e) {
             return new ResponseData().code(400).message("查询授信详情信息出错");
         }
-        
-     
-		return new ResponseData().success().data(pageInfo.getList()).result("count", pageInfo.getTotal());
+        return new ResponseData().success().data(pageInfo.getList()).result("count", pageInfo.getTotal());
 	  
   }
     

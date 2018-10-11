@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.FamilyInfoMapper">
+  <resultMap id="BaseResultMap" type="model.FamilyInfo">
+    <id column="family_id" jdbcType="BIGINT" property="familyId" />
+    <result column="household_id" jdbcType="BIGINT" property="householdId" />
+    <result column="population" jdbcType="INTEGER" property="population" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="postcode" jdbcType="INTEGER" property="postcode" />
+    <result column="local_credit" jdbcType="VARCHAR" property="localCredit" />
+    <result column="is_harmony" jdbcType="VARCHAR" property="isHarmony" />
+    <result column="social_evaluation" jdbcType="VARCHAR" property="socialEvaluation" />
+    <result column="is_self_entity" jdbcType="VARCHAR" property="isSelfEntity" />
+    <result column="is_owe_tax" jdbcType="VARCHAR" property="isOweTax" />
+    <result column="produce_capacity" jdbcType="VARCHAR" property="produceCapacity" />
+    <result column="produce_scene" jdbcType="VARCHAR" property="produceScene" />
+    <result column="account_id" jdbcType="BIGINT" property="accountId" />
+    <result column="insurance_type" jdbcType="VARCHAR" property="insuranceType" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    family_id, household_id, population, address, postcode, local_credit, is_harmony, 
+    social_evaluation, is_self_entity, is_owe_tax, produce_capacity, produce_scene, account_id, 
+    insurance_type, created_at, updated_at
+  </sql>
+
+  <select id="getByHouseholdId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from family_info
+    where household_id = #{householdId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from family_info
+    where family_id = #{familyId,jdbcType=BIGINT}
+  </delete>
+
+
+  <insert id="insertSelective" parameterType="model.FamilyInfo">
+    insert into family_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="familyId != null">
+        family_id,
+      </if>
+      <if test="householdId != null">
+        household_id,
+      </if>
+      <if test="population != null">
+        population,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="postcode != null">
+        postcode,
+      </if>
+      <if test="localCredit != null">
+        local_credit,
+      </if>
+      <if test="isHarmony != null">
+        is_harmony,
+      </if>
+      <if test="socialEvaluation != null">
+        social_evaluation,
+      </if>
+      <if test="isSelfEntity != null">
+        is_self_entity,
+      </if>
+      <if test="isOweTax != null">
+        is_owe_tax,
+      </if>
+      <if test="produceCapacity != null">
+        produce_capacity,
+      </if>
+      <if test="produceScene != null">
+        produce_scene,
+      </if>
+      <if test="accountId != null">
+        account_id,
+      </if>
+      <if test="insuranceType != null">
+        insurance_type,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="familyId != null">
+        #{familyId,jdbcType=BIGINT},
+      </if>
+      <if test="householdId != null">
+        #{householdId,jdbcType=BIGINT},
+      </if>
+      <if test="population != null">
+        #{population,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="postcode != null">
+        #{postcode,jdbcType=INTEGER},
+      </if>
+      <if test="localCredit != null">
+        #{localCredit,jdbcType=VARCHAR},
+      </if>
+      <if test="isHarmony != null">
+        #{isHarmony,jdbcType=VARCHAR},
+      </if>
+      <if test="socialEvaluation != null">
+        #{socialEvaluation,jdbcType=VARCHAR},
+      </if>
+      <if test="isSelfEntity != null">
+        #{isSelfEntity,jdbcType=VARCHAR},
+      </if>
+      <if test="isOweTax != null">
+        #{isOweTax,jdbcType=VARCHAR},
+      </if>
+      <if test="produceCapacity != null">
+        #{produceCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="produceScene != null">
+        #{produceScene,jdbcType=VARCHAR},
+      </if>
+      <if test="accountId != null">
+        #{accountId,jdbcType=BIGINT},
+      </if>
+      <if test="insuranceType != null">
+        #{insuranceType,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="model.FamilyInfo">
+    update family_info
+    <set>
+      <if test="householdId != null">
+        household_id = #{householdId,jdbcType=BIGINT},
+      </if>
+      <if test="population != null">
+        population = #{population,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="postcode != null">
+        postcode = #{postcode,jdbcType=INTEGER},
+      </if>
+      <if test="localCredit != null">
+        local_credit = #{localCredit,jdbcType=VARCHAR},
+      </if>
+      <if test="isHarmony != null">
+        is_harmony = #{isHarmony,jdbcType=VARCHAR},
+      </if>
+      <if test="socialEvaluation != null">
+        social_evaluation = #{socialEvaluation,jdbcType=VARCHAR},
+      </if>
+      <if test="isSelfEntity != null">
+        is_self_entity = #{isSelfEntity,jdbcType=VARCHAR},
+      </if>
+      <if test="isOweTax != null">
+        is_owe_tax = #{isOweTax,jdbcType=VARCHAR},
+      </if>
+      <if test="produceCapacity != null">
+        produce_capacity = #{produceCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="produceScene != null">
+        produce_scene = #{produceScene,jdbcType=VARCHAR},
+      </if>
+      <if test="accountId != null">
+        account_id = #{accountId,jdbcType=BIGINT},
+      </if>
+      <if test="insuranceType != null">
+        insurance_type = #{insuranceType,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where family_id = #{familyId,jdbcType=BIGINT}
+  </update>
+
+</mapper>

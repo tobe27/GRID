@@ -39,7 +39,8 @@ public class GridInfo implements Serializable {
     private Long updatedAt;
     
     private List<GridReview> listReview;
-
+    private String deleteFlag;
+    
     public List<GridReview> getListReview() {
 		return listReview;
 	}
@@ -151,4 +152,13 @@ public class GridInfo implements Serializable {
     public void setUpdatedAt(Long updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+	public String getDeleteFlag() {
+		return deleteFlag;
+	}
+
+	public void setDeleteFlag(String deleteFlag) {
+		this.deleteFlag = deleteFlag;
+	}
+    
 }

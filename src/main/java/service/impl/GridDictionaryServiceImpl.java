@@ -175,10 +175,11 @@ public class GridDictionaryServiceImpl implements GridDictionaryService {
 		}
 		try {
 		int i=0;
+		long now=System.currentTimeMillis();
 		String code="Grid"+System.currentTimeMillis();
 		for(GridDictionary gr:list){
 			gr.setCode(code);
-			gr.setCreatAt(System.currentTimeMillis());
+			gr.setCreatAt(now);
 			gridDictionaryMapper.insertSelective(gr);
 			i++;
 		}
@@ -242,7 +243,13 @@ public PageInfo<GridDictionary> getGridDictionaryListByPage(int pageNo, int page
 	PageHelper.startPage(pageNo, pageSize);
 	
 	map.put("name", name);
-	List<GridDictionary> list=gridDictionaryMapper.getList(map);
+	List<GridDictionary> list=null;
+	try {
+		list = gridDictionaryMapper.getList(map);
+	} catch (Exception e) {
+		
+		e.printStackTrace();
+	}
 	PageInfo<GridDictionary> pageInfo=new PageInfo<GridDictionary>(list);
 	
 	return pageInfo;

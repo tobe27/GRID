@@ -2,6 +2,8 @@ package dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import model.ProductDict;
 
 public interface ProductDictMapper {
@@ -30,7 +32,7 @@ public interface ProductDictMapper {
 	 * @param state
 	 * @return
 	 */
-	List<ProductDict> listProducts(Integer state);
+	List<ProductDict> listProducts(@Param("state")Integer state);
 	
 	/**
 	 * 修改银行产品状态

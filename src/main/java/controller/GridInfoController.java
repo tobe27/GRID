@@ -121,9 +121,7 @@ public class GridInfoController {
         } catch (Exception e) {
             return new ResponseData().code(400).message("查询网格信息出错");
         }
-        
-     
-		return new ResponseData().success().data(pageInfo.getList()).result("count", pageInfo.getTotal());
+        return new ResponseData().success().data(pageInfo.getList()).result("count", pageInfo.getTotal());
 	  
   }
 

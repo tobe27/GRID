@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
  * 用来返回controller层请求的结果
  * 默认为三个返回项：code,message,data
  * 如果有其他更多返回项，使用result方法拼接
+ * @author Created by L.C.Y on 2018-9-20
  */
 public class ResponseData extends LinkedHashMap<String, Object> {
 

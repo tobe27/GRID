@@ -1,6 +1,9 @@
 package util;
 
-
+/**
+ * 校验参数工具
+ * @author Created by L.C.Y on 2018-9-28
+ */
 public class ValidUtil {
 
     //正则表达式.手机格式，必须1开头的11位电话号码

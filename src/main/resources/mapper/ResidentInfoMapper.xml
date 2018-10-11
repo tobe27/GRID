@@ -38,7 +38,7 @@
         <if test="householdId != null">
             and household_id = #{householdId}
         </if>
-        order by updated_at DESC
+        order by created_at DESC
     </select>
 
 <insert id="batchSave" >

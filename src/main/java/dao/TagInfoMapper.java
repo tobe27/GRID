@@ -4,6 +4,9 @@ import model.TagInfo;
 
 import java.util.List;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 public interface TagInfoMapper {
     int deleteByPrimaryKey(Long tagId);
 

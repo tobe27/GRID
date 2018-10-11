@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import service.HomeStatisticsInfoService;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 @RestController
 public class HomeStatisticsInfoController {
     @Autowired

@@ -35,7 +35,7 @@ public class ProductDictController {
 		 PageHelper.startPage(pageNum,pageSize);
          List<ProductDict> list = productDictService.listProducts(state);
          if (list == null || list.isEmpty()) {
-             return new ResponseData().fail("产品列表不存在");
+             return new ResponseData().blank("产品列表不存在");
          }
          PageInfo<ProductDict> pageInfo = new PageInfo<>(list);
          return new ResponseData().success().result("count", pageInfo.getTotal()).data(pageInfo.getList());

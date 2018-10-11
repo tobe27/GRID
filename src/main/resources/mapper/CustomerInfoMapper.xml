@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dao.CustomerInfoMapper">
-
   <resultMap id="BaseResultMap" type="model.CustomerInfo">
     <id column="customer_id" jdbcType="BIGINT" property="customerId" />
     <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
     <result column="sex" jdbcType="INTEGER" property="sex" />
     <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
     <result column="marital_status" jdbcType="INTEGER" property="maritalStatus" />
-    <result column="education_level" jdbcType="INTEGER" property="educationLevel" />
+    <result column="education_level" jdbcType="VARCHAR" property="educationLevel" />
     <result column="nation" jdbcType="VARCHAR" property="nation" />
     <result column="birthday" jdbcType="VARCHAR" property="birthday" />
     <result column="native_place" jdbcType="VARCHAR" property="nativePlace" />
     <result column="phone_number" jdbcType="BIGINT" property="phoneNumber" />
-    <result column="career" jdbcType="VARCHAR" property="career" />
     <result column="custodian" jdbcType="VARCHAR" property="custodian" />
     <result column="grid_code" jdbcType="VARCHAR" property="gridCode" />
     <result column="household_id" jdbcType="BIGINT" property="householdId" />
@@ -21,19 +19,38 @@
     <result column="residence_address" jdbcType="VARCHAR" property="residenceAddress" />
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="politics_status" jdbcType="VARCHAR" property="politicsStatus" />
+    <result column="living_situation" jdbcType="VARCHAR" property="livingSituation" />
+    <result column="physical_condition" jdbcType="VARCHAR" property="physicalCondition" />
+    <result column="academic_degree" jdbcType="VARCHAR" property="academicDegree" />
+    <result column="year_salary" jdbcType="DOUBLE" property="yearSalary" />
+    <result column="nationality" jdbcType="VARCHAR" property="nationality" />
+    <result column="borrower_nature" jdbcType="VARCHAR" property="borrowerNature" />
+    <result column="postcode" jdbcType="INTEGER" property="postcode" />
+    <result column="is_stockholder" jdbcType="VARCHAR" property="isStockholder" />
+    <result column="is_staff" jdbcType="VARCHAR" property="isStaff" />
+    <result column="is_owner" jdbcType="VARCHAR" property="isOwner" />
   </resultMap>
 
   <sql id="Base_Column_List">
     customer_id, customer_name, sex, id_number, marital_status, education_level, nation, 
-    birthday, native_place, phone_number, career, custodian, grid_code, household_id, 
-    native_address, residence_address, created_at, updated_at
+    birthday, native_place, phone_number, custodian, grid_code, household_id, native_address, 
+    residence_address, created_at, updated_at, status, politics_status, living_situation, 
+    physical_condition, academic_degree, year_salary, nationality, borrower_nature, postcode, 
+    is_stockholder, is_staff, is_owner
   </sql>
 
+
+<!--客户列表-->
     <select id="listCustomers" parameterType="model.CustomerInfo" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from customer_info
         where 1 = 1
+        <if test="gridCode != null">
+            and grid_code = #{gridCode}
+        </if>
         <if test="customerName != null">
             and customer_name like CONCAT('%',#{customerName},'%')
         </if>
@@ -49,20 +66,31 @@
         <if test="residenceAddress != null">
             and residence_address like CONCAT('%',#{residenceAddress},'%')
         </if>
-        order by updated_at DESC
+        order by created_at DESC
     </select>
 
-  <select id="getCustomerByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from customer_info
-    where customer_id = #{customerId,jdbcType=BIGINT}
-  </select>
+    <!--客户详情-->
+    <select id="getCustomerByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from customer_info
+        where customer_id = #{customerId,jdbcType=BIGINT}
+    </select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--客户详情By身份证-->
+    <select id="getCustomerByIdNumber" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from customer_info
+        where id_number = #{idNumber,jdbcType=BIGINT}
+    </select>
+
+    <!--删除-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from customer_info
     where customer_id = #{customerId,jdbcType=BIGINT}
   </delete>
+
 
   <insert id="insertSelective" parameterType="model.CustomerInfo">
     insert into customer_info
@@ -97,9 +125,6 @@
       <if test="phoneNumber != null">
         phone_number,
       </if>
-      <if test="career != null">
-        career,
-      </if>
       <if test="custodian != null">
         custodian,
       </if>
@@ -121,6 +146,42 @@
       <if test="updatedAt != null">
         updated_at,
       </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="politicsStatus != null">
+        politics_status,
+      </if>
+      <if test="livingSituation != null">
+        living_situation,
+      </if>
+      <if test="physicalCondition != null">
+        physical_condition,
+      </if>
+      <if test="academicDegree != null">
+        academic_degree,
+      </if>
+      <if test="yearSalary != null">
+        year_salary,
+      </if>
+      <if test="nationality != null">
+        nationality,
+      </if>
+      <if test="borrowerNature != null">
+        borrower_nature,
+      </if>
+      <if test="postcode != null">
+        postcode,
+      </if>
+      <if test="isStockholder != null">
+        is_stockholder,
+      </if>
+      <if test="isStaff != null">
+        is_staff,
+      </if>
+      <if test="isOwner != null">
+        is_owner,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="customerId != null">
@@ -139,7 +200,7 @@
         #{maritalStatus,jdbcType=INTEGER},
       </if>
       <if test="educationLevel != null">
-        #{educationLevel,jdbcType=INTEGER},
+        #{educationLevel,jdbcType=VARCHAR},
       </if>
       <if test="nation != null">
         #{nation,jdbcType=VARCHAR},
@@ -152,9 +213,6 @@
       </if>
       <if test="phoneNumber != null">
         #{phoneNumber,jdbcType=BIGINT},
-      </if>
-      <if test="career != null">
-        #{career,jdbcType=VARCHAR},
       </if>
       <if test="custodian != null">
         #{custodian,jdbcType=VARCHAR},
@@ -177,6 +235,42 @@
       <if test="updatedAt != null">
         #{updatedAt,jdbcType=BIGINT},
       </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="politicsStatus != null">
+        #{politicsStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="livingSituation != null">
+        #{livingSituation,jdbcType=VARCHAR},
+      </if>
+      <if test="physicalCondition != null">
+        #{physicalCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="academicDegree != null">
+        #{academicDegree,jdbcType=VARCHAR},
+      </if>
+      <if test="yearSalary != null">
+        #{yearSalary,jdbcType=DOUBLE},
+      </if>
+      <if test="nationality != null">
+        #{nationality,jdbcType=VARCHAR},
+      </if>
+      <if test="borrowerNature != null">
+        #{borrowerNature,jdbcType=VARCHAR},
+      </if>
+      <if test="postcode != null">
+        #{postcode,jdbcType=INTEGER},
+      </if>
+      <if test="isStockholder != null">
+        #{isStockholder,jdbcType=VARCHAR},
+      </if>
+      <if test="isStaff != null">
+        #{isStaff,jdbcType=VARCHAR},
+      </if>
+      <if test="isOwner != null">
+        #{isOwner,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
 
@@ -196,7 +290,7 @@
         marital_status = #{maritalStatus,jdbcType=INTEGER},
       </if>
       <if test="educationLevel != null">
-        education_level = #{educationLevel,jdbcType=INTEGER},
+        education_level = #{educationLevel,jdbcType=VARCHAR},
       </if>
       <if test="nation != null">
         nation = #{nation,jdbcType=VARCHAR},
@@ -209,9 +303,6 @@
       </if>
       <if test="phoneNumber != null">
         phone_number = #{phoneNumber,jdbcType=BIGINT},
-      </if>
-      <if test="career != null">
-        career = #{career,jdbcType=VARCHAR},
       </if>
       <if test="custodian != null">
         custodian = #{custodian,jdbcType=VARCHAR},
@@ -234,8 +325,43 @@
       <if test="updatedAt != null">
         updated_at = #{updatedAt,jdbcType=BIGINT},
       </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="politicsStatus != null">
+        politics_status = #{politicsStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="livingSituation != null">
+        living_situation = #{livingSituation,jdbcType=VARCHAR},
+      </if>
+      <if test="physicalCondition != null">
+        physical_condition = #{physicalCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="academicDegree != null">
+        academic_degree = #{academicDegree,jdbcType=VARCHAR},
+      </if>
+      <if test="yearSalary != null">
+        year_salary = #{yearSalary,jdbcType=DOUBLE},
+      </if>
+      <if test="nationality != null">
+        nationality = #{nationality,jdbcType=VARCHAR},
+      </if>
+      <if test="borrowerNature != null">
+        borrower_nature = #{borrowerNature,jdbcType=VARCHAR},
+      </if>
+      <if test="postcode != null">
+        postcode = #{postcode,jdbcType=INTEGER},
+      </if>
+      <if test="isStockholder != null">
+        is_stockholder = #{isStockholder,jdbcType=VARCHAR},
+      </if>
+      <if test="isStaff != null">
+        is_staff = #{isStaff,jdbcType=VARCHAR},
+      </if>
+      <if test="isOwner != null">
+        is_owner = #{isOwner,jdbcType=VARCHAR},
+      </if>
     </set>
     where customer_id = #{customerId,jdbcType=BIGINT}
   </update>
-
 </mapper>

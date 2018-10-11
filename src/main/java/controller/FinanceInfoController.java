@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import service.FinanceInfoService;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 @RestController
 @RequestMapping
 public class FinanceInfoController {

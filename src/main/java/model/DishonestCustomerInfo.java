@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 @Data
 public class DishonestCustomerInfo implements Serializable {
     private static final long serialVersionUID = 2952636877575478687L;

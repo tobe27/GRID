@@ -28,6 +28,11 @@ public class CustomerCreditDetail implements Serializable{
     private BigDecimal rental;
 
     private String comment;
+    private String approvalStatus;
+    private String postil;
+    private String attachFlag;
+    
+    
 
     private Long createdAt;
 
@@ -128,4 +133,29 @@ public class CustomerCreditDetail implements Serializable{
     public void setUpdatedAt(Long updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+	public String getApprovalStatus() {
+		return approvalStatus;
+	}
+
+	public void setApprovalStatus(String approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
+
+	public String getPostil() {
+		return postil;
+	}
+
+	public void setPostil(String postil) {
+		this.postil = postil;
+	}
+
+	public String getAttachFlag() {
+		return attachFlag;
+	}
+
+	public void setAttachFlag(String attachFlag) {
+		this.attachFlag = attachFlag;
+	}
+    
 }

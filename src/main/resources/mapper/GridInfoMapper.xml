@@ -13,7 +13,7 @@
     <result column="supervise_manager" jdbcType="VARCHAR" property="superviseManager" />
     <result column="qr_code" jdbcType="VARCHAR" property="qrCode" />
     <result column="grid_map" jdbcType="VARCHAR" property="gridMap" />
-    
+    <result column="delete_flag" jdbcType="VARCHAR" property="deleteFlag" />
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
     <collection property="listReview" column="grid_code"   ofType="model.GridReview" select="getGridReviews" >
@@ -46,7 +46,7 @@
   select gi.id as id,gu.real_name as realName , gi.grid_code as gridCode, gi.grid_name as gridName, gi.org_code as orgCode, gi.grid_type as gridType , gi.description as description, gi.account_id as accountId,gi.assist_manager as assistManager, 
     gi.supervise_manager as superviseManager, gi.qr_code as qrCode, gi.grid_map as gridMap, gi.created_at as createdAt, gi.updated_at as updatedAt 
   
-    from grid_info gi left join grid_user gu  on gi.account_id=gu.account_id  where 1=1
+    from grid_info gi left join grid_user gu  on gi.account_id=gu.account_id  where 1=1 and delete_flag !='1'
     <if test="gridCode != null">
     and gi.grid_code   like CONCAT('%',#{gridCode},'%')
     </if >
@@ -63,7 +63,7 @@
      <if test="gridType != null">
       and  gi.grid_type = #{gridType}
     </if>
-    
+     order by gi.created_at DESC
   </select>
   <sql id="Base_Column_List">
     id, grid_code, grid_name, org_code, grid_type, description, account_id, assist_manager, 
@@ -227,6 +227,10 @@
       <if test="updatedAt != null">
         updated_at = #{updatedAt,jdbcType=BIGINT},
       </if>
+      <if test="deleteFlag != null">
+        delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>

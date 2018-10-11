@@ -6,6 +6,9 @@ import model.TagCustomer;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 public interface TagCustomerService {
     /**
      * 通过身份证删除客户标签信息

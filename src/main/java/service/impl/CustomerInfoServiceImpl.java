@@ -10,6 +10,9 @@ import util.ValidUtil;
 
 import java.util.List;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 @Service
 public class CustomerInfoServiceImpl implements CustomerInfoService {
     @Autowired
@@ -76,6 +79,22 @@ public class CustomerInfoServiceImpl implements CustomerInfoService {
             return infoMapper.getCustomerByPrimaryKey(customerId);
         } catch (Exception e) {
             throw new MyException("获取客户信息出现异常");
+        }
+    }
+
+    /**
+     * 获取客户信息详情BY身份证
+     *
+     * @param idNumber
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public CustomerInfo getCustomerByIdNumber(String idNumber) throws Exception {
+        try {
+            return infoMapper.getCustomerByIdNumber(idNumber);
+        } catch (Exception e) {
+            throw new MyException("通过身份证获取客户信息出现异常");
         }
     }
 

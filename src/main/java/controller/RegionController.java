@@ -8,9 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import service.RegionService;
+import util.TreeUtil;
 
 import java.util.List;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 @RestController
 @RequestMapping("/super")
 public class RegionController {
@@ -66,14 +70,9 @@ public class RegionController {
      */
     @RequestMapping(value = "/region/{regionCode}", method = RequestMethod.GET)
     public ResponseData getRegion(@PathVariable Long regionCode) throws Exception {
-        if (regionCode == null) {
-            return new ResponseData().fail("行政区域代码不能为空");
-        }
-
-        Region region = regionService.getRegionByPrimaryKey(regionCode);
-        List<Region> nextRegion = regionService.getRegionsByPrimaryKey(regionCode);
-        return new ResponseData().success().data(region).result("nextRegion", nextRegion);
-
+        List<Region> regionList = regionService.listRegions(new Region());
+        return new ResponseData().success().data(new TreeUtil().getRegionList(regionList, regionCode));
     }
+
 
 }

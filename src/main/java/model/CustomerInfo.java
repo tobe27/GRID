@@ -3,11 +3,10 @@ package model;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 public class CustomerInfo implements Serializable {
-    private static final long serialVersionUID = 7077761619882905217L;
+    private static final long serialVersionUID = -1959845957466682661L;
     private Long customerId;
 
     private String customerName;
@@ -18,7 +17,7 @@ public class CustomerInfo implements Serializable {
 
     private Integer maritalStatus;
 
-    private Integer educationLevel;
+    private String educationLevel;
 
     private String nation;
 
@@ -27,8 +26,6 @@ public class CustomerInfo implements Serializable {
     private String nativePlace;
 
     private Long phoneNumber;
-
-    private String career;
 
     private String custodian;
 
@@ -44,7 +41,29 @@ public class CustomerInfo implements Serializable {
 
     private Long updatedAt;
 
-    private List<TagCustomer> tags;
+    private Integer status;
+
+    private String politicsStatus;
+
+    private String livingSituation;
+
+    private String physicalCondition;
+
+    private String academicDegree;
+
+    private Double yearSalary;
+
+    private String nationality;
+
+    private String borrowerNature;
+
+    private Integer postcode;
+
+    private String isStockholder;
+
+    private String isStaff;
+
+    private String isOwner;
 
     public Long getCustomerId() {
         return customerId;
@@ -86,11 +105,11 @@ public class CustomerInfo implements Serializable {
         this.maritalStatus = maritalStatus;
     }
 
-    public Integer getEducationLevel() {
+    public String getEducationLevel() {
         return educationLevel;
     }
 
-    public void setEducationLevel(Integer educationLevel) {
+    public void setEducationLevel(String educationLevel) {
         this.educationLevel = educationLevel;
     }
 
@@ -124,14 +143,6 @@ public class CustomerInfo implements Serializable {
 
     public void setPhoneNumber(Long phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getCareer() {
-        return career;
-    }
-
-    public void setCareer(String career) {
-        this.career = career == null ? null : career.trim();
     }
 
     public String getCustodian() {
@@ -188,5 +199,101 @@ public class CustomerInfo implements Serializable {
 
     public void setUpdatedAt(Long updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getPoliticsStatus() {
+        return politicsStatus;
+    }
+
+    public void setPoliticsStatus(String politicsStatus) {
+        this.politicsStatus = politicsStatus == null ? null : politicsStatus.trim();
+    }
+
+    public String getLivingSituation() {
+        return livingSituation;
+    }
+
+    public void setLivingSituation(String livingSituation) {
+        this.livingSituation = livingSituation == null ? null : livingSituation.trim();
+    }
+
+    public String getPhysicalCondition() {
+        return physicalCondition;
+    }
+
+    public void setPhysicalCondition(String physicalCondition) {
+        this.physicalCondition = physicalCondition == null ? null : physicalCondition.trim();
+    }
+
+    public String getAcademicDegree() {
+        return academicDegree;
+    }
+
+    public void setAcademicDegree(String academicDegree) {
+        this.academicDegree = academicDegree == null ? null : academicDegree.trim();
+    }
+
+    public Double getYearSalary() {
+        return yearSalary;
+    }
+
+    public void setYearSalary(Double yearSalary) {
+        this.yearSalary = yearSalary;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality == null ? null : nationality.trim();
+    }
+
+    public String getBorrowerNature() {
+        return borrowerNature;
+    }
+
+    public void setBorrowerNature(String borrowerNature) {
+        this.borrowerNature = borrowerNature == null ? null : borrowerNature.trim();
+    }
+
+    public Integer getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(Integer postcode) {
+        this.postcode = postcode;
+    }
+
+    public String getIsStockholder() {
+        return isStockholder;
+    }
+
+    public void setIsStockholder(String isStockholder) {
+        this.isStockholder = isStockholder == null ? null : isStockholder.trim();
+    }
+
+    public String getIsStaff() {
+        return isStaff;
+    }
+
+    public void setIsStaff(String isStaff) {
+        this.isStaff = isStaff == null ? null : isStaff.trim();
+    }
+
+    public String getIsOwner() {
+        return isOwner;
+    }
+
+    public void setIsOwner(String isOwner) {
+        this.isOwner = isOwner == null ? null : isOwner.trim();
     }
 }

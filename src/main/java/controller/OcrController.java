@@ -1,14 +1,13 @@
 package controller;
 
 import model.ResponseData;
-import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import util.OcrUtil;
 
-import java.io.File;
-
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 @RestController
 @RequestMapping
 public class OcrController {
@@ -21,11 +20,6 @@ public class OcrController {
      */
     @RequestMapping(value = "/ocr/idcard/{idCardSide}", method = RequestMethod.POST)
     public ResponseData ocrIdCard(@RequestParam MultipartFile image, @PathVariable Integer idCardSide) throws Exception {
-        CommonsMultipartFile commonsMultipartFile = (CommonsMultipartFile) image;
-        DiskFileItem diskFileItem = (DiskFileItem) commonsMultipartFile.getFileItem();
-        File file = diskFileItem.getStoreLocation();
-        String data = OcrUtil.getStringIdentityCard(file, idCardSide);
-        return new ResponseData().success().data(OcrUtil.getJsonIdCardInfo(data));
-
+        return new ResponseData().success().data(OcrUtil.getIdCardInfo(image, idCardSide));
     }
 }

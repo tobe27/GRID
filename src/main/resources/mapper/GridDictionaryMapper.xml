@@ -37,7 +37,7 @@
  
    and name  like CONCAT('%',#{name},'%')
  </if>
-     group by type,parent_id,code,name,description,isenable
+        group by type,parent_id,code,name,description,isenable  ,creat_at ORDER BY creat_at desc
  </select>
  
  <select id="getListByCode" parameterType="model.GridDictionary" resultMap="BaseResultMap">

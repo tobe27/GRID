@@ -91,9 +91,7 @@ public class CustomerCreditDetailServiceImpl implements CustomerCreditDetailServ
 			throw new MyException("网格编号不能为空");
 		}
 		
-		if(record.getRental()==null || "".equals(record.getRental())) {
-			throw new MyException("授信额度不能为空");
-		}
+		
 		
 		//查询下系统中有没有相同的身份证号的白名单
 		if (customerCreditDetailMapper.getByIdOrIdnumber(record).size()>0) {
@@ -104,6 +102,8 @@ public class CustomerCreditDetailServiceImpl implements CustomerCreditDetailServ
 			long now=System.currentTimeMillis();
 			record.setCreatedAt(now);
 			record.setUpdatedAt(now);
+			record.setApprovalStatus("0");
+			record.setAttachFlag("0");
 			return customerCreditDetailMapper.insertSelective(record)==1;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -129,9 +129,7 @@ public class CustomerCreditDetailServiceImpl implements CustomerCreditDetailServ
 		if(record.getGridCode()==null || "".equals(record.getGridCode())) {
 			throw new MyException("网格编号不能为空");
 		}
-		if(record.getRental()==null || "".equals(record.getRental())) {
-			throw new MyException("授信额度不能为空");
-		}
+		
 		
 		if (customerCreditDetailMapper.getByIdOrIdnumber(record).size()>0) {
 			throw new MyException("系统中已存在相同的身份证号记录");
@@ -142,6 +140,7 @@ public class CustomerCreditDetailServiceImpl implements CustomerCreditDetailServ
 			record.setUpdatedAt(System.currentTimeMillis());
 			return customerCreditDetailMapper.updateByPrimaryKeySelective(record)==1;
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new MyException("修改授信详情信息异常");
 		}
 	}

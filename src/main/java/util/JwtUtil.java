@@ -13,6 +13,7 @@ import java.util.Map;
 /**
  * 用来生成token令牌和解码验证token令牌
  * JWT由三部分组成，头部header、载荷payload与签名signature
+ * @author Created by L.C.Y on 2018-9-28
  */
 public class JwtUtil {
     private static final String SIGNING_KEY ="www.yzsbank.com" ; //自定义加密密钥SIGNING_KEY

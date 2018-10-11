@@ -89,6 +89,7 @@
   	<if test="state!=null">
   		and state=#{state}
   	</if>
+  	order by created_at desc
   </select>
 
   <!-- 修改产品状态 -->

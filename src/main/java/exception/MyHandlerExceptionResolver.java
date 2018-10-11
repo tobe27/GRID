@@ -6,6 +6,10 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * SpringMVC全局异常拦截处理器
+ * @author Created by L.C.Y on 2018-8-28
+ */
 public class MyHandlerExceptionResolver implements HandlerExceptionResolver {
     @Override
     public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) {

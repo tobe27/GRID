@@ -11,6 +11,9 @@ import service.DishonestCustomerInfoService;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 @Service
 public class DishonestCustomerInfoServiceImpl implements DishonestCustomerInfoService {
     @Autowired

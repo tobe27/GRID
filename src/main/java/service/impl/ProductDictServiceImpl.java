@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import dao.BusinessInfoMapper;
 import dao.ProductDictMapper;
 import exception.MyException;
 import model.ProductDict;
@@ -17,8 +16,6 @@ import util.ValidUtil;
 public class ProductDictServiceImpl implements ProductDictService{
 	@Autowired
 	private ProductDictMapper productDictMapper;
-	@Autowired
-	private BusinessInfoMapper businessInfoMapper;
 	
 	/**
 	 * 查询银行所有产品
@@ -45,7 +42,9 @@ public class ProductDictServiceImpl implements ProductDictService{
 		if (ValidUtil.isEmpty(record.getName())) {
             throw new MyException("银行产品名称不能为空");
         }
-		
+		if (!ValidUtil.length(record.getName(), 20)) {
+            throw new MyException("银行产品名称最大20位");
+        }
         int row1=0,row2=0;
         try {
         	String code=productDictMapper.getMaxCode().substring(1);
@@ -68,7 +67,6 @@ public class ProductDictServiceImpl implements ProductDictService{
             record.setUpdatedAt(now);
             
         	row1=productDictMapper.insertSelective(record);
-        	row2=businessInfoMapper.updateTableStructure(code);
         } catch (Exception e) {
             throw new MyException("添加银行产品信息出现异常");
         }
@@ -85,6 +83,9 @@ public class ProductDictServiceImpl implements ProductDictService{
 	public boolean updateProduct(ProductDict record) throws MyException {
 		if (ValidUtil.isEmpty(record.getId())) {
             throw new MyException("银行产品id不能为空");
+        }
+		if (record.getName()!=null && !ValidUtil.length(record.getName(), 20)) {
+            throw new MyException("银行产品名称最大20位");
         }
         record.setUpdatedAt(System.currentTimeMillis());
         try {

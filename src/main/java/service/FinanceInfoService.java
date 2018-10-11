@@ -2,6 +2,9 @@ package service;
 
 import model.FinanceInfo;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 public interface FinanceInfoService {
     /**
      * 删除客户财务信息

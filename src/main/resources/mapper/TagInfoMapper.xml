@@ -19,7 +19,7 @@
         select
         <include refid="Base_Column_List" />
         from tag_info
-        order by updated_at DESC
+        order by created_at DESC
     </select>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">

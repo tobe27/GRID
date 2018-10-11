@@ -4,6 +4,9 @@ import model.ResidentInfo;
 
 import java.util.List;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 public interface ResidentInfoService {
     /**
      * 删除居民信息

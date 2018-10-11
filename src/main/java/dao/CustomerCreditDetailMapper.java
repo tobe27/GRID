@@ -21,4 +21,5 @@ public interface CustomerCreditDetailMapper {
 List<CustomerCreditDetail> getByIdOrIdnumber(CustomerCreditDetail record);
     
     List<CustomerCreditDetail> getList(Map<String,Object> map);
+    int  updateApprovalStatus(CustomerCreditDetail record);
 }

@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 @Data
 public class FinanceInfo implements Serializable {
     private static final long serialVersionUID = 6404575356551109616L;
@@ -11,7 +14,7 @@ public class FinanceInfo implements Serializable {
 
     private String idNumber;
 
-    private Integer industry;
+    private String industry;
 
     private String career;
 
@@ -73,11 +76,11 @@ public class FinanceInfo implements Serializable {
         this.idNumber = idNumber == null ? null : idNumber.trim();
     }
 
-    public Integer getIndustry() {
+    public String getIndustry() {
         return industry;
     }
 
-    public void setIndustry(Integer industry) {
+    public void setIndustry(String industry) {
         this.industry = industry;
     }
 

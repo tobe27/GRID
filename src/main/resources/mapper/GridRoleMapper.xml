@@ -39,6 +39,7 @@
    <if test="roleScope != null">
     and gr.role_scope  like CONCAT('%',#{roleScope},'%')
   </if>  
+   order by created_at DESC
   </select>
   
   <select id="getGridPermissions" parameterType="java.lang.Long" resultMap="GridPermissionMap">

@@ -9,6 +9,9 @@ import service.RegionService;
 
 import java.util.List;
 
+/**
+ * @author Created by L.C.Y on 2018-9-20
+ */
 @Service
 public class RegionServiceImpl implements RegionService {
     @Autowired
@@ -85,6 +88,22 @@ public class RegionServiceImpl implements RegionService {
             return regionMapper.getRegionsByPrimaryKey(preRegionCode);
         } catch (Exception e){
             throw new MyException("获取行政区域列表出现异常");
+        }
+    }
+
+    /**
+     * 获取所有区域列表
+     *
+     * @param record
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public List<Region> listRegions(Region record) throws Exception {
+        try {
+            return regionMapper.listRegions(record);
+        } catch (Exception e){
+            throw new MyException("获取所有行政区域出现异常");
         }
     }
 
