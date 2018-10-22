@@ -26,8 +26,8 @@ public class OcrUtil {
     // 身份证识别请求URL
     private static final String OCR_HOST = "https://aip.baidubce.com/rest/2.0/ocr/v1/idcard?";
     // apiKey,secretKey
-    private static final String API_KEY ="Xb12m5t4jS2n7jREvOgnBHIY";
-    private static final String SECRET_KEY = "9XVx9GPcSbSUTZCbSuvdUDDYXiB6MMLa";
+    private static final String API_KEY ="Xb12m5t4j";
+    private static final String SECRET_KEY = "9XVx9GPcS";
     private static Logger logger = LoggerFactory.getLogger(FileUploadController.class);
 
     // 获取百度云OCR的授权access_token
