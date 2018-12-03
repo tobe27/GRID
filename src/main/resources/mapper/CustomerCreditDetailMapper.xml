@@ -6,59 +6,67 @@
     <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
     <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
     <result column="grid_code" jdbcType="VARCHAR" property="gridCode" />
-    <result column="phone_number" jdbcType="BIGINT" property="phoneNumber" />
     <result column="begin_at" jdbcType="VARCHAR" property="beginAt" />
     <result column="end_at" jdbcType="VARCHAR" property="endAt" />
-    <result column="interest_rate" jdbcType="DECIMAL" property="interestRate" />
-    <result column="rental" jdbcType="DECIMAL" property="rental" />
     <result column="comment" jdbcType="VARCHAR" property="comment" />
-    <result column="approval_status" jdbcType="VARCHAR" property="approvalStatus" />
-     <result column="postil" jdbcType="VARCHAR" property="postil" />
-      <result column="attach_flag" jdbcType="VARCHAR" property="attachFlag" />
-    
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+    <result column="approval_status" jdbcType="VARCHAR" property="approvalStatus" />
+    <result column="postil" jdbcType="VARCHAR" property="postil" />
+    <result column="attach_flag" jdbcType="VARCHAR" property="attachFlag" />
+    <result column="customer_id" jdbcType="VARCHAR" property="customerId" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="spouse_name" jdbcType="VARCHAR" property="spouseName" />
+    <result column="spouse_id_number" jdbcType="VARCHAR" property="spouseIdNumber" />
+    <result column="education_level" jdbcType="VARCHAR" property="educationLevel" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="member_count" jdbcType="VARCHAR" property="memberCount" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="company_address" jdbcType="VARCHAR" property="companyAddress" />
+    <result column="native_address" jdbcType="VARCHAR" property="nativeAddress" />
+    <result column="residence_address" jdbcType="VARCHAR" property="residenceAddress" />
+    <result column="jnyd_name" jdbcType="VARCHAR" property="jnydName" />
+    <result column="jnyd_id" jdbcType="VARCHAR" property="jnydId" />
+    <result column="rental" jdbcType="VARCHAR" property="rental" />
+    <result column="deadline" jdbcType="VARCHAR" property="deadline" />
+    <result column="rate_type" jdbcType="VARCHAR" property="rateType" />
+    <result column="year_rate" jdbcType="VARCHAR" property="yearRate" />
+    <result column="rate_float" jdbcType="VARCHAR" property="rateFloat" />
+    <result column="rate_update_date" jdbcType="VARCHAR" property="rateUpdateDate" />
+    <result column="disbursement" jdbcType="VARCHAR" property="disbursement" />
+    <result column="refund_type" jdbcType="VARCHAR" property="refundType" />
+    <result column="credit_use_type" jdbcType="VARCHAR" property="creditUseType" />
+    <result column="income" jdbcType="VARCHAR" property="income" />
+    <result column="family_income" jdbcType="VARCHAR" property="familyIncome" />
+    <result column="advisers_flag" jdbcType="VARCHAR" property="advisersFlag" />
+    <result column="advisers_income" jdbcType="VARCHAR" property="advisersIncome" />
+    <result column="advisers_expense" jdbcType="VARCHAR" property="advisersExpense" />
+    <result column="advisers_rental" jdbcType="VARCHAR" property="advisersRental" />
+    <result column="advisers_name" jdbcType="VARCHAR" property="advisersName" />
+    <result column="advisers_comment" jdbcType="VARCHAR" property="advisersComment" />
+    <result column="true_customer_info" jdbcType="VARCHAR" property="trueCustomerInfo" />
+    <result column="true_customer_talk" jdbcType="VARCHAR" property="trueCustomerTalk" />
+    <result column="staff_name" jdbcType="VARCHAR" property="staffName" />
+    <result column="staff_id" jdbcType="VARCHAR" property="staffId" />
+    <result column="talk_date" jdbcType="VARCHAR" property="talkDate" />
+    <result column="grid_name" jdbcType="VARCHAR" property="gridName" />
+    <result column="account_name" jdbcType="VARCHAR" property="accountName" />
+    <result column="account_id" jdbcType="VARCHAR" property="accountId" />
+    <result column="org_name" jdbcType="VARCHAR" property="orgName" />
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="credit_report" jdbcType="VARCHAR" property="creditReport" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, customer_name, id_number, grid_code, phone_number, begin_at, end_at, interest_rate, 
-    rental, comment, created_at, updated_at,approval_status,postil,attach_flag
+    id, customer_name, id_number, grid_code, begin_at, end_at, comment, created_at, updated_at, 
+    approval_status, postil, attach_flag, customer_id, sex, spouse_name, spouse_id_number, 
+    education_level, phone_number, member_count, company_name, company_address, native_address, 
+    residence_address, jnyd_name, jnyd_id, rental, deadline, rate_type, year_rate, rate_float, 
+    rate_update_date, disbursement, refund_type, credit_use_type, income, family_income, 
+    advisers_flag, advisers_income, advisers_expense, advisers_rental, advisers_name, 
+    advisers_comment, true_customer_info, true_customer_talk, staff_name, staff_id, talk_date, 
+    grid_name, account_name, account_id, org_name, org_code, status, credit_report
   </sql>
-  
-  <update id="updateApprovalStatus" parameterType="model.CustomerBlackList" >
-   update   customer_credit_detail  set approval_status=#{approvalStatus} where id=#{id}
-  </update>
-  <select id="getByIdOrIdnumber" parameterType="model.CustomerBlackList" resultMap="BaseResultMap">
-  select* from customer_credit_detail where id_number=#{idNumber}
-  <if test="id != null">
-    and id != #{id,jdbcType=BIGINT}
-  </if>
-  </select>
-  <select id="getList" parameterType="model.CustomerBlackList" resultMap="BaseResultMap">
-  select * from customer_credit_detail where 1=1 
-  <if test="customerName != null">
-   and customer_name like  CONCAT('%',#{customerName},'%')
-  </if>
-  
-  <if test="gridCode != null">
-   and grid_code like  CONCAT('%',#{gridCode},'%')
-  </if>
-  
-  <if test="idNumber != null">
-   and id_number like  CONCAT('%',#{idNumber},'%')
-  </if>
-  <if test='attachFlag !=null'>
-  <if test='attachFlag =="3"'>
-   and attach_flag like  CONCAT('%',#{attachFlag},'%')
-   </if>
-   <if test='attachFlag !="3"'>
-   and attach_flag !=3
-   </if>
-   </if>
-    order by created_at desc
-  </select>
-  
-  
-  
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -69,19 +77,52 @@
     delete from customer_credit_detail
     where id = #{id,jdbcType=BIGINT}
   </delete>
+  
+  
+
+  
+  
   <insert id="insert" parameterType="model.CustomerCreditDetail">
     insert into customer_credit_detail (id, customer_name, id_number, 
-      grid_code, phone_number, begin_at, 
-      end_at, interest_rate, rental, 
-      comment, created_at, updated_at
+      grid_code, begin_at, end_at, 
+      comment, created_at, updated_at, 
+      approval_status, postil, attach_flag, 
+      customer_id, sex, spouse_name, 
+      spouse_id_number, education_level, phone_number, 
+      member_count, company_name, company_address, 
+      native_address, residence_address, jnyd_name, 
+      jnyd_id, rental, deadline, 
+      rate_type, year_rate, rate_float, 
+      rate_update_date, disbursement, refund_type, 
+      credit_use_type, income, family_income, 
+      advisers_flag, advisers_income, advisers_expense, 
+      advisers_rental, advisers_name, advisers_comment, 
+      true_customer_info, true_customer_talk, staff_name, 
+      staff_id, talk_date, grid_name, 
+      account_name, account_id, org_name, 
+      org_code, status, credit_report
       )
     values (#{id,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, #{idNumber,jdbcType=VARCHAR}, 
-      #{gridCode,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=BIGINT}, #{beginAt,jdbcType=VARCHAR}, 
-      #{endAt,jdbcType=VARCHAR}, #{interestRate,jdbcType=DECIMAL}, #{rental,jdbcType=DECIMAL}, 
-      #{comment,jdbcType=VARCHAR}, #{createdAt,jdbcType=BIGINT}, #{updatedAt,jdbcType=BIGINT}
+      #{gridCode,jdbcType=VARCHAR}, #{beginAt,jdbcType=VARCHAR}, #{endAt,jdbcType=VARCHAR}, 
+      #{comment,jdbcType=VARCHAR}, #{createdAt,jdbcType=BIGINT}, #{updatedAt,jdbcType=BIGINT}, 
+      #{approvalStatus,jdbcType=VARCHAR}, #{postil,jdbcType=VARCHAR}, #{attachFlag,jdbcType=VARCHAR}, 
+      #{customerId,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{spouseName,jdbcType=VARCHAR}, 
+      #{spouseIdNumber,jdbcType=VARCHAR}, #{educationLevel,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, 
+      #{memberCount,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{companyAddress,jdbcType=VARCHAR}, 
+      #{nativeAddress,jdbcType=VARCHAR}, #{residenceAddress,jdbcType=VARCHAR}, #{jnydName,jdbcType=VARCHAR}, 
+      #{jnydId,jdbcType=VARCHAR}, #{rental,jdbcType=VARCHAR}, #{deadline,jdbcType=VARCHAR}, 
+      #{rateType,jdbcType=VARCHAR}, #{yearRate,jdbcType=VARCHAR}, #{rateFloat,jdbcType=VARCHAR}, 
+      #{rateUpdateDate,jdbcType=VARCHAR}, #{disbursement,jdbcType=VARCHAR}, #{refundType,jdbcType=VARCHAR}, 
+      #{creditUseType,jdbcType=VARCHAR}, #{income,jdbcType=VARCHAR}, #{familyIncome,jdbcType=VARCHAR}, 
+      #{advisersFlag,jdbcType=VARCHAR}, #{advisersIncome,jdbcType=VARCHAR}, #{advisersExpense,jdbcType=VARCHAR}, 
+      #{advisersRental,jdbcType=VARCHAR}, #{advisersName,jdbcType=VARCHAR}, #{advisersComment,jdbcType=VARCHAR}, 
+      #{trueCustomerInfo,jdbcType=VARCHAR}, #{trueCustomerTalk,jdbcType=VARCHAR}, #{staffName,jdbcType=VARCHAR}, 
+      #{staffId,jdbcType=VARCHAR}, #{talkDate,jdbcType=VARCHAR}, #{gridName,jdbcType=VARCHAR}, 
+      #{accountName,jdbcType=VARCHAR}, #{accountId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, 
+      #{orgCode,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{creditReport,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="model.CustomerCreditDetail">
+  <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true" parameterType="model.CustomerCreditDetail">
     insert into customer_credit_detail
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -96,20 +137,11 @@
       <if test="gridCode != null">
         grid_code,
       </if>
-      <if test="phoneNumber != null">
-        phone_number,
-      </if>
       <if test="beginAt != null">
         begin_at,
       </if>
       <if test="endAt != null">
         end_at,
-      </if>
-      <if test="interestRate != null">
-        interest_rate,
-      </if>
-      <if test="rental != null">
-        rental,
       </if>
       <if test="comment != null">
         comment,
@@ -120,17 +152,141 @@
       <if test="updatedAt != null">
         updated_at,
       </if>
-       <if test="approvalStatus != null">
+      <if test="approvalStatus != null">
         approval_status,
       </if>
-      <if test=" postil  != null">
-       postil,
+      <if test="postil != null">
+        postil,
       </if>
-       <if test=" attachFlag  != null">
-       attach_flag,
+      <if test="attachFlag != null">
+        attach_flag,
       </if>
-      
-      
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="spouseName != null">
+        spouse_name,
+      </if>
+      <if test="spouseIdNumber != null">
+        spouse_id_number,
+      </if>
+      <if test="educationLevel != null">
+        education_level,
+      </if>
+      <if test="phoneNumber != null">
+        phone_number,
+      </if>
+      <if test="memberCount != null">
+        member_count,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="companyAddress != null">
+        company_address,
+      </if>
+      <if test="nativeAddress != null">
+        native_address,
+      </if>
+      <if test="residenceAddress != null">
+        residence_address,
+      </if>
+      <if test="jnydName != null">
+        jnyd_name,
+      </if>
+      <if test="jnydId != null">
+        jnyd_id,
+      </if>
+      <if test="rental != null">
+        rental,
+      </if>
+      <if test="deadline != null">
+        deadline,
+      </if>
+      <if test="rateType != null">
+        rate_type,
+      </if>
+      <if test="yearRate != null">
+        year_rate,
+      </if>
+      <if test="rateFloat != null">
+        rate_float,
+      </if>
+      <if test="rateUpdateDate != null">
+        rate_update_date,
+      </if>
+      <if test="disbursement != null">
+        disbursement,
+      </if>
+      <if test="refundType != null">
+        refund_type,
+      </if>
+      <if test="creditUseType != null">
+        credit_use_type,
+      </if>
+      <if test="income != null">
+        income,
+      </if>
+      <if test="familyIncome != null">
+        family_income,
+      </if>
+      <if test="advisersFlag != null">
+        advisers_flag,
+      </if>
+      <if test="advisersIncome != null">
+        advisers_income,
+      </if>
+      <if test="advisersExpense != null">
+        advisers_expense,
+      </if>
+      <if test="advisersRental != null">
+        advisers_rental,
+      </if>
+      <if test="advisersName != null">
+        advisers_name,
+      </if>
+      <if test="advisersComment != null">
+        advisers_comment,
+      </if>
+      <if test="trueCustomerInfo != null">
+        true_customer_info,
+      </if>
+      <if test="trueCustomerTalk != null">
+        true_customer_talk,
+      </if>
+      <if test="staffName != null">
+        staff_name,
+      </if>
+      <if test="staffId != null">
+        staff_id,
+      </if>
+      <if test="talkDate != null">
+        talk_date,
+      </if>
+      <if test="gridName != null">
+        grid_name,
+      </if>
+      <if test="accountName != null">
+        account_name,
+      </if>
+      <if test="accountId != null">
+        account_id,
+      </if>
+      <if test="orgName != null">
+        org_name,
+      </if>
+      <if test="orgCode != null">
+        org_code,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="creditReport != null">
+        credit_report,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -145,20 +301,11 @@
       <if test="gridCode != null">
         #{gridCode,jdbcType=VARCHAR},
       </if>
-      <if test="phoneNumber != null">
-        #{phoneNumber,jdbcType=BIGINT},
-      </if>
       <if test="beginAt != null">
         #{beginAt,jdbcType=VARCHAR},
       </if>
       <if test="endAt != null">
         #{endAt,jdbcType=VARCHAR},
-      </if>
-      <if test="interestRate != null">
-        #{interestRate,jdbcType=DECIMAL},
-      </if>
-      <if test="rental != null">
-        #{rental,jdbcType=DECIMAL},
       </if>
       <if test="comment != null">
         #{comment,jdbcType=VARCHAR},
@@ -169,19 +316,141 @@
       <if test="updatedAt != null">
         #{updatedAt,jdbcType=BIGINT},
       </if>
-      
-       <if test="approvalStatus != null">
-         #{approvalStatus,jdbcType=VARCHAR},
+      <if test="approvalStatus != null">
+        #{approvalStatus,jdbcType=VARCHAR},
       </if>
-      <if test=" postil  != null">
-       #{postil,jdbcType=VARCHAR},
+      <if test="postil != null">
+        #{postil,jdbcType=VARCHAR},
       </if>
-       <if test=" attachFlag  != null">
-         #{attachFlag,jdbcType=VARCHAR},
+      <if test="attachFlag != null">
+        #{attachFlag,jdbcType=VARCHAR},
       </if>
-      
-      
-      
+      <if test="customerId != null">
+        #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="spouseName != null">
+        #{spouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="spouseIdNumber != null">
+        #{spouseIdNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="educationLevel != null">
+        #{educationLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="memberCount != null">
+        #{memberCount,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyAddress != null">
+        #{companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="nativeAddress != null">
+        #{nativeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="residenceAddress != null">
+        #{residenceAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="jnydName != null">
+        #{jnydName,jdbcType=VARCHAR},
+      </if>
+      <if test="jnydId != null">
+        #{jnydId,jdbcType=VARCHAR},
+      </if>
+      <if test="rental != null">
+        #{rental,jdbcType=VARCHAR},
+      </if>
+      <if test="deadline != null">
+        #{deadline,jdbcType=VARCHAR},
+      </if>
+      <if test="rateType != null">
+        #{rateType,jdbcType=VARCHAR},
+      </if>
+      <if test="yearRate != null">
+        #{yearRate,jdbcType=VARCHAR},
+      </if>
+      <if test="rateFloat != null">
+        #{rateFloat,jdbcType=VARCHAR},
+      </if>
+      <if test="rateUpdateDate != null">
+        #{rateUpdateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="disbursement != null">
+        #{disbursement,jdbcType=VARCHAR},
+      </if>
+      <if test="refundType != null">
+        #{refundType,jdbcType=VARCHAR},
+      </if>
+      <if test="creditUseType != null">
+        #{creditUseType,jdbcType=VARCHAR},
+      </if>
+      <if test="income != null">
+        #{income,jdbcType=VARCHAR},
+      </if>
+      <if test="familyIncome != null">
+        #{familyIncome,jdbcType=VARCHAR},
+      </if>
+      <if test="advisersFlag != null">
+        #{advisersFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="advisersIncome != null">
+        #{advisersIncome,jdbcType=VARCHAR},
+      </if>
+      <if test="advisersExpense != null">
+        #{advisersExpense,jdbcType=VARCHAR},
+      </if>
+      <if test="advisersRental != null">
+        #{advisersRental,jdbcType=VARCHAR},
+      </if>
+      <if test="advisersName != null">
+        #{advisersName,jdbcType=VARCHAR},
+      </if>
+      <if test="advisersComment != null">
+        #{advisersComment,jdbcType=VARCHAR},
+      </if>
+      <if test="trueCustomerInfo != null">
+        #{trueCustomerInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="trueCustomerTalk != null">
+        #{trueCustomerTalk,jdbcType=VARCHAR},
+      </if>
+      <if test="staffName != null">
+        #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="staffId != null">
+        #{staffId,jdbcType=VARCHAR},
+      </if>
+      <if test="talkDate != null">
+        #{talkDate,jdbcType=VARCHAR},
+      </if>
+      <if test="gridName != null">
+        #{gridName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null">
+        #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountId != null">
+        #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null">
+        #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null">
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="creditReport != null">
+        #{creditReport,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="model.CustomerCreditDetail">
@@ -196,20 +465,11 @@
       <if test="gridCode != null">
         grid_code = #{gridCode,jdbcType=VARCHAR},
       </if>
-      <if test="phoneNumber != null">
-        phone_number = #{phoneNumber,jdbcType=BIGINT},
-      </if>
       <if test="beginAt != null">
         begin_at = #{beginAt,jdbcType=VARCHAR},
       </if>
       <if test="endAt != null">
         end_at = #{endAt,jdbcType=VARCHAR},
-      </if>
-      <if test="interestRate != null">
-        interest_rate = #{interestRate,jdbcType=DECIMAL},
-      </if>
-      <if test="rental != null">
-        rental = #{rental,jdbcType=DECIMAL},
       </if>
       <if test="comment != null">
         comment = #{comment,jdbcType=VARCHAR},
@@ -220,16 +480,141 @@
       <if test="updatedAt != null">
         updated_at = #{updatedAt,jdbcType=BIGINT},
       </if>
-       <if test="approvalStatus != null">
-         #{approvalStatus,jdbcType=VARCHAR},
+      <if test="approvalStatus != null">
+        approval_status = #{approvalStatus,jdbcType=VARCHAR},
       </if>
-      <if test=" postil  != null">
-       #{postil,jdbcType=VARCHAR},
+      <if test="postil != null">
+        postil = #{postil,jdbcType=VARCHAR},
       </if>
-       <if test=" attachFlag  != null">
-         #{attachFlag,jdbcType=VARCHAR},
+      <if test="attachFlag != null">
+        attach_flag = #{attachFlag,jdbcType=VARCHAR},
       </if>
-      
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="spouseName != null">
+        spouse_name = #{spouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="spouseIdNumber != null">
+        spouse_id_number = #{spouseIdNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="educationLevel != null">
+        education_level = #{educationLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="memberCount != null">
+        member_count = #{memberCount,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyAddress != null">
+        company_address = #{companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="nativeAddress != null">
+        native_address = #{nativeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="residenceAddress != null">
+        residence_address = #{residenceAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="jnydName != null">
+        jnyd_name = #{jnydName,jdbcType=VARCHAR},
+      </if>
+      <if test="jnydId != null">
+        jnyd_id = #{jnydId,jdbcType=VARCHAR},
+      </if>
+      <if test="rental != null">
+        rental = #{rental,jdbcType=VARCHAR},
+      </if>
+      <if test="deadline != null">
+        deadline = #{deadline,jdbcType=VARCHAR},
+      </if>
+      <if test="rateType != null">
+        rate_type = #{rateType,jdbcType=VARCHAR},
+      </if>
+      <if test="yearRate != null">
+        year_rate = #{yearRate,jdbcType=VARCHAR},
+      </if>
+      <if test="rateFloat != null">
+        rate_float = #{rateFloat,jdbcType=VARCHAR},
+      </if>
+      <if test="rateUpdateDate != null">
+        rate_update_date = #{rateUpdateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="disbursement != null">
+        disbursement = #{disbursement,jdbcType=VARCHAR},
+      </if>
+      <if test="refundType != null">
+        refund_type = #{refundType,jdbcType=VARCHAR},
+      </if>
+      <if test="creditUseType != null">
+        credit_use_type = #{creditUseType,jdbcType=VARCHAR},
+      </if>
+      <if test="income != null">
+        income = #{income,jdbcType=VARCHAR},
+      </if>
+      <if test="familyIncome != null">
+        family_income = #{familyIncome,jdbcType=VARCHAR},
+      </if>
+      <if test="advisersFlag != null">
+        advisers_flag = #{advisersFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="advisersIncome != null">
+        advisers_income = #{advisersIncome,jdbcType=VARCHAR},
+      </if>
+      <if test="advisersExpense != null">
+        advisers_expense = #{advisersExpense,jdbcType=VARCHAR},
+      </if>
+      <if test="advisersRental != null">
+        advisers_rental = #{advisersRental,jdbcType=VARCHAR},
+      </if>
+      <if test="advisersName != null">
+        advisers_name = #{advisersName,jdbcType=VARCHAR},
+      </if>
+      <if test="advisersComment != null">
+        advisers_comment = #{advisersComment,jdbcType=VARCHAR},
+      </if>
+      <if test="trueCustomerInfo != null">
+        true_customer_info = #{trueCustomerInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="trueCustomerTalk != null">
+        true_customer_talk = #{trueCustomerTalk,jdbcType=VARCHAR},
+      </if>
+      <if test="staffName != null">
+        staff_name = #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="staffId != null">
+        staff_id = #{staffId,jdbcType=VARCHAR},
+      </if>
+      <if test="talkDate != null">
+        talk_date = #{talkDate,jdbcType=VARCHAR},
+      </if>
+      <if test="gridName != null">
+        grid_name = #{gridName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null">
+        account_name = #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountId != null">
+        account_id = #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null">
+        org_name = #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null">
+        org_code = #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="creditReport != null">
+        credit_report = #{creditReport,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -238,14 +623,122 @@
     set customer_name = #{customerName,jdbcType=VARCHAR},
       id_number = #{idNumber,jdbcType=VARCHAR},
       grid_code = #{gridCode,jdbcType=VARCHAR},
-      phone_number = #{phoneNumber,jdbcType=BIGINT},
       begin_at = #{beginAt,jdbcType=VARCHAR},
       end_at = #{endAt,jdbcType=VARCHAR},
-      interest_rate = #{interestRate,jdbcType=DECIMAL},
-      rental = #{rental,jdbcType=DECIMAL},
       comment = #{comment,jdbcType=VARCHAR},
       created_at = #{createdAt,jdbcType=BIGINT},
-      updated_at = #{updatedAt,jdbcType=BIGINT}
+      updated_at = #{updatedAt,jdbcType=BIGINT},
+      approval_status = #{approvalStatus,jdbcType=VARCHAR},
+      postil = #{postil,jdbcType=VARCHAR},
+      attach_flag = #{attachFlag,jdbcType=VARCHAR},
+      customer_id = #{customerId,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      spouse_name = #{spouseName,jdbcType=VARCHAR},
+      spouse_id_number = #{spouseIdNumber,jdbcType=VARCHAR},
+      education_level = #{educationLevel,jdbcType=VARCHAR},
+      phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      member_count = #{memberCount,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      company_address = #{companyAddress,jdbcType=VARCHAR},
+      native_address = #{nativeAddress,jdbcType=VARCHAR},
+      residence_address = #{residenceAddress,jdbcType=VARCHAR},
+      jnyd_name = #{jnydName,jdbcType=VARCHAR},
+      jnyd_id = #{jnydId,jdbcType=VARCHAR},
+      rental = #{rental,jdbcType=VARCHAR},
+      deadline = #{deadline,jdbcType=VARCHAR},
+      rate_type = #{rateType,jdbcType=VARCHAR},
+      year_rate = #{yearRate,jdbcType=VARCHAR},
+      rate_float = #{rateFloat,jdbcType=VARCHAR},
+      rate_update_date = #{rateUpdateDate,jdbcType=VARCHAR},
+      disbursement = #{disbursement,jdbcType=VARCHAR},
+      refund_type = #{refundType,jdbcType=VARCHAR},
+      credit_use_type = #{creditUseType,jdbcType=VARCHAR},
+      income = #{income,jdbcType=VARCHAR},
+      family_income = #{familyIncome,jdbcType=VARCHAR},
+      advisers_flag = #{advisersFlag,jdbcType=VARCHAR},
+      advisers_income = #{advisersIncome,jdbcType=VARCHAR},
+      advisers_expense = #{advisersExpense,jdbcType=VARCHAR},
+      advisers_rental = #{advisersRental,jdbcType=VARCHAR},
+      advisers_name = #{advisersName,jdbcType=VARCHAR},
+      advisers_comment = #{advisersComment,jdbcType=VARCHAR},
+      true_customer_info = #{trueCustomerInfo,jdbcType=VARCHAR},
+      true_customer_talk = #{trueCustomerTalk,jdbcType=VARCHAR},
+      staff_name = #{staffName,jdbcType=VARCHAR},
+      staff_id = #{staffId,jdbcType=VARCHAR},
+      talk_date = #{talkDate,jdbcType=VARCHAR},
+      grid_name = #{gridName,jdbcType=VARCHAR},
+      account_name = #{accountName,jdbcType=VARCHAR},
+      account_id = #{accountId,jdbcType=VARCHAR},
+      org_name = #{orgName,jdbcType=VARCHAR},
+      org_code = #{orgCode,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      credit_report = #{creditReport,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  
+    <select id="getList" parameterType="java.util.Map"  resultMap="BaseResultMap">
+  select * from customer_credit_detail where status !=1   and grid_code in 
+  
+  <foreach item="item" index="index" collection="gridCodes" 
+                         open="(" separator="," close=")">
+                        #{item}
+                </foreach> 
+   
+     <if test="approvalStatusList !=null">
+      
+    and approval_status in
+     <foreach item="item" index="index" collection="approvalStatusList" 
+                         open="(" separator="," close=")">
+                        #{item}
+                </foreach>
+    </if>
+   <if test='attachFlag =="1"'>
+   and ((attach_flag =0.1) or (attach_flag =1.0))
+   </if>
+   <if test='attachFlag =="2"'>
+   and attach_flag =1.1 
+   </if>
+    <if test='attachFlag =="3"'>
+   and attach_flag =0.0 
+   </if>
+   
+   <if test="idNumber != null">
+   and id_number like  CONCAT('%',#{idNumber},'%')
+  </if>
+  
+  <if test="customerName != null">
+   and customer_name like  CONCAT('%',#{customerName},'%')
+  </if>
+
+  <if test="customerId != null">
+       and customer_id =  #{customerId}
+      </if>
+  <if test="endAt != null">
+       and #{endAt} &lt;  end_at
+      </if>
+
+    
+    
+      order by created_at desc
+      
+  
+  </select>
+  
+  <select id="getByIdNumber" parameterType="java.util.Map"  resultMap="BaseResultMap">
+   select * from customer_credit_detail where status !=1
+   
+     <if test="idNumber != null">
+   and id_number =#{idNumber}
+  </if>
+   <if test="endAt != null">
+       and #{endAt} &lt;  end_at
+      </if>
+  </select>
+  
+  <delete  id="deleteByIdNumber" parameterType="java.util.Map"  >
+  delete from  customer_credit_detail
+    where id_number=#{idNumber} and status=2
+  </delete>
+  
 </mapper>

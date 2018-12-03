@@ -15,6 +15,13 @@ public interface ProductDictMapper {
 	int insertSelective(ProductDict record);
 	
 	/**
+	 * 查询产品名为name的记录条数
+	 * @param name
+	 * @return
+	 */
+	int selectCountByName(@Param("name")String name,@Param("id")Long id);
+	
+	/**
 	 * 获取目前的最大编码
 	 * @return
 	 */

@@ -17,48 +17,62 @@
     id, customer_name, id_number, phone_number, grid_code, reason, address, comment, 
     created_at, updated_at
   </sql>
-  
-  
-   <select id="getByIdOrIdnumber" parameterType="model.CustomerBlackList" resultMap="BaseResultMap">
-  select* from customer_blacklist where id_number=#{idNumber}
-  <if test="id != null">
-    and id != #{id,jdbcType=BIGINT}
-  </if>
-  </select>
-  <select id="getBlackLists" parameterType="model.CustomerBlackList" resultMap="BaseResultMap">
-  select * from customer_blacklist where 1=1 
-  <if test="customerName != null">
-   and customer_name like  CONCAT('%',#{customerName},'%')
-  </if>
-  <if test="idNumber != null">
-   and id_number like  CONCAT('%',#{idNumber},'%')
-  </if>
-  <if test="gridCode != null">
-   and grid_code = #{gridCode}
-  </if>
-    order by created_at desc
-  </select>
-  
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from customer_blacklist
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from customer_blacklist
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="model.CustomerBlackList">
-    insert into customer_blacklist (id, customer_name, id_number, 
-      phone_number, grid_code, reason, 
-      address, comment, created_at, 
+
+
+    <select id="getByIdOrIdnumber" parameterType="model.CustomerBlackList" resultMap="BaseResultMap">
+        select * from customer_blacklist where id_number=#{idNumber}
+        <if test="id != null">
+            and id != #{id,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <!--通过身份证号获取黑名单-->
+    <select id="getByIdNumber" parameterType="String" resultMap="BaseResultMap">
+        select *
+        from customer_blacklist
+        where id_number=#{idNumber}
+
+    </select>
+
+    <select id="getBlackLists" parameterType="model.CustomerBlackList" resultType="java.util.Map">
+        select b.id as id, b.customer_name as customerName, b.id_number as idNumber, b.phone_number as phoneNumber, b.grid_code as gridCode, b.reason as reason, b.address as address, b.comment as comment, 
+    b.created_at as createdAt, b.updated_at as updatedAt,g.grid_name as gridName from customer_blacklist b left join grid_info g on b.grid_code=g.grid_code  where 1=1
+        <if test="customerName != null">
+            and b.customer_name like  CONCAT('%',#{customerName},'%')
+        </if>
+        <if test="idNumber != null">
+            and b.id_number like  CONCAT('%',#{idNumber},'%')
+        </if>
+        <if test="gridCode != null">
+            and b.grid_code = #{gridCode}
+        </if>
+        order by b.created_at desc
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from customer_blacklist
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from customer_blacklist
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert" parameterType="model.CustomerBlackList">
+    insert into customer_blacklist (id, customer_name, id_number,
+      phone_number, grid_code, reason,
+      address, comment, created_at,
       updated_at)
-    values (#{id,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, #{idNumber,jdbcType=VARCHAR}, 
-      #{phoneNumber,jdbcType=BIGINT}, #{gridCode,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR}, #{createdAt,jdbcType=BIGINT}, 
+    values (#{id,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, #{idNumber,jdbcType=VARCHAR},
+      #{phoneNumber,jdbcType=BIGINT}, #{gridCode,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR},
+      #{address,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR}, #{createdAt,jdbcType=BIGINT},
       #{updatedAt,jdbcType=BIGINT})
   </insert>
+
+
   <insert id="insertSelective" parameterType="model.CustomerBlackList">
     insert into customer_blacklist
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -126,6 +140,7 @@
       </if>
     </trim>
   </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="model.CustomerBlackList">
     update customer_blacklist
     <set>
@@ -159,6 +174,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
+
   <update id="updateByPrimaryKey" parameterType="model.CustomerBlackList">
     update customer_blacklist
     set customer_name = #{customerName,jdbcType=VARCHAR},

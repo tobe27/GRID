@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.PlatformInfoMapper">
+  <resultMap id="BaseResultMap" type="model.PlatformInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="task_uuid" jdbcType="BIGINT" property="taskUuid" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="originator_id" jdbcType="BIGINT" property="originatorId" />
+    <result column="entrance" jdbcType="INTEGER" property="entrance" />
+    <result column="handler_id" jdbcType="BIGINT" property="handlerId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="delete_status" jdbcType="INTEGER" property="deleteStatus" />
+    <result column="start_time" jdbcType="BIGINT" property="startTime" />
+    <result column="end_time" jdbcType="BIGINT" property="endTime" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+      <result column="originator" jdbcType="VARCHAR" property="originator" />
+  </resultMap>
+
+    <!--查询列表-->
+    <select id="listByHandlerId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select info.*, user.real_name as originator
+        from platform_info info
+        JOIN grid_user user on info.originator_id = user.account_id
+        where 1=1
+        <if test="type != null">
+            and info.type = #{type}
+        </if>
+        <if test="status != null">
+            and info.status = #{status}
+        </if>
+        <if test="startTime != null">
+            and <![CDATA[info.start_time >= #{startTime} ]]>
+        </if>
+        <if test="endTime != null">
+            and <![CDATA[info.end_time <= #{endTime} ]]>
+        </if>
+        and info.handler_id = #{handlerId,jdbcType=BIGINT}
+        order by info.created_at DESC
+    </select>
+
+    <!--查询详情-->
+  <select id="getByPrimaryKey" parameterType="model.PlatformInfo" resultMap="BaseResultMap">
+    select info.*, user.real_name as originator
+    from platform_info info
+    JOIN grid_user user on info.originator_id = user.accountId
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+    <!--删除-->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from platform_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+    <!--新建-->
+  <insert id="insertSelective" parameterType="model.PlatformInfo">
+    insert into platform_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="taskUuid != null">
+        task_uuid,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="originatorId != null">
+        originator_id,
+      </if>
+      <if test="entrance != null">
+        entrance,
+      </if>
+      <if test="handlerId != null">
+        handler_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="deleteStatus != null">
+        delete_status,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="taskUuid != null">
+        #{taskUuid,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="originatorId != null">
+        #{originatorId,jdbcType=BIGINT},
+      </if>
+      <if test="entrance != null">
+        #{entrance,jdbcType=INTEGER},
+      </if>
+      <if test="handlerId != null">
+        #{handlerId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="deleteStatus != null">
+        #{deleteStatus,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=BIGINT},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=BIGINT},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+
+    <!--编辑-->
+  <update id="updateByPrimaryKeySelective" parameterType="model.PlatformInfo">
+    update platform_info
+    <set>
+      <if test="taskUuid != null">
+        task_uuid = #{taskUuid,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="originatorId != null">
+        originator_id = #{originatorId,jdbcType=BIGINT},
+      </if>
+      <if test="entrance != null">
+        entrance = #{entrance,jdbcType=INTEGER},
+      </if>
+      <if test="handlerId != null">
+        handler_id = #{handlerId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="deleteStatus != null">
+        delete_status = #{deleteStatus,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=BIGINT},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=BIGINT},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,6 +1,6 @@
 package model;
 
-import util.HttpStatusCodeEnum;
+import util.StatusCodeEnum;
 import java.util.LinkedHashMap;
 
 /**
@@ -29,10 +29,10 @@ public class ResponseData extends LinkedHashMap<String, Object> {
      * @return
      */
     public ResponseData success(){
-        return this.success(HttpStatusCodeEnum.OK);
+        return this.success(StatusCodeEnum.OK);
     }
     public ResponseData success(Object message){
-        this.put("code", HttpStatusCodeEnum.OK.getCode());
+        this.put("code", StatusCodeEnum.OK.getCode());
         this.put("message", message);
         return this;
     }
@@ -42,10 +42,10 @@ public class ResponseData extends LinkedHashMap<String, Object> {
      * @return
      */
     public ResponseData blank() {
-        return this.blank(HttpStatusCodeEnum.BLANK);
+        return this.blank(StatusCodeEnum.BLANK);
     }
     public ResponseData blank(Object message) {
-        this.put("code", HttpStatusCodeEnum.BLANK.getCode());
+        this.put("code", StatusCodeEnum.BLANK.getCode());
         this.put("message", message);
         return this;
     }
@@ -55,10 +55,10 @@ public class ResponseData extends LinkedHashMap<String, Object> {
      * @return
      */
     public ResponseData fail(){
-        return this.fail(HttpStatusCodeEnum.FAIL);
+        return this.fail(StatusCodeEnum.FAIL);
     }
     public ResponseData fail(Object message) {
-        this.put("code",HttpStatusCodeEnum.FAIL.getCode());
+        this.put("code", StatusCodeEnum.FAIL.getCode());
         this.put("message", message);
         return this;
     }
@@ -68,10 +68,10 @@ public class ResponseData extends LinkedHashMap<String, Object> {
      * @return
      */
     public ResponseData redirect() {
-        return this.redirect(HttpStatusCodeEnum.REDIRECT);
+        return this.redirect(StatusCodeEnum.REDIRECT);
     }
     public ResponseData redirect(Object message) {
-        this.put("code",HttpStatusCodeEnum.REDIRECT.getCode());
+        this.put("code", StatusCodeEnum.REDIRECT.getCode());
         this.put("message", message);
         return this;
     }
@@ -81,10 +81,10 @@ public class ResponseData extends LinkedHashMap<String, Object> {
      * @return
      */
     public ResponseData unauthorized() {
-        return this.unauthorized(HttpStatusCodeEnum.UNAUTHORIZED);
+        return this.unauthorized(StatusCodeEnum.UNAUTHORIZED);
     }
     public ResponseData unauthorized(Object message){
-        this.put("code",HttpStatusCodeEnum.UNAUTHORIZED.getCode());
+        this.put("code", StatusCodeEnum.UNAUTHORIZED.getCode());
         this.put("message", message);
         return this;
     }
@@ -94,14 +94,17 @@ public class ResponseData extends LinkedHashMap<String, Object> {
      * @return
      */
     public ResponseData forbidden() {
-        return this.forbidden(HttpStatusCodeEnum.FORBIDDEN);
+        return this.forbidden(StatusCodeEnum.FORBIDDEN);
     }
     public ResponseData forbidden(Object message){
-        this.put("code",HttpStatusCodeEnum.FORBIDDEN.getCode());
+        this.put("code", StatusCodeEnum.FORBIDDEN.getCode());
         this.put("message", message);
         return this;
     }
 
+    public ResponseData code(StatusCodeEnum statusCodeEnum) {
+        return result("code" , statusCodeEnum.getCode());
+    }
     public ResponseData code(int code) {
         return result("code",code);
     }

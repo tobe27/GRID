@@ -28,7 +28,7 @@ public class CustomerCreditApproval implements Serializable{
     private String approvalResult;
 
     private String approvalNode;
-
+    private Long creditDetailId;
     public Long getId() {
         return id;
     }
@@ -108,4 +108,13 @@ public class CustomerCreditApproval implements Serializable{
     public void setApprovalNode(String approvalNode) {
         this.approvalNode = approvalNode == null ? null : approvalNode.trim();
     }
+
+	public Long getCreditDetailId() {
+		return creditDetailId;
+	}
+
+	public void setCreditDetailId(Long creditDetailId) {
+		this.creditDetailId = creditDetailId;
+	}
+    
 }

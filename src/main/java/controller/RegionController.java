@@ -55,7 +55,7 @@ public class RegionController {
     @RequestMapping(value = "/region/{regionCode}", method = RequestMethod.DELETE)
     public ResponseData deleteRegion(@PathVariable Long regionCode) throws Exception {
         if (regionCode == null) {
-            return new ResponseData().fail("行政区域代码不能为空");
+            return new ResponseData().fail("行政区域代码不能为空!");
         }
 
         regionService.deleteByPrimaryKey(regionCode);

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.GridSenatorRelationMapper">
+  <resultMap id="BaseResultMap" type="model.GridSenatorRelation">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="senator_id" jdbcType="BIGINT" property="senatorId" />
+    <result column="grid_code" jdbcType="VARCHAR" property="gridCode" />
+  </resultMap>
+
+    <!--网格号查询关联表-->
+  <select id="listByGridCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select *
+    from grid_senator_relation
+    where grid_code = #{gridCode,jdbcType=VARCHAR}
+  </select>
+
+    <!--评议员查询关联表-->
+  <select id="getBySenatorId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select *
+    from grid_senator_relation
+    where senator_id= #{senatorId,jdbcType=BIGINT}
+  </select>
+
+    <!--网格号删除关联表-->
+  <delete id="deleteByGridCode" parameterType="java.lang.String">
+    delete from grid_senator_relation
+    where grid_code = #{gridCode,jdbcType=VARCHAR}
+  </delete>
+
+    <!--评议员删除关联表-->
+  <delete id="deleteBySenatorId" parameterType="java.lang.Long">
+    delete from grid_senator_relation
+    where senator_id = #{senatorId,jdbcType=BIGINT}
+  </delete>
+
+    <!--插入关联表-->
+  <insert id="insertSelective" parameterType="model.GridSenatorRelation">
+    insert into grid_senator_relation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="senatorId != null">
+        senator_id,
+      </if>
+      <if test="gridCode != null">
+        grid_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="senatorId != null">
+        #{senatorId,jdbcType=BIGINT},
+      </if>
+      <if test="gridCode != null">
+        #{gridCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+</mapper>

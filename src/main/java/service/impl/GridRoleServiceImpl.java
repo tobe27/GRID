@@ -40,6 +40,10 @@ public class GridRoleServiceImpl implements GridRoleService {
 	@Override
 	public boolean insert(GridRole record)throws Exception {
 		try {
+			//判断是否存在重名的角色名称
+			if(gridRoleMapper.getGridRolesByIdOrName(record).size()>0) {
+				throw new MyException("系统已存在相同的角色名称");
+			}
 		return gridRoleMapper.insert(record)==1;
 		}catch(Exception e) {
 			  throw new MyException("新增角色出现异常");
@@ -57,7 +61,14 @@ public class GridRoleServiceImpl implements GridRoleService {
 	@Override
 	public boolean insertSelective(GridRole record,String permissionIds) throws Exception{
 		boolean flag=false;
-		record.setCreatedAt(System.currentTimeMillis());
+		//判断是否存在重名的角色名称
+		if(gridRoleMapper.getGridRolesByIdOrName(record).size()>0) {
+			throw new MyException("系统已存在相同的角色名称");
+		}
+		long now=System.currentTimeMillis();
+		
+		record.setCreatedAt(now);
+		record.setUpdatedAt(now);
 		try {
 			if(gridRoleMapper.insertSelective(record)==1) {
 				flag=true;
@@ -114,6 +125,10 @@ public class GridRoleServiceImpl implements GridRoleService {
 	public boolean updateByPrimaryKeySelective(GridRole record,String permissionIds) throws Exception{
 		boolean flag=false;
 		try {
+			//判断是否存在重名的角色名称
+			if(gridRoleMapper.getGridRolesByIdOrName(record).size()>0) {
+				throw new MyException("系统已存在相同的角色名称");
+			}
 			record.setUpdatedAt(System.currentTimeMillis());
 			if(gridRoleMapper.updateByPrimaryKeySelective(record)==1) {
 				flag=true;
@@ -152,6 +167,10 @@ public class GridRoleServiceImpl implements GridRoleService {
 	@Override
 	public boolean updateByPrimaryKey(GridRole record)throws Exception {
 		try {
+			//判断是否存在重名的角色名称
+			if(gridRoleMapper.getGridRolesByIdOrName(record).size()>0) {
+				throw new MyException("系统已存在相同的角色名称");
+			}
 			return gridRoleMapper.updateByPrimaryKey(record)==1;
 			}catch(Exception e) {
 				  throw new MyException("修改角色出现异常");

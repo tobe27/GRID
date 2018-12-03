@@ -21,4 +21,6 @@ public interface GridMapMapper {
    int  batchSave(List<GridMap> list);
      List<GridMap> getGridMapList(Map<String,Object> map);
     int setDeleteFlag(Map<String,Object> map);
+    List<GridMap> getGridMapByOrgCode(Map<String,Object> map);
+    
 }

@@ -8,13 +8,13 @@ public class FamilyInfo implements Serializable {
     private static final long serialVersionUID = 5558088728223503845L;
     private Long familyId;
 
-    private Long householdId;
+    private String householdId;
 
     private Integer population;
 
     private String address;
 
-    private Integer postcode;
+    private String postcode;
 
     private String localCredit;
 
@@ -30,8 +30,6 @@ public class FamilyInfo implements Serializable {
 
     private String produceScene;
 
-    private Long accountId;
-
     private String insuranceType;
 
     private Long createdAt;
@@ -46,13 +44,6 @@ public class FamilyInfo implements Serializable {
         this.familyId = familyId;
     }
 
-    public Long getHouseholdId() {
-        return householdId;
-    }
-
-    public void setHouseholdId(Long householdId) {
-        this.householdId = householdId;
-    }
 
     public Integer getPopulation() {
         return population;
@@ -70,13 +61,7 @@ public class FamilyInfo implements Serializable {
         this.address = address == null ? null : address.trim();
     }
 
-    public Integer getPostcode() {
-        return postcode;
-    }
 
-    public void setPostcode(Integer postcode) {
-        this.postcode = postcode;
-    }
 
     public String getLocalCredit() {
         return localCredit;
@@ -132,14 +117,6 @@ public class FamilyInfo implements Serializable {
 
     public void setProduceScene(String produceScene) {
         this.produceScene = produceScene == null ? null : produceScene.trim();
-    }
-
-    public Long getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
     }
 
     public String getInsuranceType() {

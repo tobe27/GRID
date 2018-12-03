@@ -27,6 +27,7 @@ public class ProductDictServiceImpl implements ProductDictService{
 		try {
             return productDictMapper.listProducts(state);
         } catch (Exception e) {
+        	e.printStackTrace();
             throw new MyException("获取银行产品信息列表出现异常");
         }
 	}
@@ -42,23 +43,31 @@ public class ProductDictServiceImpl implements ProductDictService{
 		if (ValidUtil.isEmpty(record.getName())) {
             throw new MyException("银行产品名称不能为空");
         }
-		if (!ValidUtil.length(record.getName(), 20)) {
+		if (!ValidUtil.isLength(record.getName(),1 , 20)) {
             throw new MyException("银行产品名称最大20位");
         }
+		if (productDictMapper.selectCountByName(record.getName(),null)>0){
+			throw new MyException("产品名称已存在");
+		}
         int row1=0,row2=0;
         try {
-        	String code=productDictMapper.getMaxCode().substring(1);
-    		Integer num=Integer.parseInt(code)+1;
-    		code=num.toString();
-    		if(code.length()==3){
-    			code="p"+code;
-    		}else if(code.length()==2){
-    			code="p0"+code;
-    		}else if(code.length()==1){
-    			code="p00"+code;
-    		}else{
-    			throw new MyException("生成银行产品编码出错");
-    		}
+        	String code=productDictMapper.getMaxCode();
+        	if(code==null){
+        		code="P001";
+        	}else{
+        		code=code.substring(1);
+        		Integer num=Integer.parseInt(code)+1;
+        		code=num.toString();
+        		if(code.length()==3){
+        			code="p"+code;
+        		}else if(code.length()==2){
+        			code="p0"+code;
+        		}else if(code.length()==1){
+        			code="p00"+code;
+        		}else{
+        			throw new MyException("生成银行产品编码出错");
+        		}
+        	}
     		record.setCode(code);
     		
     		// 创建时间
@@ -84,9 +93,12 @@ public class ProductDictServiceImpl implements ProductDictService{
 		if (ValidUtil.isEmpty(record.getId())) {
             throw new MyException("银行产品id不能为空");
         }
-		if (record.getName()!=null && !ValidUtil.length(record.getName(), 20)) {
+		if (record.getName()!=null && !ValidUtil.isLength(record.getName(),1 , 20)) {
             throw new MyException("银行产品名称最大20位");
-        }
+        }else if (productDictMapper.selectCountByName(record.getName(),record.getId())>0){
+			throw new MyException("产品名称已存在");
+		}
+		
         record.setUpdatedAt(System.currentTimeMillis());
         try {
             return productDictMapper.updateByPrimaryKeySelective(record) == 1;

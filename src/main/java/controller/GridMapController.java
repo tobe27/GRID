@@ -34,7 +34,7 @@ public class GridMapController {
 	   */
 	
 	@RequestMapping(value = "/gridmap",method = RequestMethod.POST)
-	 public ResponseData addDirctionaryList(@RequestBody Map<String,Object> map) {
+	 public ResponseData addGridMapList(@RequestBody Map<String,Object> map) {
 		if(!map.containsKey("gridCode")|| !map.containsKey("gridName")|| !map.containsKey("coordinate")) {
 			 return new ResponseData().fail("参数异常");
 		}
@@ -62,11 +62,28 @@ public class GridMapController {
 	   * @throws Exception
 	   */
 	@RequestMapping(value = "/gridmap/{gridCode}", method = RequestMethod.GET)
-	 public ResponseData getDictionaryByCode(@PathVariable("gridCode") String gridCode) {
+	 public ResponseData getGridMapByCode(@PathVariable("gridCode") String gridCode) {
 		 try {
 			 Map<String, Object> map=new HashMap<>();
 			 map.put("gridCode", gridCode);
 			 List<GridMap>list=gridMapService.getGridMapList(map);
+	         return new ResponseData().success().data( list);
+	     } catch (Exception e) {
+	         return new ResponseData().code(400).message(e.getMessage());
+	     }
+	 }
+	  
+	 /**
+	   * 调用此接口查询PC首页所有的网格地图坐标数据接口
+	   * @param roleId,orgCode
+	   * @return List<GridMap>
+	   * @throws Exception
+	   */
+	@RequestMapping(value = "/gridmap/list/{roleid}/{orgcode}", method = RequestMethod.GET)
+	 public ResponseData getGridMapByOrgCode(@PathVariable("roleid") String roleId,@PathVariable("orgcode") String orgCode) {
+		 try {
+			 
+			 List<GridMap>list=gridMapService.getGridMapByOrgCode(roleId, orgCode);
 	         return new ResponseData().success().data( list);
 	     } catch (Exception e) {
 	         return new ResponseData().code(400).message(e.getMessage());

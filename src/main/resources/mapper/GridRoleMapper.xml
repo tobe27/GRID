@@ -25,6 +25,16 @@
   </resultMap>  
   
   
+  <select id="getGridRolesByIdOrName" parameterType="model.GridRole" resultMap="BaseResultMap">
+  select * from grid_role where 1=1
+  <if test="roleName != null">
+  and role_name = #{roleName}
+  </if>
+  <if test="roleId != null">
+   and role_id != #{roleId}
+  </if>
+  </select>
+  
   
   <sql id="Base_Column_List">
     role_id, role_name, role_scope, description, created_at, updated_at

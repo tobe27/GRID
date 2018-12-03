@@ -14,8 +14,15 @@ public interface ResidentInfoMapper {
 
     ResidentInfo getResidentByPrimaryKey(Long residentId);
 
+    ResidentInfo getByIdNumber(String idNumber);
+
     List<ResidentInfo> listResidents(ResidentInfo record);
 
+    List<ResidentInfo> listByOrg(ResidentInfo record);
+
     int updateByPrimaryKeySelective(ResidentInfo record);
+
+    int updateResidentStatus(ResidentInfo record);
+
     int  batchSave(@Param("list")List<ResidentInfo> list);
 }

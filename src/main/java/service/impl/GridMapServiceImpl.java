@@ -1,5 +1,6 @@
 package service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,14 +8,18 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import dao.GridInfoMapper;
 import dao.GridMapMapper;
 import exception.MyException;
+import model.GridInfo;
 import model.GridMap;
 import service.GridMapService;
 @Service
 public class GridMapServiceImpl implements GridMapService {
 	@Autowired
 	private GridMapMapper gridMapMapper;
+	@Autowired
+	private GridInfoMapper gridInfoMapper;
 
 	
 	
@@ -112,6 +117,32 @@ public class GridMapServiceImpl implements GridMapService {
 		}
 		
 		
+	}
+	@Override
+	public List<GridMap> getGridMapByOrgCode(String roleId,String orgCode) throws Exception {
+		List<GridMap> returnList=new ArrayList<>();
+		if(roleId==null || "".equals(roleId)||orgCode==null || "".equals(orgCode)) {
+			throw new MyException("查询参数异常异常");
+		}
+	   Map<String,Object> map=new HashMap<>();
+	   //如果是中层干部和董事长登录  可以看所有的网格地图数据
+	   if("4".equals(roleId) ||"5".equals(roleId)) {
+		   return gridMapMapper.getGridMapByOrgCode(map);
+	   }
+	   //如果时基层干部（支行长）登录只能看自己支行的网格地图
+	   if("3".equals(roleId)) {
+		   //查询出所有的gridCode
+		   GridInfo gridInfo=new GridInfo();
+		   gridInfo.setOrgCode(Long.parseLong(orgCode));
+		  List<String> list=gridInfoMapper.getGridCodesByAccountIdOrOrgCode(gridInfo);
+		  if(list.isEmpty()) {
+			  throw new MyException("未查询到相关网格数据");
+		  }
+		  map.put("gridCodes", list);
+		  returnList= gridMapMapper.getGridMapByOrgCode(map);
+	   }
+	   
+		return returnList;
 	}
 
 }

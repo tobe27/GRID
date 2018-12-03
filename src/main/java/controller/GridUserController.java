@@ -21,14 +21,15 @@ import java.util.List;
  * @author Created by L.C.Y on 2018-9-20
  */
 @RestController
-@RequestMapping("/super")
+@RequestMapping
 public class GridUserController {
     @Autowired
     GridUserService userService;
     @Autowired
     GridUserRoleService userRoleService;
 
-    private Logger logger = LoggerFactory.getLogger(GridUserController.class);
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
     /**
      * 调用此接口进行新增用户
@@ -36,7 +37,7 @@ public class GridUserController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/account",method = RequestMethod.POST)
+    @RequestMapping(value = "/super/account",method = RequestMethod.POST)
     public ResponseData insertGridUser(GridUser gridUser, String roleIds) throws Exception {
         logger.info("添加用户及关联角色");
 
@@ -51,7 +52,7 @@ public class GridUserController {
     }
 
     /**
-     * 调用此接口修改密码
+     * 用户调用此接口修改密码
      * @param accountId
      * @param oldPassword
      * @param newPassword
@@ -72,12 +73,27 @@ public class GridUserController {
     }
 
     /**
+     * 管理员调用此接口修改密码
+     * @param user
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/super/account/{accountId}/password", method = RequestMethod.PUT)
+    public ResponseData updatePassword(GridUser user) throws Exception {
+        logger.info("修改密码"+user);
+
+        userService.updatePassword(user);
+        return new ResponseData().success();
+
+    }
+
+    /**
      * 调用此接口进行修改用户信息
      * @param gridUser
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/account/{accountId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/super/account/{accountId}", method = RequestMethod.PUT)
     public ResponseData updateAccount(GridUser gridUser, String roleIds) throws Exception {
 
         //编辑用户
@@ -86,8 +102,23 @@ public class GridUserController {
         } else {
             return new ResponseData().fail();
         }
+    }
 
 
+    /**
+     * 调用此接口进行修改用户可用状态
+     * @param gridUser
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/super/account/{accountId}/status/{status}", method = RequestMethod.PUT)
+    public ResponseData updateStatus(GridUser gridUser) throws Exception {
+        // 编辑用户状态
+        if (userService.updateStatusByPrimaryKey(gridUser)) {
+            return new ResponseData().success();
+        } else {
+            return new ResponseData().fail();
+        }
     }
 
     /**
@@ -97,10 +128,10 @@ public class GridUserController {
      * @param pageSize
      * @return
      */
-    @RequestMapping(value = "/account/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/super/account/list", method = RequestMethod.GET)
     public ResponseData getGridUser(GridUser user, Integer pageNum, Integer pageSize) throws Exception {
         if (pageNum == null || pageSize == null){
-            return new ResponseData().fail("页码和页大小不能为空");
+            return new ResponseData().fail("页码和页大小不能为空!");
         }
 
         PageHelper.startPage(pageNum, pageSize);
@@ -117,16 +148,17 @@ public class GridUserController {
      * @param pageSize
      * @return
      */
-    @RequestMapping(value = "/account/list/{roleId}", method = RequestMethod.GET)
-    public ResponseData getGridUser(@PathVariable Long roleId, Integer pageNum, Integer pageSize) throws Exception {
+    @RequestMapping(value = "/super/account/list/{roleId}", method = RequestMethod.GET)
+    public ResponseData getGridUser(@PathVariable Long roleId, Integer pageNum, Integer pageSize, Long orgCode) throws Exception {
         if (roleId == null ) {
-            return new ResponseData().fail("角色ID不能为空");
+            return new ResponseData().fail("请选择角色!");
         }
         if (pageNum == null || pageSize == null){
-            return new ResponseData().fail("页码和页大小不能为空");
+            return new ResponseData().fail("页码和页大小不能为空!");
         }
         GridRole role = new GridRole();
         role.setRoleId(roleId);
+        role.setOrgCode(orgCode);
 
         PageHelper.startPage(pageNum, pageSize);
         List<GridUser> users = userService.getUsersByRole(role);
@@ -141,16 +173,13 @@ public class GridUserController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/account/{accountId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/super/account/{accountId}", method = RequestMethod.GET)
     public ResponseData getGridUser(@PathVariable Long accountId) throws Exception {
-        if (accountId == null) {
-            return new ResponseData().fail("用户ID不能为空");
-        }
         GridUser gridUser;
         gridUser = userService.getUserByPrimaryKey(accountId);
 
         if (gridUser == null) {
-            return new ResponseData().blank("用户不存在");
+            return new ResponseData().blank("用户不存在!");
         }
         return new ResponseData().success().data(gridUser);
     }

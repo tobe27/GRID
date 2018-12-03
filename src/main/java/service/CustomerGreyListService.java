@@ -14,6 +14,6 @@ public interface CustomerGreyListService {
 
 		    boolean updateByPrimaryKeySelective(CustomerGreylist record)throws Exception;
 		    
-		    List<CustomerGreylist> getCustomerGreylistByPage(Map<String,Object> map);
-		    int insertByExcel(List<Map<String,Object>> list,String gridCode)throws Exception;
+		    List<Map<String, Object>> getCustomerGreylistByPage(Map<String,Object> map);
+		    Map<String,Object> insertByExcel(List<Map<String,Object>> list,String gridCode)throws Exception;
 }

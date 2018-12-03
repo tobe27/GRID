@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import service.OrganizationService;
+import util.TreeUtil;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class OrganizationController {
      * @param organization
      * @return
      */
-    @RequestMapping(value = "/org/{orgCode}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/org/{orgId}", method = RequestMethod.PUT)
     public ResponseData updateOrg(Organization organization) throws Exception {
 
         organizationService.updateByOrgCodeSelective(organization);
@@ -48,28 +49,28 @@ public class OrganizationController {
 
     /**
      * 调用此接口删除机构
-     * @param orgCode 机构代码
+     * @param orgId 机构代码
      * @return
      */
-    @RequestMapping(value = "/org/{orgCode}", method = RequestMethod.DELETE)
-    public ResponseData deleteOrg(@PathVariable Long orgCode) throws Exception {
+    @RequestMapping(value = "/org/{orgId}", method = RequestMethod.DELETE)
+    public ResponseData deleteOrg(@PathVariable Long orgId) throws Exception {
 
-        organizationService.deleteByOrgCode(orgCode);
+        organizationService.deleteByOrgId(orgId);
         return new ResponseData().success();
 
     }
 
     /**
      * 调用此接口获取机构列表
-     * @param orgCode
+     * @param orgId
      * @return
      */
-    @RequestMapping(value = "/org/{orgCode}", method = RequestMethod.GET)
-    public ResponseData getOrg(@PathVariable Long orgCode) throws Exception {
+    @RequestMapping(value = "/org/{orgId}", method = RequestMethod.GET)
+    public ResponseData getOrg(@PathVariable Long orgId) throws Exception {
 
-        Organization organization = organizationService.getOrganizationByOrgCode(orgCode);
-        List<Organization> nextOrganization = organizationService.getOrganizationsByPreOrgCode(orgCode);
-        return new ResponseData().success().data(organization).result("nextOrganization",nextOrganization);
+        List<Organization> organizationList = organizationService.listOrganization(new Organization());
+        List list = new TreeUtil().getOrgList(organizationList, orgId);
+        return new ResponseData().success().data(list);
 
     }
 

@@ -7,7 +7,7 @@ public interface FamilyInfoMapper {
 
     int insertSelective(FamilyInfo record);
 
-    FamilyInfo getByHouseholdId(Long householdId);
+    FamilyInfo getByHouseholdId(String householdId);
 
     int updateByPrimaryKeySelective(FamilyInfo record);
 }

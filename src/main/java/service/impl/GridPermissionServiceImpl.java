@@ -86,7 +86,10 @@ public class GridPermissionServiceImpl implements GridPermissionService {
 	   */
 	@Override
 	public boolean insertSelective(GridPermission record)throws Exception {
-		record.setCreatedAt(System.currentTimeMillis());
+	long now =System.currentTimeMillis();
+		record.setCreatedAt(now);
+		record.setUpdatedAt(now);
+		
 		try {
 			return gridPermissionMapper.insertSelective(record)==1;
 		}catch (Exception e){

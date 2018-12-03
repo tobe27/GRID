@@ -33,7 +33,7 @@ public class QueryDishonestUtil {
     /**
      * 查询失信人
      * @param performedName 名称
-     * @param cardNumber 证件号码
+     * @param cardNumber 证件号码,12-14位需变更为****
      * @return
      */
     public static List<DishonestCustomerInfo> listDishonest(String performedName, String cardNumber) {
@@ -49,11 +49,15 @@ public class QueryDishonestUtil {
      */
     public static List<DishonestCustomerInfo> listDishonest(String performedName, String cardNumber, String areaName) {
 
+        String start = cardNumber.substring(0,11);
+        String end = cardNumber.substring(14, 18);
+        // 加工后的身份证号
+        String dealCardNumber = start+"****"+end;
         // 返回的结果初始化列表
         List<DishonestCustomerInfo> infoList = new ArrayList<>();
 
         // 查询结果
-        String strResult = getStringDishonest(performedName, cardNumber, areaName);
+        String strResult = getStringDishonest(performedName, dealCardNumber, areaName);
 
         // json封装
         JSONObject firstMap = JSONObject.parseObject(strResult);
@@ -126,7 +130,8 @@ public class QueryDishonestUtil {
             try {
                 buffer.append(URLEncoder.encode((String) entry.getValue(), QueryDishonestUtil.UTF_8));
             } catch (UnsupportedEncodingException e) {
-                throw new MyException("失信人查询编码异常:"+e);
+                logger.info("查询失信人字符编码异常"+e.getMessage());
+                throw new MyException("失信人查询字符编码异常");
             }
             buffer.append("&");
         }
@@ -156,7 +161,7 @@ public class QueryDishonestUtil {
             return resultBuffer.toString().substring(
                     resultBuffer.toString().indexOf("(")+1,resultBuffer.toString().lastIndexOf(");"));
         } catch (IOException e) {
-            logger.error("失信工具IO异常："+e.getMessage());
+            logger.info("失信工具IO异常："+e.getMessage());
             throw new MyException("失信工具IO异常:"+e);
         } finally {
             if (bufferedReader != null) {

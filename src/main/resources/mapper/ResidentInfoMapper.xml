@@ -11,56 +11,107 @@
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="household_type" jdbcType="VARCHAR" property="householdType" />
     <result column="relationship" jdbcType="VARCHAR" property="relationship" />
-    <result column="household_id" jdbcType="BIGINT" property="householdId" />
+    <result column="household_id" jdbcType="VARCHAR" property="householdId" />
     <result column="contact" jdbcType="VARCHAR" property="contact" />
     <result column="is_in_list" jdbcType="VARCHAR" property="isInList" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="career" jdbcType="VARCHAR" property="career" />
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+      <result column="status" jdbcType="INTEGER" property="status" />
+      <result column="grid_code" jdbcType="BIGINT" property="gridCode" />
+      <result column="grid_name" jdbcType="VARCHAR" property="gridName" />
   </resultMap>
   <sql id="Base_Column_List">
     resident_id, resident_name, sex, nation, birthdate, id_number, address, household_type, 
-    relationship, household_id, contact, is_in_list, remark, career, created_at, updated_at
+    relationship, household_id, contact, is_in_list, remark, career, created_at, updated_at, status, grid_code
   </sql>
 
+    <!--查询居民列表-->
     <select id="listResidents"  parameterType="model.ResidentInfo" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List" />
-        from resident_info
-        where 1 = 1
+        select info.*, grid.grid_name
+        from resident_info info
+        JOIN grid_info grid on info.grid_code = grid.grid_code
+        JOIN grid_user user on grid.account_id = user.account_id
+        where 1=1
         <if test="residentName != null">
-            and resident_name like CONCAT('%',#{residentName},'%')
+            and info.resident_name like CONCAT('%',#{residentName},'%')
         </if>
         <if test="idNumber != null">
-            and id_number like CONCAT('%',#{idNumber},'%')
+            and info.id_number like CONCAT('%',#{idNumber},'%')
         </if>
-        <if test="householdId != null">
-            and household_id = #{householdId}
+        <if test="householdId != null and householdId != ''">
+            and info.household_id = #{householdId}
         </if>
-        order by created_at DESC
+        <if test="gridCode != null and gridCode != ''">
+            and info.grid_code = #{gridCode}
+        </if>
+            and user.account_id = #{accountId}
+        order by info.created_at DESC
+    </select>
+
+    <!--查询居民列表-->
+    <select id="listByOrg"  parameterType="model.ResidentInfo" resultMap="BaseResultMap">
+        select info.*, grid.grid_name
+        from resident_info info
+        JOIN grid_info grid on info.grid_code = grid.grid_code
+        JOIN grid_user user on grid.account_id = user.account_id
+        where 1=1
+        <if test="residentName != null">
+            and info.resident_name like CONCAT('%',#{residentName},'%')
+        </if>
+        <if test="idNumber != null">
+            and info.id_number like CONCAT('%',#{idNumber},'%')
+        </if>
+        <if test="householdId != null and householdId != ''">
+            and info.household_id = #{householdId}
+        </if>
+        <if test="gridCode != null and gridCode != ''">
+            and info.grid_code = #{gridCode}
+        </if>
+            and user.account_id
+            IN (SELECT account_id  from grid_user where org_code = #{orgCode})
+            order by info.created_at DESC
+    </select>
+
+    <!--通过身份证号码查询户籍-->
+    <select id="getByIdNumber"  parameterType="String" resultMap="BaseResultMap">
+        select info.*, grid.grid_name
+        from resident_info info
+        JOIN grid_info grid on info.grid_code = grid.grid_code
+        where info.id_number = #{idNumber}
     </select>
 
 <insert id="batchSave" >
-  insert into resident_info  (resident_name,sex,nation,birthdate,id_number,address,household_type,relationship,household_id,contact,is_in_list,remark,created_at,updated_at)
+  insert into resident_info(resident_name,sex,nation,birthdate,id_number,address,household_type,
+        relationship,household_id,contact,is_in_list,remark,created_at,updated_at, grid_code)
   VALUES
   <foreach  collection="list" item="item" separator=",">
-        (#{item.residentName}, #{item.sex}, #{item.nation},#{item.birthdate},  #{item.idNumber}, #{item.address}, #{item.householdType}, #{item.relationship}, #{item.householdId}
-        , #{item.contact}, #{item.isInList}, #{item.remark}, #{item.createdAt}, #{item.updatedAt})
+        (#{item.residentName}, #{item.sex}, #{item.nation},#{item.birthdate}, #{item.idNumber}, #{item.address}, #{item.householdType}, #{item.relationship}, #{item.householdId}
+        , #{item.contact}, #{item.isInList}, #{item.remark}, #{item.createdAt}, #{item.updatedAt}, #{item.gridCode})
     </foreach>
-
 </insert>
+
+    <!--获取居民信息-->
   <select id="getResidentByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from resident_info
+    select info.*, grid.grid_name
+    from resident_info info
+    JOIN grid_info grid on info.grid_code = grid.grid_code
     where resident_id = #{residentId,jdbcType=BIGINT}
   </select>
 
+    <!--删除居民信息-->
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from resident_info
     where resident_id = #{residentId,jdbcType=BIGINT}
   </delete>
+
+    <!--更改居民信息可用状态-->
+  <update id="updateResidentStatus" parameterType="model.ResidentInfo">
+    update resident_info
+    set status = #{status}
+    where resident_id = #{residentId,jdbcType=BIGINT}
+  </update>
 
   <insert id="insertSelective" parameterType="model.ResidentInfo">
     insert into resident_info
@@ -113,6 +164,12 @@
       <if test="updatedAt != null">
         updated_at,
       </if>
+        <if test="status != null">
+            status,
+        </if>
+        <if test="gridCode != null">
+            grid_code,
+        </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="residentId != null">
@@ -143,7 +200,7 @@
         #{relationship,jdbcType=VARCHAR},
       </if>
       <if test="householdId != null">
-        #{householdId,jdbcType=BIGINT},
+        #{householdId,jdbcType=VARCHAR},
       </if>
       <if test="contact != null">
         #{contact,jdbcType=VARCHAR},
@@ -163,6 +220,12 @@
       <if test="updatedAt != null">
         #{updatedAt,jdbcType=BIGINT},
       </if>
+        <if test="status != null">
+            #{status,jdbcType=INTEGER},
+        </if>
+        <if test="gridCode != null">
+            #{gridCode},
+        </if>
     </trim>
   </insert>
 
@@ -195,7 +258,7 @@
         relationship = #{relationship,jdbcType=VARCHAR},
       </if>
       <if test="householdId != null">
-        household_id = #{householdId,jdbcType=BIGINT},
+        household_id = #{householdId,jdbcType=VARCHAR},
       </if>
       <if test="contact != null">
         contact = #{contact,jdbcType=VARCHAR},
@@ -215,6 +278,12 @@
       <if test="updatedAt != null">
         updated_at = #{updatedAt,jdbcType=BIGINT},
       </if>
+        <if test="status != null">
+            status = #{status,jdbcType=INTEGER},
+        </if>
+        <if test="gridCode != null">
+            grid_code = #{gridCode},
+        </if>
     </set>
     where resident_id = #{residentId,jdbcType=BIGINT}
   </update>

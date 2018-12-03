@@ -19,10 +19,9 @@ public class FamilyInfoMapperTest {
     @Test
     public void insert() throws Exception {
         FamilyInfo info = new FamilyInfo();
-        info.setHouseholdId(12121213L);
         info.setPopulation(5);
         info.setAddress("北京");
-        info.setPostcode(100000);
+
         info.setLocalCredit("较好");
         info.setIsHarmony("是");
         info.setSocialEvaluation("家庭关系和睦，资金往来频繁，信誉较好");
@@ -37,6 +36,6 @@ public class FamilyInfoMapperTest {
 
     @Test
     public void get() throws Exception {
-        System.out.println(familyInfoService.getByHouseholdId(12121213L));
+
     }
 }

@@ -19,4 +19,5 @@ public interface GridReviewMapper {
 
     int updateByPrimaryKey(GridReview record);
     int   deleteByGridCode(Map<String,Object> map);
+    int updataByGridCode(GridReview record);
 }

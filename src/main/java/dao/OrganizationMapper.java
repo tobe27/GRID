@@ -10,13 +10,19 @@ import java.util.List;
  */
 @Repository
 public interface OrganizationMapper {
-    int deleteByOrgCode(Long orgCode);
+    int deleteByOrgId(Long orgId);
 
     int insertSelective(Organization record);
 
+    Organization getOrganizationByOrgId(Long orgId);
+
     Organization getOrganizationByOrgCode(Long orgCode);
 
-    List<Organization> getOrganizationsByPreOrgCode(Long preOrgCode);
+    Organization getOrganizationByOrgName(String orgName);
+
+    List<Organization> getOrganizationsByPreOrgId(Long preOrgId);
+
+    List<Organization> listOrganization(Organization record);
 
     int updateByOrgCodeSelective(Organization record);
 }

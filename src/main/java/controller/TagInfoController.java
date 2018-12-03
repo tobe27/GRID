@@ -32,7 +32,7 @@ public class TagInfoController {
      * @param info
      * @return
      */
-    @RequestMapping(value = "/customer/tag", method = RequestMethod.POST)
+    @RequestMapping(value = "/super/tag", method = RequestMethod.POST)
     public ResponseData insertTag(TagInfo info) throws Exception {
 
         tagInfoService.insertSelective(info);
@@ -45,7 +45,7 @@ public class TagInfoController {
      * @param info
      * @return
      */
-    @RequestMapping(value = "/customer/tag/{tagId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/super/tag/{tagId}", method = RequestMethod.PUT)
     public ResponseData updateTag(TagInfo info) throws Exception {
 
         tagInfoService.updateByPrimaryKeySelective(info);
@@ -58,7 +58,7 @@ public class TagInfoController {
      * @param tagId
      * @return
      */
-    @RequestMapping(value = "/customer/tag/{tagId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/super/tag/{tagId}", method = RequestMethod.DELETE)
     public ResponseData deleteTag(@PathVariable Long tagId) throws Exception {
 
         tagInfoService.deleteByPrimaryKey(tagId);
@@ -73,10 +73,10 @@ public class TagInfoController {
      * @param pageSize
      * @return
      */
-    @RequestMapping(value = "/customer/tag/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/super/tag/list", method = RequestMethod.GET)
     public ResponseData listTags(TagInfo info, Integer pageNum, Integer pageSize) throws Exception {
         if (ValidUtil.isEmpty(pageNum) || ValidUtil.isEmpty(pageSize)) {
-            return new ResponseData().fail("页码与页行数不能为空");
+            return new ResponseData().fail("页码与页行数不能为空!");
         }
 
         PageHelper.startPage(pageNum, pageSize);
@@ -91,7 +91,7 @@ public class TagInfoController {
      * @param tagId
      * @return
      */
-    @RequestMapping(value = "/customer/tag/{tagId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/super/tag/{tagId}", method = RequestMethod.GET)
     public ResponseData listTags(@PathVariable Long tagId) throws Exception {
 
         TagInfo info = tagInfoService.selectByPrimaryKey(tagId);

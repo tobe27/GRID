@@ -1,7 +1,11 @@
 package controller;
 
+import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +21,8 @@ import model.CustomerGreylist;
 
 import model.ResponseData;
 import service.CustomerGreyListService;
+import util.JwtUtil;
+import util.PoiUtil;
 
 
 @RestController
@@ -88,23 +94,45 @@ public class CustomerGreyListController {
      * @throws Exception
      */
   @RequestMapping(value = "/greylist/list", method = RequestMethod.GET)
-  public ResponseData getListByPage(@RequestParam Map<String,Object>  map) {
-	 
-	  PageInfo<CustomerGreylist> pageInfo ;
-	 
+  public ResponseData getListByPage(@RequestParam Map<String,Object>  map,HttpServletRequest request) {
+	  String token=request.getHeader("Authorization");
+	  List<Long> rolelist=(List<Long>) JwtUtil.parseToken(token).get("roleIdList");
+	  String orgCode=JwtUtil.parseToken(token).get("orgCode").toString();
+	  String accountId=JwtUtil.parseToken(token).get("accountId").toString();
+	  map.put("rolelist", rolelist);
+	  map.put("orgCode", orgCode);
+	  map.put("accountId", accountId);
+	  PageInfo<Map<String, Object>> pageInfo ;
 	  try {
-		  List<CustomerGreylist> list=  customerGreyListService.getCustomerGreylistByPage(map);
+		  List<Map<String, Object>> list=  customerGreyListService.getCustomerGreylistByPage(map);
 		  pageInfo=new PageInfo<>(list);
         } catch (Exception e) {
             return new ResponseData().code(400).message("查询灰名单信息出错");
         }
-        
-     
-		return new ResponseData().success().data(pageInfo.getList()).result("count", pageInfo.getTotal());
+        return new ResponseData().success().data(pageInfo.getList()).result("count", pageInfo.getTotal());
 	  
   }
     
+  
+  /**
+   * 调用此接口导入灰名单
+   * @param
+   * @return
+   */
+  @RequestMapping (value = "/greylist/import", method = RequestMethod.POST)
+  public  ResponseData importGeryList(HttpServletRequest request) throws Exception {
+      Map<String,Object> map=PoiUtil.uploadFile(request,"excel");
+      Map<String,Object> returnMap=new HashMap<>();
+      if((boolean) map.get("flag")) {
+          List<Map<String, Object>> greyList=PoiUtil.getExcelByColumnNumsAndRowNum(map.get("path").toString()+File.separator+map.get("fileName").toString(),4,4,1);
+          if(greyList!=null && greyList.size()>0) {
+              return new ResponseData().success().data(customerGreyListService.insertByExcel(greyList, map.get("gridCode").toString()));
+          }
+  }
+      returnMap.put("failCount", 0);
+      returnMap.put("successCount", 0);
+      return new ResponseData().success().data(returnMap);   
 	
-	
+  }
 
 }

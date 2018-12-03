@@ -12,10 +12,11 @@
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
     <result column="approval_result" jdbcType="VARCHAR" property="approvalResult" />
     <result column="approval_node" jdbcType="VARCHAR" property="approvalNode" />
+      <result column="credit_detail_id" jdbcType="BIGINT" property="creditDetailId" />
   </resultMap>
   <sql id="Base_Column_List">
     id, id_number, approval_opinion, approval_name, approval_account_id, signatureURL, 
-    created_at, updated_at, approval_result, approval_node
+    created_at, updated_at, approval_result, approval_node,credit_detail_id
   </sql>
   
   <insert id="batchSave" >
@@ -28,8 +29,8 @@
 
 </insert>
 
-<select id="getListByIdNumber" parameterType="model.CustomerCreditApproval" resultMap="BaseResultMap">
-select *  from customer_credit_approval where id_number = #{idNumber} order by created_at
+<select id="getListcreditDetailId" parameterType="model.CustomerCreditApproval" resultMap="BaseResultMap">
+select *  from customer_credit_approval where credit_detail_id = #{creditDetailId} order by created_at
 </select>
   
   
@@ -87,6 +88,9 @@ select *  from customer_credit_approval where id_number = #{idNumber} order by c
       <if test="approvalNode != null">
         approval_node,
       </if>
+      <if test="creditDetailId != null">
+        credit_detail_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -118,6 +122,9 @@ select *  from customer_credit_approval where id_number = #{idNumber} order by c
       </if>
       <if test="approvalNode != null">
         #{approvalNode,jdbcType=VARCHAR},
+      </if>
+      <if test="creditDetailId != null">
+        #{creditDetailId,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>

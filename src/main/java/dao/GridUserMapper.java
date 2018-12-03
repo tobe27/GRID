@@ -29,4 +29,6 @@ public interface GridUserMapper {
     List<GridUser> getUsersByRole(GridRole role);
     //编辑用户
     int updateByPrimaryKeySelective(GridUser record);
+    //编辑用户状态
+    int updateStatusByPrimaryKey(GridUser record);
 }

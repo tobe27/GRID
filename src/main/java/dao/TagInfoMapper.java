@@ -14,6 +14,8 @@ public interface TagInfoMapper {
 
     TagInfo selectByPrimaryKey(Long tagId);
 
+    TagInfo getByTagName(String tagName);
+
     List<TagInfo> listTags(TagInfo record);
 
     int updateByPrimaryKeySelective(TagInfo record);

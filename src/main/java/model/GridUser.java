@@ -37,7 +37,7 @@ public class GridUser implements Serializable {
 
     private String corpName;
 
-    private String orgCode;
+    private Long orgCode;
 
     private String orgName;
 

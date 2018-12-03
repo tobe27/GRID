@@ -28,7 +28,7 @@ public class FinanceInfoController {
 
         FinanceInfo info = infoService.getFinanceInfoByIdNumber(idNumber);
         if (info == null) {
-            return new ResponseData().blank("客户财务信息不存在");
+            return new ResponseData().blank("客户财务信息不存在!");
         }
         return new ResponseData().success().data(info);
 

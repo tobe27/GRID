@@ -20,4 +20,5 @@ public interface GridRoleMapper {
 
     int updateByPrimaryKey(GridRole record);
     List<GridRole> getGridRoles(Map<String,Object> map);
+    List<GridRole> getGridRolesByIdOrName(GridRole record);
 }

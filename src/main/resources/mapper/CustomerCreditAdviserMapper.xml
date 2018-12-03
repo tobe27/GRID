@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.CustomerCreditAdviserMapper">
+  <resultMap id="BaseResultMap" type="model.CustomerCreditAdviser">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="income" jdbcType="DECIMAL" property="income" />
+    <result column="expenditure" jdbcType="DECIMAL" property="expenditure" />
+    <result column="rental" jdbcType="DECIMAL" property="rental" />
+    <result column="grid_code" jdbcType="VARCHAR" property="gridCode" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="adviser_name" jdbcType="VARCHAR" property="adviserName" />
+    <result column="signing_time" jdbcType="VARCHAR" property="signingTime" />
+    <result column="credted_at" jdbcType="BIGINT" property="credtedAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, customer_name, id_number, phone, address, income, expenditure, rental, grid_code, 
+    comment, adviser_name, signing_time, credted_at, updated_at, status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer_credit_adviser
+    where id = #{id,jdbcType=BIGINT} and status !='1'
+  </select>
+  <select id="getCustomerCreditAdviserList" parameterType="model.CustomerCreditAdviser" resultMap="BaseResultMap">
+  select id, customer_name, id_number, phone, address, income, expenditure, rental, grid_code, 
+    comment, adviser_name, signing_time, credted_at, updated_at from customer_credit_adviser where status !='1'
+    <if test="adviserName != null">
+    and adviser_name like  CONCAT('%',#{adviserName},'%')
+    </if>
+    <if test="gridCode != null">
+    and grid_code like CONCAT('%',#{gridCode},'%')
+    </if>
+     <if test="customerName != null">
+    and customer_name like CONCAT('%',#{customerName},'%')
+    </if>
+     <if test="idNumber != null">
+    and id_number like CONCAT('%',#{idNumber},'%')
+    </if>
+    
+    order by credted_at desc
+    
+    
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from customer_credit_adviser
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="model.CustomerCreditAdviser">
+    insert into customer_credit_adviser (id, customer_name, id_number, 
+      phone, address, income, 
+      expenditure, rental, grid_code, 
+      comment, adviser_name, signing_time, 
+      credted_at, updated_at, status
+      )
+    values (#{id,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, #{idNumber,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{income,jdbcType=DECIMAL}, 
+      #{expenditure,jdbcType=DECIMAL}, #{rental,jdbcType=DECIMAL}, #{gridCode,jdbcType=VARCHAR}, 
+      #{comment,jdbcType=VARCHAR}, #{adviserName,jdbcType=VARCHAR}, #{signingTime,jdbcType=VARCHAR}, 
+      #{credtedAt,jdbcType=BIGINT}, #{updatedAt,jdbcType=BIGINT}, #{status,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="model.CustomerCreditAdviser">
+    insert into customer_credit_adviser
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="customerName != null">
+        customer_name,
+      </if>
+      <if test="idNumber != null">
+        id_number,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="income != null">
+        income,
+      </if>
+      <if test="expenditure != null">
+        expenditure,
+      </if>
+      <if test="rental != null">
+        rental,
+      </if>
+      <if test="gridCode != null">
+        grid_code,
+      </if>
+      <if test="comment != null">
+        comment,
+      </if>
+      <if test="adviserName != null">
+        adviser_name,
+      </if>
+      <if test="signingTime != null">
+        signing_time,
+      </if>
+      <if test="credtedAt != null">
+        credted_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="customerName != null">
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="income != null">
+        #{income,jdbcType=DECIMAL},
+      </if>
+      <if test="expenditure != null">
+        #{expenditure,jdbcType=DECIMAL},
+      </if>
+      <if test="rental != null">
+        #{rental,jdbcType=DECIMAL},
+      </if>
+      <if test="gridCode != null">
+        #{gridCode,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="adviserName != null">
+        #{adviserName,jdbcType=VARCHAR},
+      </if>
+      <if test="signingTime != null">
+        #{signingTime,jdbcType=VARCHAR},
+      </if>
+      <if test="credtedAt != null">
+        #{credtedAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="model.CustomerCreditAdviser">
+    update customer_credit_adviser
+    <set>
+      <if test="customerName != null">
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        id_number = #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="income != null">
+        income = #{income,jdbcType=DECIMAL},
+      </if>
+      <if test="expenditure != null">
+        expenditure = #{expenditure,jdbcType=DECIMAL},
+      </if>
+      <if test="rental != null">
+        rental = #{rental,jdbcType=DECIMAL},
+      </if>
+      <if test="gridCode != null">
+        grid_code = #{gridCode,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="adviserName != null">
+        adviser_name = #{adviserName,jdbcType=VARCHAR},
+      </if>
+      <if test="signingTime != null">
+        signing_time = #{signingTime,jdbcType=VARCHAR},
+      </if>
+      <if test="credtedAt != null">
+        credted_at = #{credtedAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="model.CustomerCreditAdviser">
+    update customer_credit_adviser
+    set customer_name = #{customerName,jdbcType=VARCHAR},
+      id_number = #{idNumber,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      income = #{income,jdbcType=DECIMAL},
+      expenditure = #{expenditure,jdbcType=DECIMAL},
+      rental = #{rental,jdbcType=DECIMAL},
+      grid_code = #{gridCode,jdbcType=VARCHAR},
+      comment = #{comment,jdbcType=VARCHAR},
+      adviser_name = #{adviserName,jdbcType=VARCHAR},
+      signing_time = #{signingTime,jdbcType=VARCHAR},
+      credted_at = #{credtedAt,jdbcType=BIGINT},
+      updated_at = #{updatedAt,jdbcType=BIGINT},
+      status = #{status,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

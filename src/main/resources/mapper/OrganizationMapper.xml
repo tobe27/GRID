@@ -3,10 +3,11 @@
 <mapper namespace="dao.OrganizationMapper">
 
   <resultMap id="BaseResultMap" type="model.Organization">
-    <id column="org_code" jdbcType="BIGINT" property="orgCode" />
+    <id column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="org_code" jdbcType="BIGINT" property="orgCode" />
     <result column="org_name" jdbcType="VARCHAR" property="orgName" />
     <result column="corp_code" jdbcType="VARCHAR" property="corpCode" />
-    <result column="pre_org_code" jdbcType="VARCHAR" property="preOrgCode" />
+    <result column="pre_org_id" jdbcType="BIGINT" property="preOrgId" />
     <result column="relation_type" jdbcType="INTEGER" property="relationType" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="virtual_org_flag" jdbcType="INTEGER" property="virtualOrgFlag" />
@@ -18,30 +19,57 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    org_code, org_name, corp_code, pre_org_code, relation_type, status, virtual_org_flag, 
+    org_id, org_code, org_name, corp_code, pre_org_id, relation_type, status, virtual_org_flag,
     description, type, org_level, created_at, updated_at
   </sql>
 
     <!--查询机构列表-->
-    <select id="getOrganizationsByPreOrgCode" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="getOrganizationsByPreOrgId" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from grid_org
-        where pre_org_code = #{preOrgCode,jdbcType=BIGINT}
+        where pre_org_id = #{preOrgId,jdbcType=BIGINT}
+    </select>
+
+    <!--查询所有机构-->
+    <select id="listOrganization" parameterType="model.Organization" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from grid_org
+        where 1=1
+        <if test="orgCode != null">
+            and org_code = #{orgCode}
+        </if>
+    </select>
+
+    <!--查询单个机构详情By机构码-->
+    <select id="getOrganizationByOrgCode" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from grid_org
+        where org_code = #{orgCode,jdbcType=BIGINT}
+    </select>
+
+    <!--查询单个机构详情By机构名-->
+    <select id="getOrganizationByOrgName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from grid_org
+        where org_name = #{orgName,jdbcType=BIGINT}
     </select>
 
     <!--查询单个机构详情-->
-  <select id="getOrganizationByOrgCode" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="getOrganizationByOrgId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from grid_org
-    where org_code = #{orgCode,jdbcType=BIGINT}
+    where org_id = #{orgId,jdbcType=BIGINT}
   </select>
 
     <!--删除机构-->
-  <delete id="deleteByOrgCode" parameterType="java.lang.Long">
+  <delete id="deleteByOrgId" parameterType="java.lang.Long">
     delete from grid_org
-    where org_code = #{orgCode,jdbcType=BIGINT}
+    where org_id = #{orgId,jdbcType=BIGINT}
   </delete>
 
     <!--新增机构-->
@@ -57,8 +85,8 @@
       <if test="corpCode != null">
         corp_code,
       </if>
-      <if test="preOrgCode != null">
-        pre_org_code,
+      <if test="preOrgId != null">
+        pre_org_id,
       </if>
       <if test="relationType != null">
         relation_type,
@@ -86,6 +114,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+
       <if test="orgCode != null">
         #{orgCode,jdbcType=BIGINT},
       </if>
@@ -95,8 +124,8 @@
       <if test="corpCode != null">
         #{corpCode,jdbcType=VARCHAR},
       </if>
-      <if test="preOrgCode != null">
-        #{preOrgCode,jdbcType=VARCHAR},
+      <if test="preOrgId != null">
+        #{preOrgId,jdbcType=BIGINT},
       </if>
       <if test="relationType != null">
         #{relationType,jdbcType=INTEGER},
@@ -129,14 +158,17 @@
   <update id="updateByOrgCodeSelective" parameterType="model.Organization">
     update grid_org
     <set>
+        <if test="orgCode != null">
+            org_code = #{orgCode,jdbcType=BIGINT},
+        </if>
       <if test="orgName != null">
         org_name = #{orgName,jdbcType=VARCHAR},
       </if>
       <if test="corpCode != null">
         corp_code = #{corpCode,jdbcType=VARCHAR},
       </if>
-      <if test="preOrgCode != null">
-        pre_org_code = #{preOrgCode,jdbcType=VARCHAR},
+      <if test="preOrgId != null">
+        pre_org_id = #{preOrgId,jdbcType=BIGINT},
       </if>
       <if test="relationType != null">
         relation_type = #{relationType,jdbcType=INTEGER},
@@ -163,7 +195,7 @@
         updated_at = #{updatedAt,jdbcType=BIGINT},
       </if>
     </set>
-    where org_code = #{orgCode,jdbcType=BIGINT}
+    where org_id = #{orgId,jdbcType=BIGINT}
   </update>
 
 </mapper>

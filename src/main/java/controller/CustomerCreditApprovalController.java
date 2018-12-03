@@ -1,3 +1,4 @@
+
 package controller;
 
 
@@ -33,16 +34,15 @@ public class CustomerCreditApprovalController {
      * @return
      * @throws Exception
      */
-
     @RequestMapping(value = "/creditapproval",method = RequestMethod.POST)
     public ResponseData addCustomerCreditApproval( @RequestBody Map<String,Object> map) throws Exception {
-        if(!map.containsKey("list") || !map.containsKey("roleIds") || !map.containsKey("customerCreditDetailList")) {
+        if(!map.containsKey("list") || !map.containsKey("roleId") ) {
             throw new MyException("参数缺失");
         }
 
         ArrayList<CustomerCreditApproval>  list=(ArrayList<CustomerCreditApproval>) map.get("list");
-        List<Integer> roleIds=(List<Integer>) map.get("roleIds");
-        ArrayList<CustomerCreditDetail> customerCreditDetailList=(ArrayList<CustomerCreditDetail>) map.get("customerCreditDetailList");
+       String roleId= map.get("roleId").toString();
+       
         //将接收的数据转换成model
         ObjectMapper mapper = new ObjectMapper();
 
@@ -54,41 +54,42 @@ public class CustomerCreditApprovalController {
             customerCreditApprovalList.add(customerCreditApproval);
         }
         ArrayList<CustomerCreditDetail>  creditDetailList=new ArrayList<>();
-        for(int i=0;i<customerCreditDetailList.size();i++) {
-            String json=mapper.writeValueAsString(customerCreditDetailList.get(i));
-            CustomerCreditDetail customerCreditDetail=new CustomerCreditDetail();
-            customerCreditDetail=mapper.readValue(json,CustomerCreditDetail.class);
-            creditDetailList.add(customerCreditDetail);
-        }
+        
 
-        if(roleIds.isEmpty()) {
+        if("".equals(roleId)) {
             throw new MyException("参数缺失");
         }
-        return new ResponseData().success().data(customerCreditApprovalService.batchSave(customerCreditApprovalList,roleIds,creditDetailList));
+        return new ResponseData().success().data(customerCreditApprovalService.batchSave(customerCreditApprovalList,roleId));
 
     }
 
 
     /**
-     * 调用此接口获取某个客户的审批记录
-     * @param  idNumber
+     * 调用此接口获取某条面谈面签的审批记录
+     * @param  creditDetailId
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/creditapproval/{idNumber}",method = RequestMethod.GET)
-    public ResponseData getListByIdNumber(@PathVariable String idNumber) throws Exception {
+    @RequestMapping(value = "/creditapproval/{creditDetailId}",method = RequestMethod.GET)
+    public ResponseData getListByIdNumber(@PathVariable long creditDetailId) throws Exception {
         CustomerCreditApproval customerCreditApproval=new CustomerCreditApproval();
-        customerCreditApproval.setIdNumber(idNumber);
-        return new ResponseData().success().data(customerCreditApprovalService.getListByIdNumber(customerCreditApproval));
+        customerCreditApproval.setCreditDetailId(creditDetailId);
+        return new ResponseData().success().data(customerCreditApprovalService.getListcreditDetailId(customerCreditApproval));
 
     }
 
+    /**
+     * 信贷系统信息
+     * @param idNumber
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/creditapproval/report/{idNumber}", method = RequestMethod.GET)
     public ResponseData getApprovalReport(@PathVariable String idNumber) throws Exception {
         CustomerInfo customerInfo = customerInfoService.getCustomerByIdNumber(idNumber);
         FinanceInfo financeInfo = financeInfoService.getFinanceInfoByIdNumber(idNumber);
         if (customerInfo == null) {
-            return new ResponseData().blank("客户信息为空");
+            return new ResponseData().blank("客户信息为空!");
         }
         FamilyInfo familyInfo = familyInfoService.getByHouseholdId(customerInfo.getHouseholdId());
 
@@ -100,3 +101,4 @@ public class CustomerCreditApprovalController {
 
 
 }
+

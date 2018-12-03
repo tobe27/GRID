@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.CreditReportAccountMapper">
+  <resultMap id="BaseResultMap" type="model.CreditReportAccount">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="org_name" jdbcType="VARCHAR" property="orgName" />
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="remind" jdbcType="VARCHAR" property="remind" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+     <result column="type" jdbcType="VARCHAR" property="type" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, user_name, password, org_name, org_code, status, comment, remind, created_at, 
+    updated_at,type
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from credit_report_account
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="getList" parameterType="model.CreditReportAccount" resultMap="BaseResultMap">
+    select * from credit_report_account where status !=2
+    <if test="userName != null">
+    and user_name = #{userName}
+    </if>
+    order by updated_at desc
+  </select>
+
+  <select id="getListByUserNameOrId" parameterType="model.CreditReportAccount" resultMap="BaseResultMap">
+      select *
+      from credit_report_account
+      where status !=2
+      <if test="userName != null">
+      and user_name =#{userName}
+      </if>
+      <if test="id != null">
+        and id != #{id} 
+      </if>
+       order by updated_at desc
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from credit_report_account
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="model.CreditReportAccount">
+    insert into credit_report_account (id, user_name, password, 
+      org_name, org_code, status, 
+      comment, remind, created_at, 
+      updated_at)
+    values (#{id,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{orgName,jdbcType=VARCHAR}, #{orgCode,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{comment,jdbcType=VARCHAR}, #{remind,jdbcType=VARCHAR}, #{createdAt,jdbcType=BIGINT}, 
+      #{updatedAt,jdbcType=BIGINT})
+  </insert>
+
+
+  <insert id="insertSelective" parameterType="model.CreditReportAccount">
+    insert into credit_report_account
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="orgName != null">
+        org_name,
+      </if>
+      <if test="orgCode != null">
+        org_code,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="comment != null">
+        comment,
+      </if>
+      <if test="remind != null">
+        remind,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null">
+        #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null">
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="remind != null">
+        #{remind,jdbcType=VARCHAR},
+      </if>
+     
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+       <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="model.CreditReportAccount">
+    update credit_report_account
+    <set>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null">
+        org_name = #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null">
+        org_code = #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="remind != null">
+        remind = #{remind,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="model.CreditReportAccount">
+    update credit_report_account
+    set user_name = #{userName,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      org_name = #{orgName,jdbcType=VARCHAR},
+      org_code = #{orgCode,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      comment = #{comment,jdbcType=VARCHAR},
+      remind = #{remind,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=BIGINT},
+      updated_at = #{updatedAt,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

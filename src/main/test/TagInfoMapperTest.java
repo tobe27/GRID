@@ -49,6 +49,6 @@ public class TagInfoMapperTest {
         tagCustomer.setIdNumber("342224199910120673");
         tagCustomer.setTagId(6L);
         tagCustomer.setTagName("六星级");
-        System.out.println(tagCustomerService.insertSelective(tagCustomer));
+        //System.out.println(tagCustomerService.insertSelective(tagCustomer));
     }
 }

@@ -7,6 +7,8 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="code" jdbcType="BIGINT" property="code" />
     <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="rate" jdbcType="DECIMAL" property="rate" />
+    <result column="explain" jdbcType="VARCHAR" property="explain" />
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
   </resultMap>
@@ -26,6 +28,12 @@
       </if>
       <if test="state != null">
         state,
+      </if>
+      <if test="rate != null">
+        rate,
+      </if>
+      <if test="explain != null">
+        `explain`,
       </if>
       <if test="createdAt != null">
         created_at,
@@ -47,6 +55,12 @@
       <if test="state != null">
         #{state,jdbcType=INTEGER},
       </if>
+      <if test="rate != null">
+        #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="explain != null">
+        #{explain,jdbcType=VARCHAR},
+      </if>
   	  <if test="createdAt != null">
         #{createdAt,jdbcType=BIGINT},
       </if>
@@ -55,6 +69,14 @@
       </if>
   	</trim>
   </insert>
+  
+  <select id="selectCountByName" resultType="java.lang.Integer" parameterType="java.lang.String">
+  	select count(1) from product_dict
+  	where name = #{name,jdbcType=VARCHAR}
+  	<if test="id != null">
+  		and id != #{id}
+  	</if>
+  </select>
   
   <!-- 查询银行产品最大编码 -->
   <select id="getMaxCode" resultType="java.lang.String">
@@ -74,6 +96,12 @@
       <if test="state != null">
         state = #{state,jdbcType=INTEGER},
       </if>
+      <if test="rate != null">
+        rate = #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="explain != null">
+        `explain` = #{explain,jdbcType=VARCHAR},
+      </if>
       <if test="updatedAt != null">
         updated_at = #{updatedAt,jdbcType=BIGINT},
       </if>
@@ -83,7 +111,7 @@
   
   <!-- 银行产品列表查询 -->
   <select id="listProducts" resultMap="BaseResultMap">
-  	select id,name,code,state,created_at,updated_at
+  	select id,name,code,state,rate,`explain`,created_at,updated_at
   	from product_dict
   	where 1=1
   	<if test="state!=null">

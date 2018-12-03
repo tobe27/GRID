@@ -10,11 +10,11 @@ import java.util.List;
 public interface OrganizationService {
     /**
      * 删除机构
-     * @param orgCode
+     * @param orgId
      * @return
      * @throws Exception
      */
-    boolean deleteByOrgCode(Long orgCode) throws Exception;
+    boolean deleteByOrgId(Long orgId) throws Exception;
 
     /**
      * 新增机构
@@ -26,19 +26,41 @@ public interface OrganizationService {
 
     /**
      * 获取机构详情
-     * @param orgCode
+     * @param orgId
      * @return
      * @throws Exception
+     */
+    Organization getOrganizationByOrgId(Long orgId) throws Exception;
+
+    /**
+     * 通过机构码获取详情
+     * @param orgCode
+     * @return
      */
     Organization getOrganizationByOrgCode(Long orgCode) throws Exception;
 
     /**
+     * 通过机构名获取详情
+     * @param orgName
+     * @return
+     */
+    Organization getOrganizationByOrgName(String orgName) throws Exception;
+
+    /**
      * 获取机构列表
-     * @param preOrgCode 上一级机构代码
+     * @param preOrgId 上一级机构代码
      * @return
      * @throws Exception
      */
-    List<Organization> getOrganizationsByPreOrgCode(Long preOrgCode) throws Exception;
+    List<Organization> getOrganizationsByPreOrgId(Long preOrgId) throws Exception;
+
+    /**
+     * 获取所有机构列表
+     * @param record
+     * @return
+     * @throws Exception
+     */
+    List<Organization> listOrganization(Organization record) throws Exception;
 
     /**
      * 编辑机构

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.CustomerCreditInfoMapper">
+  <resultMap id="BaseResultMap" type="model.CustomerCreditInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="incidence_of_letter" jdbcType="DECIMAL" property="incidenceOfLetter" />
+    <result column="housing_mortgage_debt" jdbcType="DECIMAL" property="housingMortgageDebt" />
+    <result column="business_loan_debt" jdbcType="DECIMAL" property="businessLoanDebt" />
+    <result column="consumer_loan_debt" jdbcType="DECIMAL" property="consumerLoanDebt" />
+    <result column="housing_mortgage_remainder" jdbcType="DECIMAL" property="housingMortgageRemainder" />
+    <result column="business_loan_remainder" jdbcType="DECIMAL" property="businessLoanRemainder" />
+    <result column="consumer_loan_remainder" jdbcType="DECIMAL" property="consumerLoanRemainder" />
+    <result column="overdue_record" jdbcType="INTEGER" property="overdueRecord"/>
+    <result column="past_due" jdbcType="DECIMAL" property="pastDue" />
+    <result column="basic_identity" jdbcType="VARCHAR" property="basicIdentity" />
+    <result column="address1" jdbcType="VARCHAR" property="address1" />
+    <result column="address2" jdbcType="VARCHAR" property="address2" />
+    <result column="address3" jdbcType="VARCHAR" property="address3" />
+    <result column="mate" jdbcType="VARCHAR" property="mate" />
+    <result column="neighborhood_relation" jdbcType="VARCHAR" property="neighborhoodRelation" />
+    <result column="have_bad_habits" jdbcType="INTEGER" property="haveBadHabits"/>
+    <result column="have_bad_credit" jdbcType="INTEGER" property="haveBadCredit"/>
+    <result column="is_dishonest" jdbcType="INTEGER" property="isDishonest"/>
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+  </resultMap>
+  
+  <select id="selectByIdNUmber" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select *
+    from customer_credit_info
+    where id_number = #{idNumber,jdbcType=VARCHAR}
+  </select>
+  
+  <insert id="insertSelective" parameterType="model.CustomerCredit">
+    insert into customer_credit_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="idNumber != null">
+        id_number,
+      </if>
+      <if test="incidenceOfLetter != null">
+        incidence_of_letter,
+      </if>
+      <if test="housingMortgageDebt != null">
+        housing_mortgage_debt,
+      </if>
+      <if test="businessLoanDebt != null">
+        business_loan_debt,
+      </if>
+      <if test="consumerLoanDebt != null">
+        consumer_loan_debt,
+      </if>
+      <if test="housingMortgageRemainder != null">
+        housing_mortgage_remainder,
+      </if>
+      <if test="businessLoanRemainder != null">
+        business_loan_remainder,
+      </if>
+      <if test="consumerLoanRemainder != null">
+        consumer_loan_remainder,
+      </if>
+      <if test="overdueRecord != null">
+      	overdue_record,
+      </if>
+      <if test="pastDue != null">
+      	past_due,
+      </if>
+      <if test="basicIdentity != null">
+      	basic_identity,
+      </if>
+      <if test="address1 != null">
+      	address1,
+      </if>
+      <if test="address2 != null">
+      	address2,
+      </if>
+      <if test="address3 != null">
+      	address3,
+      </if>
+      <if test="mate != null">
+      	mate,
+      </if>
+      <if test="neighborhoodRelation != null">
+      	neighborhood_relation,
+      </if>
+      <if test="haveBadHabits != null">
+      	have_bad_habits,
+      </if>
+      <if test="haveBadCredit != null">
+      	have_bad_credit,
+      </if>
+      <if test="isDishonest != null">
+      	is_dishonest,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="incidenceOfLetter != null">
+        #{incidenceOfLetter,jdbcType=DECIMAL},
+      </if>
+      <if test="housingMortgageDebt != null">
+        #{housingMortgageDebt,jdbcType=DECIMAL},
+      </if>
+      <if test="businessLoanDebt != null">
+        #{businessLoanDebt,jdbcType=DECIMAL},
+      </if>
+      <if test="consumerLoanDebt != null">
+        #{consumerLoanDebt,jdbcType=DECIMAL},
+      </if>
+      <if test="housingMortgageRemainder != null">
+        #{housingMortgageRemainder,jdbcType=DECIMAL},
+      </if>
+      <if test="businessLoanRemainder != null">
+        #{businessLoanRemainder,jdbcType=DECIMAL},
+      </if>
+      <if test="consumerLoanRemainder != null">
+        #{consumerLoanRemainder,jdbcType=DECIMAL},
+      </if>
+      <if test="overdueRecord != null">
+      	#{overdueRecord,jdbcType=INTEGER},
+      </if>
+      <if test="pastDue != null">
+      	#{pastDue,jdbcType=DECIMAL},
+      </if>
+      <if test="basicIdentity != null">
+      	#{basicIdentity,jdbcType=VARCHAR},
+      </if>
+      <if test="address1 != null">
+      	#{address1,jdbcType=VARCHAR},
+      </if>
+      <if test="address2 != null">
+      	#{address2,jdbcType=VARCHAR},
+      </if>
+      <if test="address3 != null">
+      	#{address3,jdbcType=VARCHAR},
+      </if>
+      <if test="mate != null">
+      	#{mate,jdbcType=VARCHAR},
+      </if>
+      <if test="neighborhoodRelation != null">
+      	#{neighborhoodRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="haveBadHabits != null">
+      	#{haveBadHabits,jdbcType=INTEGER},
+      </if>
+      <if test="haveBadCredit != null">
+      	#{haveBadCredit,jdbcType=INTEGER},
+      </if>
+      <if test="isDishonest != null">
+      	#{isDishonest,jdbcType=INTEGER},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateSelective" parameterType="model.CustomerCredit">
+    update customer_credit_info
+    <set>
+      <if test="incidenceOfLetter != null">
+        incidence_of_letter = #{incidenceOfLetter,jdbcType=DECIMAL},
+      </if>
+      <if test="housingMortgageDebt != null">
+        housing_mortgage_debt= #{housingMortgageDebt,jdbcType=DECIMAL},
+      </if>
+      <if test="businessLoanDebt != null">
+        business_loan_debt = #{businessLoanDebt,jdbcType=DECIMAL},
+      </if>
+      <if test="consumerLoanDebt != null">
+        consumer_loan_debt = #{consumerLoanDebt,jdbcType=DECIMAL},
+      </if>
+      <if test="housingMortgageRemainder != null">
+        housing_mortgage_remainder = #{housingMortgageRemainder,jdbcType=DECIMAL},
+      </if>
+      <if test="businessLoanRemainder != null">
+        business_loan_remainder = #{businessLoanRemainder,jdbcType=DECIMAL},
+      </if>
+      <if test="consumerLoanRemainder != null">
+        consumer_loan_remainder = #{consumerLoanRemainder,jdbcType=DECIMAL},
+      </if>
+      <if test="overdueRecord != null">
+      	overdue_record = #{overdueRecord,jdbcType=INTEGER},
+      </if>
+      <if test="pastDue != null">
+      	past_due = #{pastDue,jdbcType=DECIMAL},
+      </if>
+      <if test="basicIdentity != null">
+      	basic_identity = #{basicIdentity,jdbcType=VARCHAR},
+      </if>
+      <if test="address1 != null">
+      	address1 = #{address1,jdbcType=VARCHAR},
+      </if>
+      <if test="address2 != null">
+      	address2 = #{address2,jdbcType=VARCHAR},
+      </if>
+      <if test="address3 != null">
+      	address3 = #{address3,jdbcType=VARCHAR},
+      </if>
+      <if test="mate != null">
+      	mate = #{mate,jdbcType=VARCHAR},
+      </if>
+      <if test="neighborhoodRelation != null">
+      	neighborhood_relation = #{neighborhoodRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="haveBadHabits != null">
+      	have_bad_habits = #{haveBadHabits,jdbcType=INTEGER},
+      </if>
+      <if test="haveBadCredit != null">
+      	have_bad_credit = #{haveBadCredit,jdbcType=INTEGER},
+      </if>
+      <if test="isDishonest != null">
+      	is_dishonest = #{isDishonest,jdbcType=INTEGER},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id_number = #{idNumber,jdbcType=VARCHAR}
+  </update>
+</mapper>

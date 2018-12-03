@@ -19,5 +19,7 @@ public interface CustomerGreylistMapper {
     int updateByPrimaryKey(CustomerGreylist record);
 List<CustomerGreylist> getByIdOrIdnumber(CustomerGreylist record);
     
-    List<CustomerGreylist> getGreyLists(Map<String,Object> map);
+    List<Map<String, Object>> getGreyLists(Map<String,Object> map);
+    int deleteByIdNumber(CustomerGreylist record);
+    
 }

@@ -14,6 +14,6 @@ public interface CustomerBlackListService {
 
 	    boolean updateByPrimaryKeySelective(CustomerBlackList record)throws Exception;
 	    
-	    List<CustomerBlackList> getCustomerBlackListByPage(Map<String,Object> map)throws Exception;
-	    int insertByExcel(List<Map<String,Object>> list,String gridCode)throws Exception;
+	    List<Map<String,Object>> getCustomerBlackListByPage(Map<String,Object> map)throws Exception;
+	    Map<String,Object>  insertByExcel(List<Map<String,Object>> list,String gridCode)throws Exception;
 }

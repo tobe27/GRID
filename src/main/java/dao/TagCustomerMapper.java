@@ -19,7 +19,7 @@ public interface TagCustomerMapper {
 
     int insertSelective(TagCustomer record);
 
-    Set<TagCustomer> listTagsByIdNumber(String idNumber);
+    List<TagCustomer> listTagsByIdNumber(String idNumber);
 
     int countCustomersByTagId(Long tagId);
 

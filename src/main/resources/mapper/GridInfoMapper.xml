@@ -6,6 +6,7 @@
     <result column="grid_code" jdbcType="VARCHAR" property="gridCode" />
     <result column="grid_name" jdbcType="VARCHAR" property="gridName" />
     <result column="org_code" jdbcType="BIGINT" property="orgCode" />
+      <result column="org_name" jdbcType="VARCHAR" property="orgName" />
     <result column="grid_type" jdbcType="INTEGER" property="gridType" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="account_id" jdbcType="BIGINT" property="accountId" />
@@ -29,80 +30,125 @@
     <result column="duties" jdbcType="VARCHAR" property="duties" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="address" jdbcType="VARCHAR" property="address" />
+    
+     <result column="type" jdbcType="VARCHAR" property="type" />
+      <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
   </resultMap>
   
   
-  <select id="getGridReviews" parameterType="java.lang.String" resultMap="GridReviewResultMap">
-  
-  
-  select * from grid_review gr where gr.grid_code = #{grid_code}
-  
-  
+  <select id="getGridCodesByAccountIdOrOrgCode" parameterType="java.util.Map" resultType="java.lang.String">
+    select grid_code
+    from grid_info
+    where delete_flag !=1
+    <if test="accountId != null">
+    and account_id = #{accountId}
+    </if>
+    <if test="orgCode != null">
+    and org_Code   = #{orgCode}
+    </if>
+  </select>
+
+
+  <select id="getGridinfosByAccountIdOrOrgCode" parameterType="model.GridInfo" resultMap="GridReviewResultMap">
+    select grid_code,grid_name
+    from grid_info
+    where delete_flag !=1
+    <if test="accountId != null">
+     and account_id = #{accountId}
+    </if>
+    <if test="orgCode != null">
+     and org_Code = #{orgCode}
+    </if>
   </select>
   
+
+  <select id="getGridReviews" parameterType="java.lang.String" resultMap="GridReviewResultMap">
+    select *
+    from grid_review gr
+    where status !=1
+    and gr.grid_code = #{grid_code}
+  </select>
+
+    <!--查询列表with机构名称-->
   <select id="getGridInfoList" parameterType="java.util.Map" resultType="java.util.Map">
-  select gi.id as id,gu.real_name as realName , gi.grid_code as gridCode, gi.grid_name as gridName, gi.org_code as orgCode, gi.grid_type as gridType , gi.description as description, gi.account_id as accountId,gi.assist_manager as assistManager, 
-    gi.supervise_manager as superviseManager, gi.qr_code as qrCode, gi.grid_map as gridMap, gi.created_at as createdAt, gi.updated_at as updatedAt 
-  
-    from grid_info gi left join grid_user gu  on gi.account_id=gu.account_id  where 1=1 and delete_flag !='1'
+    select gi.id as id,gu.real_name as realName , gi.grid_code as gridCode, gi.grid_name as gridName,
+    gi.org_code as orgCode, gi.grid_type as gridType , gi.description as description, gi.account_id as accountId,
+    gi.assist_manager as assistManager,gi.supervise_manager as superviseManager, gi.qr_code as qrCode,
+    gi.grid_map as gridMap, gi.created_at as createdAt, gi.updated_at as updatedAt, org.org_name as orgName
+
+    from grid_info gi
+    left join grid_user gu  on gi.account_id=gu.account_id
+    left join grid_org org on gi.org_code = org.org_code
+    where 1=1
+    and delete_flag !='1'
     <if test="gridCode != null">
     and gi.grid_code   like CONCAT('%',#{gridCode},'%')
     </if >
-     
     <if test="gridName != null">
-     and gi.grid_name  like CONCAT('%',#{gridName},'%')
+    and gi.grid_name  like CONCAT('%',#{gridName},'%')
     </if>
-     <if test="orgCode != null">
+    <if test="orgCode != null">
     and gi.org_code  like CONCAT('%',#{orgCode},'%')
     </if>
-     <if test="realName != null">
-     and gu.real_name   like CONCAT('%',#{realName},'%')
+    <if test="realName != null">
+    and gu.real_name   like CONCAT('%',#{realName},'%')
     </if>
-     <if test="gridType != null">
-      and  gi.grid_type = #{gridType}
+    <if test="accountId != null">
+    and gi.account_id   = #{accountId}
     </if>
-     order by gi.created_at DESC
+    <if test="gridType != null">
+    and  gi.grid_type = #{gridType}
+    </if>
+    order by gi.created_at DESC
   </select>
+
+
   <sql id="Base_Column_List">
     id, grid_code, grid_name, org_code, grid_type, description, account_id, assist_manager, 
     supervise_manager, qr_code, grid_map, created_at, updated_at
   </sql>
+
+    <!--查询with机构名称-->
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from grid_info
-    where id = #{id,jdbcType=BIGINT}
+    select gi.*, org.org_name
+    from grid_info gi
+    left join grid_org org on gi.org_code = org.org_code
+    where gi.id = #{id,jdbcType=BIGINT}
   </select>
+
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from grid_info
     where id = #{id,jdbcType=BIGINT}
   </delete>
+
+
   <insert id="insert" parameterType="model.GridInfo">
-    insert into grid_info (id, grid_code, grid_name, 
-      org_code, grid_type, description, 
-      account_id, assist_manager, supervise_manager, 
-      qr_code, grid_map, created_at, 
-      updated_at)
-    values (#{id,jdbcType=BIGINT}, #{gridCode,jdbcType=VARCHAR}, #{gridName,jdbcType=VARCHAR}, 
-      #{orgCode,jdbcType=BIGINT}, #{gridType,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
-      #{accountId,jdbcType=BIGINT}, #{assistManager,jdbcType=VARCHAR}, #{superviseManager,jdbcType=VARCHAR}, 
-      #{qrCode,jdbcType=VARCHAR}, #{gridMap,jdbcType=VARCHAR}, #{createdAt,jdbcType=BIGINT}, 
-      #{updatedAt,jdbcType=BIGINT})
+    insert into grid_info (id, grid_code, grid_name,
+        org_code, grid_type, description,
+        account_id, assist_manager, supervise_manager,
+        qr_code, grid_map, created_at,
+        updated_at)
+    values (#{id,jdbcType=BIGINT}, #{gridCode,jdbcType=VARCHAR}, #{gridName,jdbcType=VARCHAR},
+        #{orgCode,jdbcType=BIGINT}, #{gridType,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR},
+        #{accountId,jdbcType=BIGINT}, #{assistManager,jdbcType=VARCHAR}, #{superviseManager,jdbcType=VARCHAR},
+        #{qrCode,jdbcType=VARCHAR}, #{gridMap,jdbcType=VARCHAR}, #{createdAt,jdbcType=BIGINT},
+        #{updatedAt,jdbcType=BIGINT})
   </insert>
+
+
   <select id="checkSameGridCode" parameterType="java.util.Map"  resultMap="BaseResultMap">
-    select * from grid_info where grid_code = #{gridCode}
-    
-    <if test="id !=null">
-    
-       and id !=#{id}
-    </if>
-  
+        select *
+        from grid_info
+        where grid_code = #{gridCode}
+        <if test="id !=null">
+        and id !=#{id}
+        </if>
   </select>
   
- 
-  
+
   <insert id="insertSelective" parameterType="model.GridInfo">
     insert into grid_info
     <trim prefix="(" suffix=")" suffixOverrides=",">

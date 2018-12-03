@@ -13,5 +13,6 @@ public interface GridMapService {
 	 boolean  batchSave(List<GridMap> list) throws Exception;
      List<GridMap> getGridMapList(Map<String,Object> map) throws Exception;
      boolean insertSelective(GridMap record) throws Exception;
+     List<GridMap> getGridMapByOrgCode(String roleId,String orgCode) throws Exception;
 
 }

@@ -33,6 +33,14 @@ public interface RegionService {
     Region getRegionByPrimaryKey(Long regionCode) throws Exception;
 
     /**
+     * 根据名称获取详情
+     * @param regionName
+     * @return
+     * @throws Exception
+     */
+    Region getRegionByRegionName(String regionName) throws Exception;
+
+    /**
      * 获取区域列表
      * @param preRegionCode
      * @return

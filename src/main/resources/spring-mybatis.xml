@@ -15,16 +15,16 @@
     <context:annotation-config/>
     <!--自动扫描注解注入类### dao层@Repository ### service层@Service ###不知道类型@Compnent-->
     <context:component-scan base-package="dao,model,service,service.impl,util"/>
-
+  <context:property-placeholder ignore-unresolvable="true" location="classpath:config.properties"/>
     <!--1.配置资源-->
 
     <bean id="dataSource"
           class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close" >
-        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://192.168.1.137:3306/db?characterEncoding=utf-8&amp;allowMultiQueries=true&amp;serverTimezone=GMT%2B8&amp;useSSL=false"/>
+        <property name="driverClassName" value="${dataSource.driverClassName}"/>
+        <property name="url" value="${dataSource.url}characterEncoding=utf-8&amp;allowMultiQueries=true&amp;serverTimezone=GMT%2B8&amp;useSSL=false"/>
         <!--<property name="url" value="jdbc:mysql://101.132.152.195:3306/grid?characterEncoding=utf-8&amp;serverTimezone=GMT%2B8&amp;useSSL=false"/>-->
-        <property name ="username" value="root"/>
-        <property name="password" value="123456"/>
+        <property name ="username" value="${dataSource.username}"/>
+        <property name="password" value="${dataSource.password}"/>
         <!--<property name="password" value="Yzs@123456"/>-->
         <!--连接池一些属性设置-->
         <property name="initialSize" value="1"/>
@@ -72,6 +72,41 @@
     <!-- 注解方式配置事务 -->
     <tx:annotation-driven/>
 
+    <!--Quartz配置-->
+    <bean id="myJobTask" class="quartz.MyJobTask"/>
+    <!-- 定时任务 -->
+    <!-- 定义调用对象和调用对象的方法，这个配置和普通的一样的,id是JobDetail的名字  -->  
+    <bean id="jobtask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <!-- 调用的类  -->  
+        <property name="targetObject" ref="myJobTask" />  
+        <!-- 调用类中的方法  -->  
+        <property name="targetMethod" value="doSomething" />  
+        <!-- 是否并发  -->  
+        <property name ="concurrent" value ="false"  />          
+    </bean> 
+    
+    <!-- 定义触发时间 ，这边就不同了，这里必须将时间设置成无限长，因为我们要去读取数据库的时间来做为定时器的触发时间-->  
+    <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">  
+        <property name="jobDetail" ref="jobtask" />  
+        <!-- cron表达式  -->  
+        <property name="cronExpression" value="0/1 * * * * ?" />  
+    </bean>  
+
+<!-- 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序  -->  
+    <bean id="startQuertz" lazy-init="true" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+        <property name="triggers">  
+            <list>  
+                <ref bean="cronTrigger" />  
+            </list>  
+        </property>  
+    </bean> 
+
+  <!--这个类是用来设置触发时间的， startJobs方法启动调度容器，然后按照上面触发器每隔1s执行所配置的myJob2.doSomething()方法 -->     
+    <bean id="quartzManager" class="quartz.QuartzManager" lazy-init="false" init-method="startJobs" >  
+        <!--这个对象一定要注入，这样类才能进行管理，还有在类型要用get set方法，不然会报错。-->  
+        <property name="scheduler" ref="startQuertz" />  
+    </bean>   
+
 
     <!--Shiro-->
     <!-- Realm实现 -->
@@ -108,13 +143,17 @@
         <property name="proxyTargetClass" value="true"/>
     </bean>
 
+    <!--无状态Filter-->
     <bean id="myStatelessFilter" class="shiro.MyStatelessShiroFilter"/>
+    <!--OR角色Filter-->
+    <bean id="rolesOrFilter" class="shiro.Roles2OrLogicFilter"/>
     <!-- Shiro的Web过滤器 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
         <property name="filters">
             <map>
                 <entry key="statelessAuth" value-ref="myStatelessFilter"/>
+                <entry key="roles" value-ref="rolesOrFilter"/>
             </map>
         </property>
         <property name="loginUrl" value="/login"/>
@@ -124,9 +163,9 @@
                 /=anon
                 /login=anon
                 /unauthorized=anon
-                /user/**=anon
-                /admin/**=anon
-                /**=anon
+                /template/**=anon
+                /file/**=anon
+                /**=statelessAuth
             </value>
         </property>
     </bean>

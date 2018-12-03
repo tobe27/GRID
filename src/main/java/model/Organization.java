@@ -10,13 +10,16 @@ import java.io.Serializable;
 @Data
 public class Organization implements Serializable {
     private static final long serialVersionUID = 6760125305786077678L;
+
+    private Long orgId;
+
     private Long orgCode;
 
     private String orgName;
 
     private String corpCode;
 
-    private String preOrgCode;
+    private Long preOrgId;
 
     private Integer relationType;
 

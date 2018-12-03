@@ -16,7 +16,7 @@
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="corp_code" jdbcType="VARCHAR" property="corpCode" />
     <result column="corp_name" jdbcType="VARCHAR" property="corpName" />
-    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="org_code" jdbcType="BIGINT" property="orgCode" />
     <result column="org_name" jdbcType="VARCHAR" property="orgName" />
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
@@ -42,17 +42,17 @@
     avatar,qr_code, status, corp_code, corp_name, org_code, org_name, created_at, updated_at
   </sql>
 
-    <!--通过主键获取roles-->
+    <!--通过主键获取roles_SCOPE,作为固定的角色英文名-->
     <select id="getStringRolesByUserPrimaryKey" resultType="String">
-        select gr.role_name
+        select gr.role_scope
         from grid_role gr
         join grid_user_role gur on gur.role_id=gr.role_id
         WHERE gur.account_id=#{accountId}
     </select>
 
-    <!--通过主键获取perms-->
+    <!--通过主键获取perms_URL-->
     <select id="getStringPermissionsByUserPrimaryKey"  resultType="String">
-        select  gp.permission_name FROM grid_permission  gp
+        select  gp.permission_url FROM grid_permission  gp
         join grid_role_permission  grp on grp.permission_id=gp.permission_id
         join grid_user_role gur on gur.role_id=grp.role_id
         where gur.account_id=#{accountId}
@@ -60,21 +60,25 @@
 
     <!--查看用户详情-->
   <select id="getUserByPrimaryKey" parameterType="java.lang.Long" resultMap="userRoleResultMap">
-    select user.*
+    select user.*, org.org_name org_name
         from grid_user user
+        join grid_org org on user.org_code = org.org_code
         WHERE user.account_id=#{accountId}
   </select>
 
-    <select id="getUserByUniqueIndex" parameterType="model.GridUser"  resultMap="BaseResultMap">
-        select * from grid_user
-        where account_name = #{accountName} or phone_number = #{phoneNumber} or id_number = #{idNumber}
-        order by created_at DESC
+    <select id="getUserByUniqueIndex" parameterType="model.GridUser"  resultMap="userRoleResultMap">
+        select user.*, org.org_name org_name
+        from grid_user user
+        join grid_org org on user.org_code = org.org_code
+        where user.account_name = #{accountName}
+        order by user.created_at DESC
     </select>
 
     <!--按条件查询用户列表 with role-->
     <select id="getUsersByAccountNameOrRealNameOrOrgName" parameterType="model.GridUser"  resultMap="userRoleResultMap">
-        select user.*
+        select user.*, org.org_name org_name
         from grid_user user
+        join grid_org org on user.org_code = org.org_code
         where 1=1
             <if test="accountName != null">
                 and user.account_name like CONCAT('%',#{accountName},'%')
@@ -82,8 +86,8 @@
             <if test="realName != null">
                 and user.real_name like CONCAT('%',#{realName},'%')
             </if>
-            <if test="orgName != null">
-                and user.org_name like CONCAT('%',#{orgName},'%')
+            <if test="orgCode != null">
+                and user.org_code = #{orgCode}
             </if>
         order by user.created_at DESC
     </select>
@@ -97,16 +101,20 @@
 
     <!--byRole查询用户列表 with role-->
     <select id="getUsersByRole" parameterType="model.GridRole" resultMap="userRoleResultMap">
-        select user.*,role.*
+        select user.*, role.*, org.org_name org_name
         from grid_user user
         LEFT join grid_user_role ur on user.account_id = ur.account_id
         LEFT join grid_role role on role.role_id = ur.role_id
+        LEFT join grid_org org on org.org_code = user.org_code
         where 1=1
         <if test="roleName != null">
             and role.role_name like CONCAT('%',#{roleName},'%')
         </if>
         <if test="roleId != null">
             and role.role_id = #{roleId}
+        </if>
+        <if test="orgCode != null">
+            and user.org_code = #{orgCode}
         </if>
         order by user.created_at DESC
     </select>
@@ -116,6 +124,13 @@
     delete from grid_user
     where account_id = #{accountId,jdbcType=BIGINT}
   </delete>
+
+    <!--冻结和解冻用户-->
+    <update id="updateStatusByPrimaryKey" parameterType="model.GridUser">
+        update grid_user
+        set status = #{status}
+        where account_id = #{accountId}
+    </update>
 
 
     <!--新增用户-->
@@ -163,9 +178,6 @@
       </if>
       <if test="orgCode != null">
         org_code,
-      </if>
-      <if test="orgName != null">
-        org_name,
       </if>
       <if test="createdAt != null">
         created_at,
@@ -215,10 +227,7 @@
         #{corpName,jdbcType=VARCHAR},
       </if>
       <if test="orgCode != null">
-        #{orgCode,jdbcType=VARCHAR},
-      </if>
-      <if test="orgName != null">
-        #{orgName,jdbcType=VARCHAR},
+        #{orgCode,jdbcType=BIGINT},
       </if>
       <if test="createdAt != null">
         #{createdAt,jdbcType=BIGINT},
@@ -270,10 +279,7 @@
         corp_name = #{corpName,jdbcType=VARCHAR},
       </if>
       <if test="orgCode != null">
-        org_code = #{orgCode,jdbcType=VARCHAR},
-      </if>
-      <if test="orgName != null">
-        org_name = #{orgName,jdbcType=VARCHAR},
+        org_code = #{orgCode,jdbcType=BIGINT},
       </if>
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=BIGINT},

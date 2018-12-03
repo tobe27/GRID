@@ -82,5 +82,29 @@ public interface GridUserService {
      */
     boolean updateByPrimaryKeySelective(GridUser record, String roleIds) throws Exception;
 
+    /**
+     * 用户修改密码
+     * @param record
+     * @param oldPassword
+     * @param newPassword
+     * @return
+     * @throws Exception
+     */
     boolean updatePasswordByOldPassword(GridUser record, String oldPassword, String newPassword) throws Exception;
+
+    /**
+     * 直接修改密码
+     * @param record
+     * @return
+     * @throws Exception
+     */
+    boolean updatePassword(GridUser record) throws Exception;
+
+    /**
+     * 修改用户状态
+     * @param record
+     * @return
+     * @throws Exception
+     */
+    boolean updateStatusByPrimaryKey(GridUser record) throws Exception;
 }

@@ -33,6 +33,14 @@ public interface TagInfoService {
     TagInfo selectByPrimaryKey(Long tagId) throws Exception;
 
     /**
+     * 通过标签名获取详情
+     * @param tagName
+     * @return
+     * @throws Exception
+     */
+    TagInfo getByTagName(String tagName) throws Exception;
+
+    /**
      * 获取标签列表
      * @param record
      * @return

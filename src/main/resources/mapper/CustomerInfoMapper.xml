@@ -4,17 +4,17 @@
   <resultMap id="BaseResultMap" type="model.CustomerInfo">
     <id column="customer_id" jdbcType="BIGINT" property="customerId" />
     <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
-    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
     <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
-    <result column="marital_status" jdbcType="INTEGER" property="maritalStatus" />
+    <result column="marital_status" jdbcType="VARCHAR" property="maritalStatus" />
     <result column="education_level" jdbcType="VARCHAR" property="educationLevel" />
     <result column="nation" jdbcType="VARCHAR" property="nation" />
     <result column="birthday" jdbcType="VARCHAR" property="birthday" />
     <result column="native_place" jdbcType="VARCHAR" property="nativePlace" />
-    <result column="phone_number" jdbcType="BIGINT" property="phoneNumber" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
     <result column="custodian" jdbcType="VARCHAR" property="custodian" />
     <result column="grid_code" jdbcType="VARCHAR" property="gridCode" />
-    <result column="household_id" jdbcType="BIGINT" property="householdId" />
+    <result column="household_id" jdbcType="VARCHAR" property="householdId" />
     <result column="native_address" jdbcType="VARCHAR" property="nativeAddress" />
     <result column="residence_address" jdbcType="VARCHAR" property="residenceAddress" />
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
@@ -23,31 +23,155 @@
     <result column="politics_status" jdbcType="VARCHAR" property="politicsStatus" />
     <result column="living_situation" jdbcType="VARCHAR" property="livingSituation" />
     <result column="physical_condition" jdbcType="VARCHAR" property="physicalCondition" />
-    <result column="academic_degree" jdbcType="VARCHAR" property="academicDegree" />
-    <result column="year_salary" jdbcType="DOUBLE" property="yearSalary" />
     <result column="nationality" jdbcType="VARCHAR" property="nationality" />
     <result column="borrower_nature" jdbcType="VARCHAR" property="borrowerNature" />
-    <result column="postcode" jdbcType="INTEGER" property="postcode" />
+    <result column="postcode" jdbcType="VARCHAR" property="postcode" />
     <result column="is_stockholder" jdbcType="VARCHAR" property="isStockholder" />
     <result column="is_staff" jdbcType="VARCHAR" property="isStaff" />
     <result column="is_owner" jdbcType="VARCHAR" property="isOwner" />
+      <result column="is_buy_house" jdbcType="VARCHAR" property="isBuyHouse" />
+      <result column="cell_name" jdbcType="VARCHAR" property="cellName" />
+      <result column="cell_address" jdbcType="VARCHAR" property="cellAddress" />
+      <result column="id_type" jdbcType="VARCHAR" property="idType" />
+
+      <result column="work_year" jdbcType="VARCHAR" property="workYear" />
+      <result column="career" jdbcType="VARCHAR" property="career" />
+      <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+      <result column="company_address" jdbcType="VARCHAR" property="companyAddress" />
+      <result column="is_farmer" jdbcType="VARCHAR" property="isFarmer" />
+      <result column="investigator1" jdbcType="VARCHAR" property="investigator1" />
+      <result column="investigator2" jdbcType="VARCHAR" property="investigator2" />
+      <result column="registrant" jdbcType="VARCHAR" property="registrant" />
+      <result column="register_org" jdbcType="VARCHAR" property="registerOrg" />
+      <result column="credit_id" jdbcType="VARCHAR" property="creditId" />
+
+      <result column="grid_name" jdbcType="VARCHAR" property="gridName" />
   </resultMap>
 
+    <!--获取客户的同时显示标签-->
+    <resultMap id="customerTagResultMap" type="model.CustomerInfo" extends="BaseResultMap">
+        <collection property="tags" column="id_number"   ofType="model.TagCustomer" select="listTags" >
+        </collection>
+    </resultMap>
+
+    <!--客户标签关联表-->
+    <resultMap id="tagCustomerBaseResultMap" type="model.TagCustomer">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="tag_id" jdbcType="BIGINT" property="tagId" />
+        <result column="tag_name" jdbcType="VARCHAR" property="tagName" />
+        <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+        <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+        <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+    </resultMap>
+
   <sql id="Base_Column_List">
-    customer_id, customer_name, sex, id_number, marital_status, education_level, nation, 
-    birthday, native_place, phone_number, custodian, grid_code, household_id, native_address, 
-    residence_address, created_at, updated_at, status, politics_status, living_situation, 
-    physical_condition, academic_degree, year_salary, nationality, borrower_nature, postcode, 
-    is_stockholder, is_staff, is_owner
+    customer_id, customer_name, sex, id_number, marital_status, education_level, nation,
+    birthday, native_place, phone_number, custodian, grid_code, household_id, native_address,
+    residence_address, created_at, updated_at, status, politics_status, living_situation,
+    physical_condition, nationality, borrower_nature, postcode,
+    is_stockholder, is_staff, is_owner, is_buy_house, cell_name, cell_address, id_type
   </sql>
 
 
+    <!--批量导入客户信息-->
+    <insert id="batchSave" >
+        insert into customer_info(customer_name, sex, id_number, marital_status, education_level, nation,
+        birthday, native_place, phone_number, custodian, grid_code, household_id, native_address,
+        residence_address, created_at, updated_at, status, politics_status, living_situation,
+        physical_condition, nationality, borrower_nature, postcode,
+        is_stockholder, is_staff, is_owner, is_buy_house, cell_name, cell_address, id_type)
+        VALUES
+        <foreach  collection="list" item="item" separator=",">
+            (#{item.customerName}, #{item.sex}, #{item.idNumber},#{item.maritalStatus},  #{item.educationLevel}, #{item.nation}, #{item.birthday},
+            #{item.nativePlace}, #{item.phoneNumber}, #{item.custodian}, #{item.gridCode}, #{item.householdId}, #{item.nativeAddress},
+            #{item.residenceAddress}, #{item.createdAt}, #{item.updatedAt},#{item.status},  #{item.politicsStatus}, #{item.livingSituation},
+            #{item.physicalCondition}, #{item.nationality}, #{item.borrowerNature}, #{item.postcode}, #{item.isStockholder}, #{item.isStaff},
+            #{item.isOwner}, #{item.isBuyHouse}, #{item.cellName}, #{item.cellAddress}, #{item.idType})
+        </foreach>
+    </insert>
+
+    <!--根据登录用户ID获取其名下客户 with tags-->
+    <select id="listCustomersByAccountId" parameterType="model.CustomerInfo" resultMap="customerTagResultMap">
+        select info.*, grid.grid_name
+        FROM customer_info info
+        JOIN grid_info grid on info.grid_code = grid.grid_code
+        JOIN grid_user user on grid.account_id = user.account_id
+        WHERE 1=1
+        <if test="status != null">
+            and info.status = #{status}
+        </if>
+        <if test="gridCode != null">
+            and info.grid_code = #{gridCode}
+        </if>
+        <if test="customerName != null">
+            and info.customer_name like CONCAT('%',#{customerName},'%')
+        </if>
+        <if test="idNumber != null">
+            and info.id_number like CONCAT('%',#{idNumber},'%')
+        </if>
+        <if test="householdId != null">
+            and info.household_id like CONCAT('%',#{householdId},'%')
+        </if>
+        <if test="nativeAddress != null">
+            and info.native_address like CONCAT('%',#{nativeAddress},'%')
+        </if>
+        <if test="residenceAddress != null">
+            and info.residence_address like CONCAT('%',#{residenceAddress},'%')
+        </if>
+          and user.account_id = #{accountId}
+          order by created_at DESC
+    </select>
+
+    <!--根据登录用户的机构号获取其名下客户 with Tags-->
+    <select id="listCustomersByOrgCode" parameterType="model.CustomerInfo" resultMap="customerTagResultMap">
+        select info.*, grid.grid_name
+        FROM customer_info info
+        JOIN grid_info grid on info.grid_code = grid.grid_code
+        JOIN grid_user user on grid.account_id = user.account_id
+        WHERE 1=1
+        <if test="status != null">
+            and info.status = #{status}
+        </if>
+        <if test="gridCode != null">
+            and info.grid_code = #{gridCode}
+        </if>
+        <if test="customerName != null">
+            and info.customer_name like CONCAT('%',#{customerName},'%')
+        </if>
+        <if test="idNumber != null">
+            and info.id_number like CONCAT('%',#{idNumber},'%')
+        </if>
+        <if test="householdId != null">
+            and info.household_id like CONCAT('%',#{householdId},'%')
+        </if>
+        <if test="nativeAddress != null">
+            and info.native_address like CONCAT('%',#{nativeAddress},'%')
+        </if>
+        <if test="residenceAddress != null">
+            and info.residence_address like CONCAT('%',#{residenceAddress},'%')
+        </if>
+            and user.account_id
+            IN (SELECT account_id  from grid_user where org_code = #{orgCode})
+        order by info.created_at DESC
+
+    </select>
+
+    <!--获取客户的标签 - 通过身份证获取客户所有标签-->
+    <select id="listTags" parameterType="java.lang.String" resultMap="tagCustomerBaseResultMap">
+        select tc.*, ti.tag_name
+        from tag_customer tc
+        JOIN tag_info ti on tc.tag_id = ti.tag_id
+        where tc.id_number = #{idNumber,jdbcType=VARCHAR}
+    </select>
+
 <!--客户列表-->
-    <select id="listCustomers" parameterType="model.CustomerInfo" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List" />
+    <select id="listCustomers" parameterType="model.CustomerInfo" resultMap="customerTagResultMap">
+        select *
         from customer_info
         where 1 = 1
+        <if test="status != null">
+            and status = #{status}
+        </if>
         <if test="gridCode != null">
             and grid_code = #{gridCode}
         </if>
@@ -57,8 +181,8 @@
         <if test="idNumber != null">
             and id_number like CONCAT('%',#{idNumber},'%')
         </if>
-        <if test="householdId != null">
-            and household_id like CONCAT('%',#{householdId},'%')
+        <if test="householdId != null and householdId != ''">
+            and household_id = #{householdId}
         </if>
         <if test="nativeAddress != null">
             and native_address like CONCAT('%',#{nativeAddress},'%')
@@ -70,19 +194,19 @@
     </select>
 
     <!--客户详情-->
-    <select id="getCustomerByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List" />
-        from customer_info
-        where customer_id = #{customerId,jdbcType=BIGINT}
+    <select id="getCustomerByPrimaryKey" parameterType="java.lang.Long" resultMap="customerTagResultMap">
+        select info.*, grid.grid_name
+        from customer_info info
+        JOIN grid_info grid on info.grid_code = grid.grid_code
+        where info.customer_id = #{customerId,jdbcType=BIGINT}
     </select>
 
     <!--客户详情By身份证-->
-    <select id="getCustomerByIdNumber" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List" />
-        from customer_info
-        where id_number = #{idNumber,jdbcType=BIGINT}
+    <select id="getCustomerByIdNumber" parameterType="java.lang.String" resultMap="customerTagResultMap">
+        select info.*, grid.grid_name
+        from customer_info info
+        JOIN grid_info grid on info.grid_code = grid.grid_code
+        where info.id_number = #{idNumber,jdbcType=VARCHAR}
     </select>
 
     <!--删除-->
@@ -91,8 +215,23 @@
     where customer_id = #{customerId,jdbcType=BIGINT}
   </delete>
 
+    <!--修改客户可用状态-->
+    <update id="updateCustomerStatus" parameterType="model.CustomerInfo">
+    update customer_info
+    set status = #{status}
+    where customer_id = #{customerId,jdbcType=BIGINT}
+  </update>
 
-  <insert id="insertSelective" parameterType="model.CustomerInfo">
+    <!--批量修改用户状态-->
+    <update id="batchUpdateStatus" parameterType="java.util.List">
+        <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+            update customer_info set status=#{item.status}
+            where customer_id=#{item.customerId}
+        </foreach>
+    </update>
+
+
+  <insert id="insertSelective" keyProperty="customerId" useGeneratedKeys="true" parameterType="model.CustomerInfo">
     insert into customer_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="customerId != null">
@@ -158,12 +297,6 @@
       <if test="physicalCondition != null">
         physical_condition,
       </if>
-      <if test="academicDegree != null">
-        academic_degree,
-      </if>
-      <if test="yearSalary != null">
-        year_salary,
-      </if>
       <if test="nationality != null">
         nationality,
       </if>
@@ -182,6 +315,52 @@
       <if test="isOwner != null">
         is_owner,
       </if>
+        <if test="isBuyHouse != null">
+            is_buy_house,
+        </if>
+        <if test="cellName != null">
+            cell_name,
+        </if>
+        <if test="cellAddress != null">
+            cell_address,
+        </if>
+        <if test="idType != null">
+            id_type,
+        </if>
+
+
+        <if test="creditId != null">
+            credit_id,
+        </if>
+        <if test="career != null">
+            career,
+        </if>
+        <if test="workYear != null">
+            work_year,
+        </if>
+        <if test="companyName != null">
+            company_name,
+        </if>
+        <if test="companyAddress != null">
+            company_address,
+        </if>
+        <if test="isFarmer != null">
+            is_farmer,
+        </if>
+        <if test="investigator1 != null">
+            investigator1 ,
+        </if>
+        <if test="investigator2 != null">
+            investigator2,
+        </if>
+        <if test="registrant != null">
+            registrant,
+        </if>
+        <if test="registerOrg != null">
+            register_org,
+        </if>
+
+
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="customerId != null">
@@ -191,13 +370,13 @@
         #{customerName,jdbcType=VARCHAR},
       </if>
       <if test="sex != null">
-        #{sex,jdbcType=INTEGER},
+        #{sex,jdbcType=VARCHAR},
       </if>
       <if test="idNumber != null">
         #{idNumber,jdbcType=VARCHAR},
       </if>
       <if test="maritalStatus != null">
-        #{maritalStatus,jdbcType=INTEGER},
+        #{maritalStatus,jdbcType=VARCHAR},
       </if>
       <if test="educationLevel != null">
         #{educationLevel,jdbcType=VARCHAR},
@@ -212,7 +391,7 @@
         #{nativePlace,jdbcType=VARCHAR},
       </if>
       <if test="phoneNumber != null">
-        #{phoneNumber,jdbcType=BIGINT},
+        #{phoneNumber,jdbcType=VARCHAR},
       </if>
       <if test="custodian != null">
         #{custodian,jdbcType=VARCHAR},
@@ -221,7 +400,7 @@
         #{gridCode,jdbcType=VARCHAR},
       </if>
       <if test="householdId != null">
-        #{householdId,jdbcType=BIGINT},
+        #{householdId,jdbcType=VARCHAR},
       </if>
       <if test="nativeAddress != null">
         #{nativeAddress,jdbcType=VARCHAR},
@@ -247,12 +426,6 @@
       <if test="physicalCondition != null">
         #{physicalCondition,jdbcType=VARCHAR},
       </if>
-      <if test="academicDegree != null">
-        #{academicDegree,jdbcType=VARCHAR},
-      </if>
-      <if test="yearSalary != null">
-        #{yearSalary,jdbcType=DOUBLE},
-      </if>
       <if test="nationality != null">
         #{nationality,jdbcType=VARCHAR},
       </if>
@@ -260,7 +433,7 @@
         #{borrowerNature,jdbcType=VARCHAR},
       </if>
       <if test="postcode != null">
-        #{postcode,jdbcType=INTEGER},
+        #{postcode,jdbcType=VARCHAR},
       </if>
       <if test="isStockholder != null">
         #{isStockholder,jdbcType=VARCHAR},
@@ -271,6 +444,49 @@
       <if test="isOwner != null">
         #{isOwner,jdbcType=VARCHAR},
       </if>
+        <if test="isBuyHouse != null">
+            #{isBuyHouse,jdbcType=VARCHAR},
+        </if>
+        <if test="cellName != null">
+            #{cellName,jdbcType=VARCHAR},
+        </if>
+        <if test="cellAddress != null">
+            #{cellAddress,jdbcType=VARCHAR},
+        </if>
+        <if test="idType != null">
+            #{idType,jdbcType=VARCHAR},
+        </if>
+
+        <if test="creditId != null">
+            #{creditId},
+        </if>
+        <if test="career != null">
+            #{career},
+        </if>
+        <if test="workYear != null">
+            #{workYear},
+        </if>
+        <if test="companyName != null">
+            #{companyName},
+        </if>
+        <if test="companyAddress != null">
+            #{companyAddress},
+        </if>
+        <if test="isFarmer != null">
+            #{isFarmer},
+        </if>
+        <if test="investigator1 != null">
+            #{investigator1},
+        </if>
+        <if test="investigator2 != null">
+            #{investigator2},
+        </if>
+        <if test="registrant != null">
+            #{registrant},
+        </if>
+        <if test="registerOrg != null">
+            #{registerOrg},
+        </if>
     </trim>
   </insert>
 
@@ -281,13 +497,13 @@
         customer_name = #{customerName,jdbcType=VARCHAR},
       </if>
       <if test="sex != null">
-        sex = #{sex,jdbcType=INTEGER},
+        sex = #{sex,jdbcType=VARCHAR},
       </if>
       <if test="idNumber != null">
         id_number = #{idNumber,jdbcType=VARCHAR},
       </if>
       <if test="maritalStatus != null">
-        marital_status = #{maritalStatus,jdbcType=INTEGER},
+        marital_status = #{maritalStatus,jdbcType=VARCHAR},
       </if>
       <if test="educationLevel != null">
         education_level = #{educationLevel,jdbcType=VARCHAR},
@@ -302,7 +518,7 @@
         native_place = #{nativePlace,jdbcType=VARCHAR},
       </if>
       <if test="phoneNumber != null">
-        phone_number = #{phoneNumber,jdbcType=BIGINT},
+        phone_number = #{phoneNumber,jdbcType=VARCHAR},
       </if>
       <if test="custodian != null">
         custodian = #{custodian,jdbcType=VARCHAR},
@@ -311,7 +527,7 @@
         grid_code = #{gridCode,jdbcType=VARCHAR},
       </if>
       <if test="householdId != null">
-        household_id = #{householdId,jdbcType=BIGINT},
+        household_id = #{householdId,jdbcType=VARCHAR},
       </if>
       <if test="nativeAddress != null">
         native_address = #{nativeAddress,jdbcType=VARCHAR},
@@ -337,12 +553,6 @@
       <if test="physicalCondition != null">
         physical_condition = #{physicalCondition,jdbcType=VARCHAR},
       </if>
-      <if test="academicDegree != null">
-        academic_degree = #{academicDegree,jdbcType=VARCHAR},
-      </if>
-      <if test="yearSalary != null">
-        year_salary = #{yearSalary,jdbcType=DOUBLE},
-      </if>
       <if test="nationality != null">
         nationality = #{nationality,jdbcType=VARCHAR},
       </if>
@@ -350,7 +560,7 @@
         borrower_nature = #{borrowerNature,jdbcType=VARCHAR},
       </if>
       <if test="postcode != null">
-        postcode = #{postcode,jdbcType=INTEGER},
+        postcode = #{postcode,jdbcType=VARCHAR},
       </if>
       <if test="isStockholder != null">
         is_stockholder = #{isStockholder,jdbcType=VARCHAR},
@@ -361,6 +571,49 @@
       <if test="isOwner != null">
         is_owner = #{isOwner,jdbcType=VARCHAR},
       </if>
+        <if test="isBuyHouse != null">
+            is_buy_house = #{isBuyHouse,jdbcType=VARCHAR},
+        </if>
+        <if test="cellName != null">
+            cell_name = #{cellName,jdbcType=VARCHAR},
+        </if>
+        <if test="cellAddress != null">
+            cell_address = #{cellAddress,jdbcType=VARCHAR},
+        </if>
+        <if test="idType != null">
+            id_type = #{idType,jdbcType=VARCHAR},
+        </if>
+
+        <if test="creditId != null">
+            credit_id = #{creditId},
+        </if>
+        <if test="career != null">
+            career = #{career},
+        </if>
+        <if test="workYear != null">
+            work_year = #{workYear},
+        </if>
+        <if test="companyName != null">
+            company_name = #{companyName},
+        </if>
+        <if test="companyAddress != null">
+            company_address = #{companyAddress},
+        </if>
+        <if test="isFarmer != null">
+            is_farmer = #{isFarmer},
+        </if>
+        <if test="investigator1 != null">
+            investigator1 = #{investigator1},
+        </if>
+        <if test="investigator2 != null">
+            investigator2 = #{investigator2},
+        </if>
+        <if test="registrant != null">
+            registrant = #{registrant},
+        </if>
+        <if test="registerOrg != null">
+            register_org = #{registerOrg},
+        </if>
     </set>
     where customer_id = #{customerId,jdbcType=BIGINT}
   </update>

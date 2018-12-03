@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.CustomerBusinessMapper">
+  <resultMap id="BaseResultMap" type="model.CustomerBusiness">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="deposit_total" jdbcType="DECIMAL" property="depositTotal" />
+    <result column="deposit_month" jdbcType="DECIMAL" property="depositMonth" />
+    <result column="deposit_season" jdbcType="DECIMAL" property="depositSeason" />
+    <result column="deposit_year" jdbcType="DECIMAL" property="depositYear" />
+    <result column="deposit_time_poit" jdbcType="DECIMAL" property="depositTimePoit" />
+    <result column="current_total" jdbcType="DECIMAL" property="currentTotal" />
+    <result column="current_month" jdbcType="DECIMAL" property="currentMonth" />
+    <result column="current_season" jdbcType="DECIMAL" property="currentSeason" />
+    <result column="current_year" jdbcType="DECIMAL" property="currentYear" />
+    <result column="current_time_poit" jdbcType="DECIMAL" property="currentTimePoit" />
+    <result column="fixed_total" jdbcType="DECIMAL" property="fixedTotal" />
+    <result column="fixed_month" jdbcType="DECIMAL" property="fixedMonth" />
+    <result column="fixed_season" jdbcType="DECIMAL" property="fixedSeason" />
+    <result column="fixed_year" jdbcType="DECIMAL" property="fixedYear" />
+    <result column="fixed_time_poit" jdbcType="DECIMAL" property="fixedTimePoit" />
+  </resultMap>
+	
+  <insert id="insertSelective" parameterType="model.CustomerBusiness">
+  	insert into customer_business
+  	<trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="idNumber != null">
+        id_number,
+      </if>
+      <if test="depositTotal != null">
+      	deposit_total,
+      </if>
+      <if test="depositMonth != null">
+      	deposit_month,
+      </if>
+      <if test="depositSeason != null">
+      	deposit_season,
+      </if>
+      <if test="depositYear != null">
+      	deposit_year,
+      </if>
+      <if test="depositTimePoit != null">
+      	deposit_time_poit,
+      </if>
+      <if test="currentTotal != null">
+      	current_total,
+      </if>
+      <if test="currentMonth != null">
+      	current_month,
+      </if>
+      <if test="currentSeason != null">
+      	current_season,
+      </if>
+      <if test="currentYear != null">
+      	current_year,
+      </if>
+      <if test="currentTimePoit != null">
+      	current_time_poit,
+      </if>
+      <if test="fixedTotal != null">
+      	fixed_total,
+      </if>
+      <if test="fixedMonth != null">
+      	fixed_month,
+      </if>
+      <if test="fixedSeason != null">
+      	fixed_season,
+      </if>
+      <if test="fixedYear != null">
+      	fixed_year,
+      </if>
+      <if test="fixedTimePoit != null">
+      	fixed_time_poit,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="depositTotal != null">
+      	#{depositTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="depositMonth != null">
+      	#{depositMonth,jdbcType=DECIMAL},
+      </if>
+      <if test="depositSeason != null">
+      	#{depositSeason,jdbcType=DECIMAL},
+      </if>
+      <if test="depositYear != null">
+      	#{depositYear,jdbcType=DECIMAL},
+      </if>
+      <if test="depositTimePoit != null">
+      	#{depositTimePoit,jdbcType=DECIMAL},
+      </if>
+      <if test="currentTotal != null">
+      	#{currentTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="currentMonth != null">
+      	#{currentMonth,jdbcType=DECIMAL},
+      </if>
+      <if test="currentSeason != null">
+      	#{currentSeason,jdbcType=DECIMAL},
+      </if>
+      <if test="currentYear != null">
+      	#{currentYear,jdbcType=DECIMAL},
+      </if>
+      <if test="currentTimePoit != null">
+      	#{currentTimePoit,jdbcType=DECIMAL},
+      </if>
+      <if test="fixedTotal != null">
+      	#{fixedTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="fixedMonth != null">
+      	#{fixedMonth,jdbcType=DECIMAL},
+      </if>
+      <if test="fixedSeason != null">
+      	#{fixedSeason,jdbcType=DECIMAL},
+      </if>
+      <if test="fixedYear != null">
+      	#{fixedYear,jdbcType=DECIMAL},
+      </if>
+      <if test="fixedTimePoit != null">
+      	#{fixedTimePoit,jdbcType=DECIMAL},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateSelective" parameterType="model.CustomerBusiness">
+  	update customer_business
+  	<set>
+      <if test="depositTotal != null">
+      	deposit_total = #{depositTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="depositMonth != null">
+      	deposit_month = #{depositMonth,jdbcType=DECIMAL},
+      </if>
+      <if test="depositSeason != null">
+      	deposit_season = #{depositSeason,jdbcType=DECIMAL},
+      </if>
+      <if test="depositYear != null">
+      	deposit_year = #{depositYear,jdbcType=DECIMAL},
+      </if>
+      <if test="depositTimePoit != null">
+      	deposit_time_poit = #{depositTimePoit,jdbcType=DECIMAL},
+      </if>
+      <if test="currentTotal != null">
+      	current_total = #{currentTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="currentMonth != null">
+      	current_month = #{currentMonth,jdbcType=DECIMAL},
+      </if>
+      <if test="currentSeason != null">
+      	current_season = #{currentSeason,jdbcType=DECIMAL},
+      </if>
+      <if test="currentYear != null">
+      	current_year = #{currentYear,jdbcType=DECIMAL},
+      </if>
+      <if test="currentTimePoit != null">
+      	current_time_poit = #{currentTimePoit,jdbcType=DECIMAL},
+      </if>
+      <if test="fixedTotal != null">
+      	fixed_total = #{fixedTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="fixedMonth != null">
+      	fixed_month = #{fixedMonth,jdbcType=DECIMAL},
+      </if>
+      <if test="fixedSeason != null">
+      	fixed_season = #{fixedSeason,jdbcType=DECIMAL},
+      </if>
+      <if test="fixedYear != null">
+      	fixed_year = #{fixedYear,jdbcType=DECIMAL},
+      </if>
+      <if test="fixedTimePoit != null">
+      	fixed_time_poit = #{fixedTimePoit,jdbcType=DECIMAL},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id_number=#{idNumber}
+  </update>
+  
+  <select id="getBusinesssByIdNumber" resultMap="BaseResultMap">
+  	select id_number,
+  	deposit_total,deposit_month,deposit_season,deposit_year,deposit_time_poit,
+  	current_total,current_month,current_season,current_year,current_time_poit,
+ 	fixed_total,fixed_month,fixed_season,fixed_year,fixed_time_poit
+	from customer_business
+  	where id_number=#{idNumber} 
+  </select>
+</mapper>

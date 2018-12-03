@@ -37,6 +37,7 @@ public class CustomerImage implements Serializable{
     private Long createdAt;
 
     private Long updatedAt;
+    private Long creditDetailId;
 
     public Long getId() {
         return id;
@@ -149,4 +150,13 @@ public class CustomerImage implements Serializable{
     public void setUpdatedAt(Long updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+	public Long getCreditDetailId() {
+		return creditDetailId;
+	}
+
+	public void setCreditDetailId(Long creditDetailId) {
+		this.creditDetailId = creditDetailId;
+	}
+    
 }

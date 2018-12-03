@@ -14,6 +14,8 @@ public interface RegionMapper {
 
     Region getRegionByPrimaryKey(Long regionCode);
 
+    Region getRegionByRegionName(String regionName);
+
     List<Region> getRegionsByPrimaryKey(Long preRegionCode);
 
     List<Region> listRegions(Region record);

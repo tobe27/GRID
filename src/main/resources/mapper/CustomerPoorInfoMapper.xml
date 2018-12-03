@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.CustomerPoorInfoMapper">
+  <resultMap id="BaseResultMap" type="model.CustomerPoorInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="person_code" jdbcType="VARCHAR" property="personCode" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="person_count" jdbcType="VARCHAR" property="personCount" />
+    <result column="internal_student" jdbcType="VARCHAR" property="internalStudent" />
+    <result column="health_condition" jdbcType="VARCHAR" property="healthCondition" />
+    <result column="labor_skills" jdbcType="VARCHAR" property="laborSkills" />
+    <result column="working_conditions" jdbcType="VARCHAR" property="workingConditions" />
+    <result column="working_time" jdbcType="VARCHAR" property="workingTime" />
+    <result column="critical_illness_insurance" jdbcType="VARCHAR" property="criticalIllnessInsurance" />
+    <result column="overcome_poverty" jdbcType="VARCHAR" property="overcomePoverty" />
+    <result column="overcome_poverty_year" jdbcType="VARCHAR" property="overcomePovertyYear" />
+    <result column="attribute" jdbcType="VARCHAR" property="attribute" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="dangerous_building" jdbcType="VARCHAR" property="dangerousBuilding" />
+    <result column="safety_water" jdbcType="VARCHAR" property="safetyWater" />
+    <result column="dysdipsia" jdbcType="VARCHAR" property="dysdipsia" />
+    <result column="income_avg" jdbcType="VARCHAR" property="incomeAvg" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="write_ime" jdbcType="VARCHAR" property="writeIme" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="update_at" jdbcType="BIGINT" property="updateAt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, person_code, id_number, person_count, internal_student, health_condition, labor_skills, 
+    working_conditions, working_time, critical_illness_insurance, overcome_poverty, overcome_poverty_year, 
+    attribute, reason, dangerous_building, safety_water, dysdipsia, income_avg, phone, 
+    write_ime, status, created_at, update_at
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer_poor_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getByIdnumber"   parameterType="model.CustomerPoorInfo" resultMap="BaseResultMap">
+  
+  select * from  customer_poor_info  where id_number = #{idNumber} and status !=1
+  </select>
+  
+  <update id="deleteByIdNumber" parameterType="model.CustomerPoorInfo">
+  
+  update  customer_poor_info  
+   <set>
+  
+   status = #{status,jdbcType=VARCHAR},
+   </set>
+   where id_number=#{idNumber}
+  
+  </update>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from customer_poor_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="model.CustomerPoorInfo">
+    insert into customer_poor_info (id, person_code, id_number, 
+      person_count, internal_student, health_condition, 
+      labor_skills, working_conditions, working_time, 
+      critical_illness_insurance, overcome_poverty, 
+      overcome_poverty_year, attribute, reason, 
+      dangerous_building, safety_water, dysdipsia, 
+      income_avg, phone, write_ime, 
+      status, created_at, update_at
+      )
+    values (#{id,jdbcType=INTEGER}, #{personCode,jdbcType=VARCHAR}, #{idNumber,jdbcType=VARCHAR}, 
+      #{personCount,jdbcType=VARCHAR}, #{internalStudent,jdbcType=VARCHAR}, #{healthCondition,jdbcType=VARCHAR}, 
+      #{laborSkills,jdbcType=VARCHAR}, #{workingConditions,jdbcType=VARCHAR}, #{workingTime,jdbcType=VARCHAR}, 
+      #{criticalIllnessInsurance,jdbcType=VARCHAR}, #{overcomePoverty,jdbcType=VARCHAR}, 
+      #{overcomePovertyYear,jdbcType=VARCHAR}, #{attribute,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, 
+      #{dangerousBuilding,jdbcType=VARCHAR}, #{safetyWater,jdbcType=VARCHAR}, #{dysdipsia,jdbcType=VARCHAR}, 
+      #{incomeAvg,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{writeIme,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{createdAt,jdbcType=BIGINT}, #{updateAt,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="model.CustomerPoorInfo">
+    insert into customer_poor_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="personCode != null">
+        person_code,
+      </if>
+      <if test="idNumber != null">
+        id_number,
+      </if>
+      <if test="personCount != null">
+        person_count,
+      </if>
+      <if test="internalStudent != null">
+        internal_student,
+      </if>
+      <if test="healthCondition != null">
+        health_condition,
+      </if>
+      <if test="laborSkills != null">
+        labor_skills,
+      </if>
+      <if test="workingConditions != null">
+        working_conditions,
+      </if>
+      <if test="workingTime != null">
+        working_time,
+      </if>
+      <if test="criticalIllnessInsurance != null">
+        critical_illness_insurance,
+      </if>
+      <if test="overcomePoverty != null">
+        overcome_poverty,
+      </if>
+      <if test="overcomePovertyYear != null">
+        overcome_poverty_year,
+      </if>
+      <if test="attribute != null">
+        attribute,
+      </if>
+      <if test="reason != null">
+        reason,
+      </if>
+      <if test="dangerousBuilding != null">
+        dangerous_building,
+      </if>
+      <if test="safetyWater != null">
+        safety_water,
+      </if>
+      <if test="dysdipsia != null">
+        dysdipsia,
+      </if>
+      <if test="incomeAvg != null">
+        income_avg,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="writeIme != null">
+        write_ime,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updateAt != null">
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="personCode != null">
+        #{personCode,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="personCount != null">
+        #{personCount,jdbcType=VARCHAR},
+      </if>
+      <if test="internalStudent != null">
+        #{internalStudent,jdbcType=VARCHAR},
+      </if>
+      <if test="healthCondition != null">
+        #{healthCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="laborSkills != null">
+        #{laborSkills,jdbcType=VARCHAR},
+      </if>
+      <if test="workingConditions != null">
+        #{workingConditions,jdbcType=VARCHAR},
+      </if>
+      <if test="workingTime != null">
+        #{workingTime,jdbcType=VARCHAR},
+      </if>
+      <if test="criticalIllnessInsurance != null">
+        #{criticalIllnessInsurance,jdbcType=VARCHAR},
+      </if>
+      <if test="overcomePoverty != null">
+        #{overcomePoverty,jdbcType=VARCHAR},
+      </if>
+      <if test="overcomePovertyYear != null">
+        #{overcomePovertyYear,jdbcType=VARCHAR},
+      </if>
+      <if test="attribute != null">
+        #{attribute,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="dangerousBuilding != null">
+        #{dangerousBuilding,jdbcType=VARCHAR},
+      </if>
+      <if test="safetyWater != null">
+        #{safetyWater,jdbcType=VARCHAR},
+      </if>
+      <if test="dysdipsia != null">
+        #{dysdipsia,jdbcType=VARCHAR},
+      </if>
+      <if test="incomeAvg != null">
+        #{incomeAvg,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="writeIme != null">
+        #{writeIme,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updateAt != null">
+        #{updateAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="model.CustomerPoorInfo">
+    update customer_poor_info
+    <set>
+      <if test="personCode != null">
+        person_code = #{personCode,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        id_number = #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="personCount != null">
+        person_count = #{personCount,jdbcType=VARCHAR},
+      </if>
+      <if test="internalStudent != null">
+        internal_student = #{internalStudent,jdbcType=VARCHAR},
+      </if>
+      <if test="healthCondition != null">
+        health_condition = #{healthCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="laborSkills != null">
+        labor_skills = #{laborSkills,jdbcType=VARCHAR},
+      </if>
+      <if test="workingConditions != null">
+        working_conditions = #{workingConditions,jdbcType=VARCHAR},
+      </if>
+      <if test="workingTime != null">
+        working_time = #{workingTime,jdbcType=VARCHAR},
+      </if>
+      <if test="criticalIllnessInsurance != null">
+        critical_illness_insurance = #{criticalIllnessInsurance,jdbcType=VARCHAR},
+      </if>
+      <if test="overcomePoverty != null">
+        overcome_poverty = #{overcomePoverty,jdbcType=VARCHAR},
+      </if>
+      <if test="overcomePovertyYear != null">
+        overcome_poverty_year = #{overcomePovertyYear,jdbcType=VARCHAR},
+      </if>
+      <if test="attribute != null">
+        attribute = #{attribute,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null">
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="dangerousBuilding != null">
+        dangerous_building = #{dangerousBuilding,jdbcType=VARCHAR},
+      </if>
+      <if test="safetyWater != null">
+        safety_water = #{safetyWater,jdbcType=VARCHAR},
+      </if>
+      <if test="dysdipsia != null">
+        dysdipsia = #{dysdipsia,jdbcType=VARCHAR},
+      </if>
+      <if test="incomeAvg != null">
+        income_avg = #{incomeAvg,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="writeIme != null">
+        write_ime = #{writeIme,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updateAt != null">
+        update_at = #{updateAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="model.CustomerPoorInfo">
+    update customer_poor_info
+    set person_code = #{personCode,jdbcType=VARCHAR},
+      id_number = #{idNumber,jdbcType=VARCHAR},
+      person_count = #{personCount,jdbcType=VARCHAR},
+      internal_student = #{internalStudent,jdbcType=VARCHAR},
+      health_condition = #{healthCondition,jdbcType=VARCHAR},
+      labor_skills = #{laborSkills,jdbcType=VARCHAR},
+      working_conditions = #{workingConditions,jdbcType=VARCHAR},
+      working_time = #{workingTime,jdbcType=VARCHAR},
+      critical_illness_insurance = #{criticalIllnessInsurance,jdbcType=VARCHAR},
+      overcome_poverty = #{overcomePoverty,jdbcType=VARCHAR},
+      overcome_poverty_year = #{overcomePovertyYear,jdbcType=VARCHAR},
+      attribute = #{attribute,jdbcType=VARCHAR},
+      reason = #{reason,jdbcType=VARCHAR},
+      dangerous_building = #{dangerousBuilding,jdbcType=VARCHAR},
+      safety_water = #{safetyWater,jdbcType=VARCHAR},
+      dysdipsia = #{dysdipsia,jdbcType=VARCHAR},
+      income_avg = #{incomeAvg,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      write_ime = #{writeIme,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=BIGINT},
+      update_at = #{updateAt,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

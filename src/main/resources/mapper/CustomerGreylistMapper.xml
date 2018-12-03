@@ -17,6 +17,12 @@
     id, customer_name, id_number, phone_number, grid_code, reason, address, comment, 
     created_at, updated_at
   </sql>
+  <delete id="deleteByIdNumber" parameterType="model.CustomerGreylist"  >
+  
+  delete from customer_greylist where id_number = #{idNumber}
+  
+  </delete>
+  
   
   
   <select id="getByIdOrIdnumber" parameterType="model.CustomerGreylist" resultMap="BaseResultMap">
@@ -25,18 +31,24 @@
     and id != #{id,jdbcType=BIGINT}
   </if>
   </select>
-  <select id="getGreyLists" parameterType="model.CustomerGreylist" resultMap="BaseResultMap">
-  select * from customer_greylist where 1=1 
+  <select id="getGreyLists" parameterType="model.CustomerGreylist" resultType="java.util.Map">
+  select  y.id as id, y.customer_name as customerName, y.id_number as idNumber, y.phone_number as phoneNumber, y.grid_code as gridCode, y.reason as reason, y.address as address, y.comment as comment, 
+    y.created_at as createdAt, y.updated_at as updatedAt,g.grid_name as gridName  from customer_greylist  y  left join grid_info g on y. grid_code= g.grid_code  where 1=1 
+     and  y.grid_code in
+     <foreach item="item" index="index" collection="gridCodeList" 
+                         open="(" separator="," close=")">
+                        #{item}
+                </foreach>
   <if test="customerName != null">
-   and customer_name like  CONCAT('%',#{customerName},'%')
+   and  y.customer_name like  CONCAT('%',#{customerName},'%')
   </if>
   <if test="idNumber != null">
-   and id_number like  CONCAT('%',#{idNumber},'%')
+   and  y.id_number like  CONCAT('%',#{idNumber},'%')
   </if>
   <if test="gridCode != null">
-   and grid_code = #{gridCode}
+   and  y.grid_code = #{gridCode}
   </if>
-   order by created_at desc
+   order by  y.created_at desc
   </select>
   
   

@@ -4,6 +4,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
@@ -19,6 +22,8 @@ public class JwtUtil {
     private static final String SIGNING_KEY ="www.yzsbank.com" ; //自定义加密密钥SIGNING_KEY
     private static byte[] signingSecretBytes = DatatypeConverter.parseBase64Binary(SIGNING_KEY); //转换成Base64编码
     private static final long EXP = 60*60*1000; //有效期为60分钟
+    private static final long EXP_WEEK = 7*24*60*60*1000; // 有效期为一周
+    private static Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
     private JwtUtil(){}
 
@@ -28,7 +33,7 @@ public class JwtUtil {
      * @return token
      */
     public static String createToken(Map<String, Object> payload) { //默认有效期为60分钟
-        return createToken(payload,EXP);
+        return createToken(payload,EXP_WEEK);
     }
 
     /**
@@ -63,12 +68,13 @@ public class JwtUtil {
                     .setSigningKey(signingSecretBytes)
                     .parseClaimsJws(token).getBody();
         }catch (Exception e) {
+            logger.info("JWT解析token异常："+e.getMessage());
             return null;
         }
     }
 
     /**
-     * 解析token信息
+     * 鉴定token信息
      * @param token JWT信息
      * @return payload
      */
@@ -79,6 +85,7 @@ public class JwtUtil {
                     .parseClaimsJws(token).getBody();
              return true;
         }catch (Exception e) {
+            logger.info("JWT鉴定token异常："+e.getMessage());
             return false;
         }
     }

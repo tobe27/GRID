@@ -22,14 +22,14 @@ public class ResidentInfoMapperTest {
         info.setHouseholdType("居民家庭户");
         info.setSex("男");
         info.setNation("汉");
-        info.setHouseholdId(1338514L);
 
-        try {
-            System.out.println(infoService.insertSelective(info));
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        //try {
+        //    //System.out.println(infoService.insertSelective(info));
+        //
+        //} catch (Exception e) {
+        //    System.out.println(e.getMessage());
+        //}
     }
 
     @Test
@@ -41,7 +41,6 @@ public class ResidentInfoMapperTest {
         info.setHouseholdType("居民家庭户");
         info.setSex("男");
         info.setNation("汉");
-        info.setHouseholdId(1338514L);
 
         try {
             System.out.println(infoService.updateByPrimaryKeySelective(info));

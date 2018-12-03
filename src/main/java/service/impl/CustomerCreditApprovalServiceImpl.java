@@ -6,23 +6,45 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import dao.CustomerBlackListMapper;
 import dao.CustomerCreditApprovalMapper;
 import dao.CustomerCreditDetailMapper;
+import dao.CustomerGreylistMapper;
+import dao.CustomerInfoMapper;
+import dao.CustomerWhitelistMapper;
+import dao.TagCustomerMapper;
 import exception.MyException;
+import model.CustomerBlackList;
 import model.CustomerCreditApproval;
 import model.CustomerCreditDetail;
+import model.CustomerGreylist;
+import model.CustomerInfo;
+import model.CustomerWhitelist;
+import model.TagCustomer;
 import service.CustomerCreditApprovalService;
+import util.ValidUtil;
 @Service
 public class CustomerCreditApprovalServiceImpl implements CustomerCreditApprovalService {
     @Autowired
     private CustomerCreditApprovalMapper customerCreditApprovalMapper;
     @Autowired
     private CustomerCreditDetailMapper customerCreditDetailMapper;
+    @Autowired
+    private CustomerWhitelistMapper customerWhitelistMapper;
+    @Autowired
+    private CustomerInfoMapper customerInfoMapper;
+    @Autowired
+    private CustomerGreylistMapper customerGreylistMapper;
+    @Autowired
+    private CustomerBlackListMapper customerBlackListMapper;
+
 	
 	
 	@Override
-	public int batchSave(ArrayList<CustomerCreditApproval> list,List<Integer> roleIds,ArrayList<CustomerCreditDetail> customerCreditDetailList) throws Exception {
-		List<CustomerCreditApproval> savaList=new ArrayList<>();
+	public int batchSave(ArrayList<CustomerCreditApproval> list,String roleId) throws Exception {
+		
+		long now=System.currentTimeMillis();
+		int sum=0;
 		if(list !=null && list.size()>0) {
 			for(CustomerCreditApproval customerCreditApproval:list) {
 				if(customerCreditApproval.getIdNumber()==null || "".equals(customerCreditApproval.getIdNumber())) {
@@ -40,68 +62,108 @@ public class CustomerCreditApprovalServiceImpl implements CustomerCreditApproval
 				if(customerCreditApproval.getApprovalName()==null || "".equals(customerCreditApproval.getApprovalName())) {
 					continue;
 				}
-				long now=System.currentTimeMillis();
+				//查询出审批的面谈面签记录
+				CustomerCreditDetail record=customerCreditDetailMapper.selectByPrimaryKey(customerCreditApproval.getCreditDetailId());
+				if("2".equals(record.getStatus())) {
+					continue;
+				}
+				//验证是否参数齐全
+				try {
+				CustomerCreditDetailServiceImpl.checkParams(record);
+				checkCustomerCreditDetailLogic(record);
+				}catch(Exception e){
+					continue;
+				}
+				//如果面谈面签数据状态是 0和4 （待提交和被驳回）
+				if("0".equals(record.getApprovalStatus())||"4".equals(record.getApprovalStatus())) {
+					if("1".equals(roleId)) {
+						record.setApprovalStatus("1").setUpdatedAt(now);
+						customerCreditDetailMapper.updateByPrimaryKeySelective(record);
+					}
+				}
+				//如果面谈面签数据状态是 1（客户经理已提交）
+				if("1".equals(record.getApprovalStatus())) {
+					//如果是会计同意，将面谈面签数据设为3（通过）
+					if("2".equals(roleId) && "0".equals(customerCreditApproval.getApprovalResult())) {
+						record.setApprovalStatus("3").setUpdatedAt(now);
+						customerCreditDetailMapper.updateByPrimaryKeySelective(record);
+					}
+					//如果是会计驳回，将面谈面签数据设为4（驳回）
+					if("2".equals(roleId) && "1".equals(customerCreditApproval.getApprovalResult())) {
+						record.setApprovalStatus("4").setUpdatedAt(now);
+						customerCreditDetailMapper.updateByPrimaryKeySelective(record);
+					}
+				}
+				
+				
 				customerCreditApproval.setCreatedAt(now);
 				customerCreditApproval.setUpdatedAt(now);
-				savaList.add(customerCreditApproval);
+				//savaList.add(customerCreditApproval);
+				customerCreditApprovalMapper.insertSelective(customerCreditApproval);
+				sum++;
 			}	
 		}
-		//根据roleid判断审批的人
-		
-		for(CustomerCreditDetail customerCreditDetail:customerCreditDetailList) {
-			//如果审批数据状态为0 并且审批人角色id包含客户经理
-			if(customerCreditDetail.getApprovalStatus().equals("0") && roleIds.contains(1)) {
-				//审批意见为通过
-				if(list.get(0).getApprovalResult().equals("0")) {
-					customerCreditDetail.setApprovalStatus("1");
-				}else {
-					customerCreditDetail.setApprovalStatus("2");
-				}
-				customerCreditDetailMapper.updateApprovalStatus(customerCreditDetail);
-				continue;
-			}
-			
-			//如果审批数据状态为1并且审批角色为会计
-			if(customerCreditDetail.getApprovalStatus().equals("1")&& roleIds.contains(2)) {
-				//审批意见为通过
-				if(list.get(0).getApprovalResult().equals("0")) {
-					customerCreditDetail.setApprovalStatus("3");
-				}else {
-					customerCreditDetail.setApprovalStatus("4");
-				}
-				customerCreditDetailMapper.updateApprovalStatus(customerCreditDetail);
-				continue;
-			}
-			//如果审批数据状态为2并且审批角色为支行长
-			if(customerCreditDetail.getApprovalStatus().equals("2")&& roleIds.contains(3)) {
-				if(list.get(0).getApprovalResult().equals("0")) {
-					customerCreditDetail.setApprovalStatus("5");
-				}else {
-					customerCreditDetail.setApprovalStatus("6");
-				}
-				customerCreditDetailMapper.updateApprovalStatus(customerCreditDetail);
-				continue;
-			}
-		}
-		
-		try {
-			if(savaList.size()>0) {
-				customerCreditApprovalMapper.batchSave(savaList);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			 throw new MyException("审批操作异常");
-			
-		}
-		return savaList.size();
+	
+		return sum;
 	}
+    
 
+    /**
+     * 验证新增的面谈面签资料是否符合业务逻辑
+     * @param record
+     * @return
+     * @throws Exception
+     */
+    public  boolean checkCustomerCreditDetailLogic(CustomerCreditDetail record) throws Exception{
+        CustomerInfo customerInfo=customerInfoMapper.getCustomerByIdNumber(record.getIdNumber());
+        //检查客户信息是否可用
+        if((customerInfo==null) || (ValidUtil.isEmpty(customerInfo.getIdNumber()))||(customerInfo.getStatus()!=5)) {
+            throw new MyException("客户库中没有检索到可用的客户信息");
+        }
+        //验证信息是否已存在于白名单中
+        CustomerWhitelist customerWhitelist=new CustomerWhitelist();
+        customerWhitelist.setIdNumber(record.getIdNumber());
+       if( customerWhitelistMapper.getByIdOrIdnumber(customerWhitelist).isEmpty()) {
+    	   throw new MyException("白名单库中未匹配到相关信息");
+       }
+        
+        //验证客户勾选的网格和客户库中的网格是否一致
+
+        if(!customerInfo.getGridCode().equals(record.getGridCode())) {
+            throw new MyException("您勾选的网格和客户库中客户所属的网格信息不匹配");
+        }
+        //验证客户信息是否在黑名单
+        CustomerBlackList customerBlackList=new CustomerBlackList();
+        customerBlackList.setIdNumber(record.getIdNumber());
+        if(customerBlackListMapper.getByIdOrIdnumber(customerBlackList).size()>0) {
+            throw new MyException("该客户已存在黑名单记录");
+        }
+        //验证客户信息是否在灰名单
+        CustomerGreylist customerGreylist=new CustomerGreylist();
+        customerGreylist.setIdNumber(record.getIdNumber());
+        if(customerGreylistMapper.getByIdOrIdnumber(customerGreylist).size()>0) {
+            throw new MyException("该客户已存在灰名单记录");
+        }
+		/*//验证提交的客户信息是否存在还未授信截至的记录
+		Map<String,Object> map =new HashMap<>();
+		map.put("idNumber",record.getIdNumber());
+		Date now = new Date(); 
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        map.put("endAt",dateFormat.format( now ));
+		List<CustomerCreditDetail> list=customerCreditDetailMapper.getByIdNumber(map);
+		if(list.size()>0) {
+			throw new MyException("面谈面签库中已存在授信还未到期的客户资料");
+		}*/
+        return true;
+    }
+	
+	
 	@Override
-	public List<CustomerCreditApproval> getListByIdNumber(CustomerCreditApproval record) throws Exception {
-		if(record.getIdNumber()==null || "".equals(record.getIdNumber())) {
+	public List<CustomerCreditApproval> getListcreditDetailId(CustomerCreditApproval record) throws Exception {
+		if(record.getCreditDetailId()==null) {
 			 throw new MyException("查询操作异常");
 		}
-		return customerCreditApprovalMapper.getListByIdNumber(record);
+		return customerCreditApprovalMapper.getListcreditDetailId(record);
 	}
 
 }

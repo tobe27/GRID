@@ -16,6 +16,7 @@ import java.util.List;
  * @author Created by L.C.Y on 2018-9-20
  */
 @RestController
+@RequestMapping("/home/warn")
 public class HomeWarnInfoController {
     @Autowired
     HomeWarnInfoService infoService;
@@ -25,7 +26,7 @@ public class HomeWarnInfoController {
      * @param info
      * @return
      */
-    @RequestMapping(value = "/president/home/warn", method = RequestMethod.GET)
+    @RequestMapping(value = "/president", method = RequestMethod.GET)
     public ResponseData listWarnInfoForPresident(HomeWarnInfo info,Integer pageNum, Integer pageSize) throws Exception {
         if (pageNum == null || pageSize == null) {
             return new ResponseData().fail("页码或者页大小不能为空");
@@ -46,7 +47,7 @@ public class HomeWarnInfoController {
      * @param info
      * @return
      */
-    @RequestMapping(value = "/middle/home/warn", method = RequestMethod.GET)
+    @RequestMapping(value = "/middle", method = RequestMethod.GET)
     public ResponseData listWarnInfoForMid(HomeWarnInfo info, Integer pageNum, Integer pageSize) throws Exception {
         if (pageNum == null || pageSize == null) {
             return new ResponseData().fail("页码或者页大小不能为空");
@@ -67,13 +68,13 @@ public class HomeWarnInfoController {
      * @param info
      * @return
      */
-    @RequestMapping(value = "/basic/home/warn", method = RequestMethod.GET)
+    @RequestMapping(value = "/basic", method = RequestMethod.GET)
     public ResponseData listWarnInfoForBasic(HomeWarnInfo info, Integer pageNum, Integer pageSize) throws Exception {
         if (pageNum == null || pageSize == null) {
             return new ResponseData().fail("页码或者页大小不能为空");
         }
-        if (info.getOrgCode() == null || info.getOrgLevel() == null) {
-            return new ResponseData().fail("机构代码或者机构级别不能为空");
+        if (info.getOrgCode() == null) {
+            return new ResponseData().fail("机构代码不能为空");
         }
 
         PageHelper.startPage(pageNum, pageSize);

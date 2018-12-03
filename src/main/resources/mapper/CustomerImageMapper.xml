@@ -16,10 +16,11 @@
     <result column="delete_time" jdbcType="BIGINT" property="deleteTime" />
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+    <result column="credit_detail_id" jdbcType="BIGINT" property="creditDetailId" />
   </resultMap>
   <sql id="Base_Column_List">
     id, customer_name, id_number, grid_code, original_name, system_name, path, upload_account_id, 
-    type, delete_flag, delete_path, delete_time, created_at, updated_at
+    type, delete_flag, delete_path, delete_time, created_at, updated_at,credit_detail_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -30,6 +31,17 @@
   
   <select id="getImageListByIdNumberAndType" parameterType="model.CustomerImage"  resultMap="BaseResultMap">
   select * from customer_image where id_number=#{idNumber} and type   like   CONCAT(#{type},'%') and delete_flag !='1'
+  <if test="creditDetailId != null">
+   and credit_detail_id = #{creditDetailId}
+  </if>
+  </select>
+  
+  <select id="getListByCreditdetailId" parameterType="model.CustomerImage"  resultMap="BaseResultMap">
+  
+   select * from customer_image where credit_detail_id = #{creditDetailId} and delete_flag !=1 
+   <if test="type != null">
+     and    type = #{type}
+      </if>
   </select>
   
   
@@ -94,6 +106,9 @@
       <if test="updatedAt != null">
         updated_at,
       </if>
+      <if test="creditDetailId != null">
+        credit_detail_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -138,6 +153,9 @@
       <if test="updatedAt != null">
         #{updatedAt,jdbcType=BIGINT},
       </if>
+      <if test="creditDetailId != null">
+        #{creditDetailId,jdbcType=BIGINT},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="model.CustomerImage">
@@ -181,6 +199,9 @@
       </if>
       <if test="updatedAt != null">
         updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+      <if test="creditDetailId != null">
+        credit_detail_id = #{creditDetailId,jdbcType=BIGINT},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}

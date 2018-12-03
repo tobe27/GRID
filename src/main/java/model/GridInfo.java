@@ -2,9 +2,9 @@ package model;
 
 import java.io.Serializable;
 import java.util.List;
+import lombok.Data;
 
-import lombok.ToString;
-@ToString
+@Data
 public class GridInfo implements Serializable {
 	
     /**
@@ -19,6 +19,7 @@ public class GridInfo implements Serializable {
     private String gridName;
 
     private Long orgCode;
+    private String orgName; // 联查使用
 
     private Integer gridType;
 

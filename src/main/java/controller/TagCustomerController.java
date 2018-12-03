@@ -32,14 +32,16 @@ public class TagCustomerController {
 
     /**
      * 调用此接口为客户添加标签
-     * @param tagCustomer
+     * @param idNumber
+     * @param tagIds 标签ID，多个标签以，隔开
      * @return
      */
     @RequestMapping(value = "/customer/{idNumber}/tag", method = RequestMethod.POST)
-    public ResponseData insertTagForCustomer(TagCustomer tagCustomer) throws Exception {
-
-        tagCustomerService.insertSelective(tagCustomer);
-        return new ResponseData().success();
+    public ResponseData insertTagForCustomer(@PathVariable String idNumber, String tagIds) throws Exception {
+        if (tagCustomerService.insertSelective(idNumber, tagIds)) {
+            return new ResponseData().success();
+        }
+        return new ResponseData().fail("添加标签异常");
 
     }
 
@@ -79,7 +81,7 @@ public class TagCustomerController {
     @RequestMapping(value = "/customer/{idNumber}/tag/list", method = RequestMethod.GET)
     public ResponseData listTagsForCustomer(@PathVariable String idNumber) throws Exception {
 
-        Set<TagCustomer> list = tagCustomerService.listTagsByIdNumber(idNumber);
+        List<TagCustomer> list = tagCustomerService.listTagsByIdNumber(idNumber);
         return new ResponseData().success().data(list);
 
     }
@@ -105,7 +107,7 @@ public class TagCustomerController {
     @RequestMapping(value = "/customer/list/tag/{tagId}", method = RequestMethod.GET)
     public ResponseData listCustomersByTag(@PathVariable Long tagId, Integer pageNum, Integer pageSize) throws Exception {
         if (ValidUtil.isEmpty(pageNum) || ValidUtil.isEmpty(pageSize)) {
-            return new ResponseData().fail("页码与页行数不能为空");
+            return new ResponseData().fail("页码与页行数不能为空!");
         }
 
         PageHelper.startPage(pageNum, pageSize);

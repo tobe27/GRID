@@ -45,7 +45,7 @@
         <if test="performedName != null">
           and performed_name like CONCAT('%',#{performedName},'%')
         </if>
-        <if test="cardNumber != null">
+        <if test="cardNumber != null and cardNumber != ''">
           and card_number = #{cardNumber}
         </if>
         order by created_at DESC

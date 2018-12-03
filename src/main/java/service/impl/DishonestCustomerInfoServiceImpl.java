@@ -1,12 +1,17 @@
 package service.impl;
 
 import dao.DishonestCustomerInfoMapper;
+import dao.ResidentInfoMapper;
 import exception.MyException;
 import model.DishonestCustomerInfo;
+import model.ResidentInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import service.DishonestCustomerInfoService;
+import util.QueryDishonestUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +23,10 @@ import java.util.List;
 public class DishonestCustomerInfoServiceImpl implements DishonestCustomerInfoService {
     @Autowired
     DishonestCustomerInfoMapper dishonestCustomerInfoMapper;
+    @Autowired
+    ResidentInfoMapper residentInfoMapper;
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     /**
      * 删除失信人
      *
@@ -31,7 +39,8 @@ public class DishonestCustomerInfoServiceImpl implements DishonestCustomerInfoSe
         try {
             return dishonestCustomerInfoMapper.deleteByPrimaryKey(id) == 1;
         } catch (Exception e) {
-            throw new MyException("删除失信人出现异常");
+            logger.info("删除失信人异常："+e.getMessage());
+            throw new MyException("删除失信人出现异常!");
         }
     }
 
@@ -65,10 +74,11 @@ public class DishonestCustomerInfoServiceImpl implements DishonestCustomerInfoSe
             }
             return count == 1;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new MyException("添加失信人出现异常");
+            logger.info("新建失信人异常："+e.getMessage());
+            throw new MyException("新建失信人出现异常!");
         }
     }
+
 
     /**
      * 获取失信人
@@ -82,7 +92,8 @@ public class DishonestCustomerInfoServiceImpl implements DishonestCustomerInfoSe
         try {
             return dishonestCustomerInfoMapper.getByPrimaryKey(id);
         } catch (Exception e) {
-            throw new MyException("获取失信人出现异常");
+            logger.info("查询失信人异常："+e.getMessage());
+            throw new MyException("查询失信人出现异常!");
         }
     }
 
@@ -98,7 +109,8 @@ public class DishonestCustomerInfoServiceImpl implements DishonestCustomerInfoSe
         try {
             return dishonestCustomerInfoMapper.listByPerformedNameOrCardNumber(record);
         } catch (Exception e) {
-            throw new MyException("获取失信人名单列表出现异常");
+            logger.info("查询失信人异常："+e.getMessage());
+            throw new MyException("查询失信人名单列表出现异常!");
         }
     }
 
@@ -114,7 +126,8 @@ public class DishonestCustomerInfoServiceImpl implements DishonestCustomerInfoSe
         try {
             return dishonestCustomerInfoMapper.listByCardNumber(cardNumber);
         } catch (Exception e) {
-            throw new MyException("精确获取失信人名单出现异常");
+            logger.info("精确查询失信人异常："+e.getMessage());
+            throw new MyException("精确查询失信人名单出现异常!");
         }
     }
 
@@ -133,7 +146,8 @@ public class DishonestCustomerInfoServiceImpl implements DishonestCustomerInfoSe
         try {
             return dishonestCustomerInfoMapper.updateByPrimaryKeySelective(record) == 1;
         } catch (Exception e) {
-            throw new MyException("编辑失信人出现异常");
+            logger.info("编辑失信人异常："+e.getMessage());
+            throw new MyException("编辑失信人出现异常!");
         }
     }
 }

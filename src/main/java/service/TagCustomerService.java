@@ -27,17 +27,17 @@ public interface TagCustomerService {
 
     /**
      * 添加客户标签信息
-     * @param record
+     * @param
      * @return
      */
-    boolean insertSelective(TagCustomer record) throws Exception;
+    boolean insertSelective(String idNumber, String tagIds) throws Exception;
 
     /**
      * 获取客户的所有标签
      * @param idNumber
      * @return
      */
-    Set<TagCustomer> listTagsByIdNumber(String idNumber) throws Exception;
+    List<TagCustomer> listTagsByIdNumber(String idNumber) throws Exception;
 
     /**
      * 获取该标签所有客户数

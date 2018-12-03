@@ -30,6 +30,20 @@
   
   </select>
   
+  <select id="getGridMapByOrgCode" parameterType="java.util.Map"  resultMap="BaseResultMap">
+  select * from grid_map where delete_flag !=1 
+  <if test="gridCodes != null">
+    and grid_code  in 
+    <foreach item="item" index="index" collection="gridCodes" 
+                         open="(" separator="," close=")">
+                        #{item}
+                </foreach>
+  </if>
+  
+  </select>
+  
+  
+  
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -38,7 +52,7 @@
   </select>
   <update id="setDeleteFlag"  parameterType="java.util.Map">
   
-  update grid_map set delete_flag=1 where grid_code = #{gridCode}
+  update grid_map set delete_flag=1 where grid_code = #{gridCode} 
   </update>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from grid_map

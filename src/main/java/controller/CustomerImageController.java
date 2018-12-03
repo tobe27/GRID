@@ -1,6 +1,10 @@
 package controller;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -57,10 +61,16 @@ public class CustomerImageController {
      */
 	
 	@RequestMapping(value = "/image/list/{idNumber}",method = RequestMethod.GET)
-	 public ResponseData getImageBaseCodeList(@PathVariable String  idNumber,String type) throws Exception {
+	 public ResponseData getImageBaseCodeList(@PathVariable String  idNumber,String type,String creditDetailId) throws Exception {
 		CustomerImage customerImage=new CustomerImage();
 		customerImage.setIdNumber(idNumber);
 		customerImage.setType(type);
+		if("4.1".equals(type)||"4.2".equals(type)) {
+			if(creditDetailId==null||"".equals(creditDetailId)) {
+				 return new ResponseData().fail("查询参数缺失");
+			}
+			customerImage.setCreditDetailId(Long.parseLong(creditDetailId));
+		}
 			 return new ResponseData().success().data( customerImageService.getListByIdNumberAndType(customerImage));
 	}
 	

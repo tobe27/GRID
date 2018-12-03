@@ -19,5 +19,5 @@ public interface CustomerCreditApprovalMapper {
 
     int updateByPrimaryKey(CustomerCreditApproval record);
     int batchSave(@Param("list")List<CustomerCreditApproval> list);
-    List<CustomerCreditApproval> getListByIdNumber(CustomerCreditApproval record);
+    List<CustomerCreditApproval> getListcreditDetailId(CustomerCreditApproval record);
 }

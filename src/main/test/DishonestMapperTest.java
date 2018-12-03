@@ -17,27 +17,28 @@ public class DishonestMapperTest {
 
     @Test
     public void insertTest() throws Exception {
-        List<DishonestCustomerInfo> list = QueryDishonestUtil.listDishonest("牛高","41041119610****2058");
-        if (list == null) {
-            System.out.println("null");
-        } else {
-            long id = 11;
-            for (DishonestCustomerInfo info : list) {
-                //info.setId(id);
-                dishonestCustomerInfoService.insertSelective(info);
-                //dishonestCustomerInfoService.updateByPrimaryKeySelective(info);
-                id++;
-            }
-        }
+        List<DishonestCustomerInfo> list = QueryDishonestUtil.listDishonest("","410411196102222058");
+        System.out.println("====================================");
+        System.out.println(JSON.toJSONString(list,true));
+        //if (list == null) {
+        //    System.out.println("null");
+        //} else {
+        //    long id = 11;
+        //    for (DishonestCustomerInfo info : list) {
+        //        //info.setId(id);
+        //        dishonestCustomerInfoService.insertSelective(info);
+        //        //dishonestCustomerInfoService.updateByPrimaryKeySelective(info);
+        //        id++;
+        //    }
+        //}
     }
 
 
     @Test
     public void listTest() throws Exception {
         DishonestCustomerInfo info = new DishonestCustomerInfo();
-        info.setCardNumber("41041119610****2058");
+        info.setCardNumber("14270219610****3655");
         List<DishonestCustomerInfo> set = dishonestCustomerInfoService.listByPerformedNameOrCardNumber(info);
-        System.out.println(JSON.toJSONString(dishonestCustomerInfoService.getByPrimaryKey(1L),true));
         System.out.println(set+":"+set.size());
     }
 

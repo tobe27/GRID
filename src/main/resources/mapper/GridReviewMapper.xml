@@ -12,11 +12,27 @@
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    
   </resultMap>
   <sql id="Base_Column_List">
     id, grid_code, grid_name, grid_review_name, id_number, duties, description, address, 
-    created_at, updated_at
+    created_at, updated_at,type,status
   </sql>
+  <update id="updataByGridCode"  parameterType="model.GridReview">
+  update grid_review  
+  <set>
+  <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+  
+   status = 1 
+  </set>
+  where grid_code = #{gridCode}
+  </update>
+  
+  
   <delete id="deleteByGridCode" parameterType="java.util.Map">
   delete from grid_review where grid_code = #{gridCode}
   </delete>
@@ -67,6 +83,15 @@
       <if test="address != null">
         address,
       </if>
+      
+      <if test="type != null">
+        type,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      
+      
       <if test="createdAt != null">
         created_at,
       </if>
@@ -99,6 +124,17 @@
       <if test="address != null">
         #{address,jdbcType=VARCHAR},
       </if>
+      
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      
+      
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      
+      
       <if test="createdAt != null">
         #{createdAt,jdbcType=BIGINT},
       </if>
@@ -131,6 +167,14 @@
       <if test="address != null">
         address = #{address,jdbcType=VARCHAR},
       </if>
+      
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="ststus != null">
+        ststus = #{ststus,jdbcType=VARCHAR},
+      </if>
+      
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=BIGINT},
       </if>

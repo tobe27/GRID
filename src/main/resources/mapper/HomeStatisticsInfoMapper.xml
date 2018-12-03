@@ -15,9 +15,9 @@
     <select id="listInfo" parameterType="model.HomeStatisticsInfo" resultMap="BaseResultMap">
         select * from home_statistics_info
         where org_code = #{orgCode}
-        and org_level = #{orgLevel}
-        and time like  CONCAT(#{time},'%')
+        and amount_type = #{amountType}
         and time_type = #{timeType}
+        order by time
     </select>
 
   <insert id="insertSelective" parameterType="model.HomeStatisticsInfo">

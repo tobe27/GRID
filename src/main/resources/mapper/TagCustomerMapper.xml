@@ -35,20 +35,15 @@
 
 
   <sql id="Base_Column_List">
-    id, tag_id, tag_name, id_number, created_at, updated_at
+    id, tag_id, id_number, created_at, updated_at
   </sql>
 
+    <!--编辑-->
 <update id="updateByPrimaryKeySelective" parameterType="model.TagCustomer">
     update tag_customer
     <set>
       <if test="tagId != null">
         tag_id = #{tagId,jdbcType=BIGINT},
-      </if>
-      <if test="tagName != null">
-        tag_name = #{tagName,jdbcType=VARCHAR},
-      </if>
-      <if test="idNumber != null">
-        id_number = #{idNumber,jdbcType=VARCHAR},
       </if>
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=BIGINT},
@@ -59,17 +54,17 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-
+        <!--查询-->
     <select id="getListByTagIdAndIdNumber" parameterType="model.TagCustomer" resultMap="BaseResultMap">
       select * from tag_customer where tag_id =#{tagId}  and id_number= #{idNumber}
     </select>
 
     <!--获取客户的标签 - 通过身份证获取客户所有标签-->
   <select id="listTagsByIdNumber" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from tag_customer
-    where id_number = #{idNumber,jdbcType=VARCHAR}
+    select tc.*, ti.tag_name
+    from tag_customer tc
+    JOIN tag_info ti on tc.tag_id = ti.tag_id
+    where tc.id_number = #{idNumber,jdbcType=VARCHAR}
   </select>
 
     <!--获取人数 - 通过标签Id获取该标签下的所有人数-->
@@ -97,8 +92,7 @@
     <!--删除关联 - 通过标签删除标签关联信息-->
     <delete id="deleteTagByTagId" parameterType="java.lang.Long">
         delete from tag_customer
-        where
-        tag_id = #{tagId,jdbcType=BIGINT}
+        where tag_id = #{tagId,jdbcType=BIGINT}
     </delete>
 
 
@@ -118,9 +112,6 @@
       <if test="tagId != null">
         tag_id,
       </if>
-      <if test="tagName != null">
-        tag_name,
-      </if>
       <if test="idNumber != null">
         id_number,
       </if>
@@ -137,9 +128,6 @@
       </if>
       <if test="tagId != null">
         #{tagId,jdbcType=BIGINT},
-      </if>
-      <if test="tagName != null">
-        #{tagName,jdbcType=VARCHAR},
       </if>
       <if test="idNumber != null">
         #{idNumber,jdbcType=VARCHAR},

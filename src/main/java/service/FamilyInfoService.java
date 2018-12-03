@@ -28,7 +28,7 @@ public interface FamilyInfoService {
      * @return
      * @throws Exception
      */
-    FamilyInfo getByHouseholdId(Long householdId) throws Exception;
+    FamilyInfo getByHouseholdId(String householdId) throws Exception;
 
     /**
      * 编辑家庭信息

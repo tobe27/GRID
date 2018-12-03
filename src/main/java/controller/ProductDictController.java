@@ -15,7 +15,7 @@ import model.ResponseData;
 import service.ProductDictService;
 
 @RestController
-@RequestMapping
+@RequestMapping("super")
 public class ProductDictController {
 	@Autowired
 	private ProductDictService productDictService;

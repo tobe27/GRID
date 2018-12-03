@@ -2,6 +2,7 @@ package controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import concurrent.DishonestQueryThread;
 import model.DishonestCustomerInfo;
 import model.ResponseData;
 import org.slf4j.Logger;
@@ -12,10 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import service.DishonestCustomerInfoService;
-import util.QueryDishonestUtil;
+import service.ResidentInfoService;
 import util.ValidUtil;
 
 import java.util.List;
+import java.util.concurrent.*;
 
 /**
  * @author Created by L.C.Y on 2018-9-20
@@ -24,9 +26,13 @@ import java.util.List;
 @RequestMapping
 public class DishonestCustomerInfoController {
     @Autowired
-    DishonestCustomerInfoService infoService;
+    DishonestCustomerInfoService dishonestCustomerInfoService;
+    @Autowired
+    ResidentInfoService residentInfoService;
 
-    private Logger logger = LoggerFactory.getLogger(DishonestCustomerInfoController.class);
+    // 创建线程池，核心线程数是5
+    private static ThreadPoolExecutor executor =
+            new ThreadPoolExecutor(5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>(10));
 
     /**
      * 调用此接口获取失信人列表，通过证件可以精确查询
@@ -39,12 +45,12 @@ public class DishonestCustomerInfoController {
     @RequestMapping(value = "/customer/dishonesty/list",method = RequestMethod.GET)
     public ResponseData listInfo(DishonestCustomerInfo info, Integer pageNum, Integer pageSize) throws Exception {
         if (pageNum == null || pageSize == null){
-            return new ResponseData().fail("页码和页大小不能为空");
+            return new ResponseData().fail("页码和页大小不能为空!");
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<DishonestCustomerInfo> list = infoService.listByPerformedNameOrCardNumber(info);
+        List<DishonestCustomerInfo> list = dishonestCustomerInfoService.listByPerformedNameOrCardNumber(info);
         if (list == null || list.isEmpty()) {
-            return new ResponseData().blank("数据库中暂无失信人记录信息");
+            return new ResponseData().blank("数据库中暂无失信人记录信息!");
         }
         PageInfo<DishonestCustomerInfo> pageInfo = new PageInfo<>(list);
         return new ResponseData().success().result("count",pageInfo.getTotal()).data(pageInfo.getList());
@@ -58,33 +64,23 @@ public class DishonestCustomerInfoController {
      */
     @RequestMapping(value = "/customer/dishonesty/{id}", method = RequestMethod.GET)
     public ResponseData getInfo(@PathVariable Long id) throws Exception {
-        DishonestCustomerInfo info = infoService.getByPrimaryKey(id);
+        DishonestCustomerInfo info = dishonestCustomerInfoService.getByPrimaryKey(id);
         if (ValidUtil.isEmpty(info)) {
-            return new ResponseData().blank("没有该客户失信信息");
+            return new ResponseData().blank("没有该客户失信信息!");
         }
         return new ResponseData().success().data(info);
     }
 
     /**
-     * 调用此接口爬取官方失信人信息
-     * @param cardNumber
-     * @param performedName
+     * 调用此接口爬取户籍失信人信息并导入数据库
+     * 通过线程执行，异步
      * @return
      */
     @RequestMapping(value = "/customer/dishonesty", method = RequestMethod.POST)
-    public ResponseData queryInfo(String performedName, String cardNumber) throws Exception {
-        if (ValidUtil.isEmpty(performedName) || ValidUtil.isEmpty(cardNumber)) {
-            return new ResponseData().fail("被执行人姓名/名称不能为空");
-        }
-        List<DishonestCustomerInfo> list = QueryDishonestUtil.listDishonest(performedName, cardNumber);
-        if (list == null || list.isEmpty()) {
-            return new ResponseData().blank("未查询到该客户失信记录");
-        }
-        logger.info("接口爬取失信信息："+list);
-        for (DishonestCustomerInfo info : list) {
-            infoService.insertSelective(info);
-        }
-        return new ResponseData().success().data(list);
+    public ResponseData queryInfo() throws Exception {
+        // 开启线程执行导入
+        executor.execute(new DishonestQueryThread(residentInfoService, dishonestCustomerInfoService));
+        return new ResponseData().success();
     }
 
 }

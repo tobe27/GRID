@@ -3,9 +3,12 @@ package model;
 import java.io.Serializable;
 import java.util.List;
 
+import lombok.Data;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
-@ToString
+@Data
+@Accessors(chain = true)
 public class GridRole implements Serializable{
     /**
 	 * 
@@ -26,61 +29,7 @@ public class GridRole implements Serializable{
     
     private List<GridPermission> permissionList;
 
-    public Long getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName == null ? null : roleName.trim();
-    }
-
-    public String getRoleScope() {
-        return roleScope;
-    }
-
-    public void setRoleScope(String roleScope) {
-        this.roleScope = roleScope == null ? null : roleScope.trim();
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description == null ? null : description.trim();
-    }
-
-    public Long getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Long createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Long getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Long updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-	public List<GridPermission> getPermissionList() {
-		return permissionList;
-	}
-
-	public void setUserList(List<GridPermission> permissionList) {
-		this.permissionList = permissionList;
-	}
-
+    // 关联查询使用
+    private Long orgCode;
 	
 }

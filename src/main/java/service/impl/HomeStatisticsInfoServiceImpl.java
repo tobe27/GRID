@@ -26,11 +26,14 @@ public class HomeStatisticsInfoServiceImpl implements HomeStatisticsInfoService 
      */
     @Override
     public List<HomeStatisticsInfo> listInfo(HomeStatisticsInfo record) throws Exception {
-        if (record.getOrgCode() == null || record.getOrgLevel() == null) {
-            throw new MyException("机构代码和级别不能为空");
+        if (record.getOrgCode() == null) {
+            throw new MyException("机构代码不能为空");
         }
-        if (record.getTime() == null || record.getTime().isEmpty() || record.getTimeType() == null){
-            throw new MyException("时间及类型不能为空");
+        if (record.getTimeType() == null){
+            throw new MyException("时间类型不能为空");
+        }
+        if (record.getAmountType() == null){
+            throw new MyException("存贷类型不能为空");
         }
         try {
             return statisticsInfoMapper.listInfo(record);

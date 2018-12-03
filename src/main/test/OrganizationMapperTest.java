@@ -23,9 +23,7 @@ public class OrganizationMapperTest {
 
     @Test
     public void getTest() throws Exception {
-        System.out.println(organizationService.deleteByOrgCode(17000L));
-        System.out.println(organizationService.getOrganizationByOrgCode(17000L));
-        System.out.println(organizationService.getOrganizationsByPreOrgCode(17000L));
+        System.out.println(organizationService.listOrganization(new Organization()));
     }
 
 

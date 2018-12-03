@@ -13,9 +13,10 @@ public interface CustomerWhiteListService {
 
 	    boolean updateByPrimaryKeySelective(CustomerWhitelist record)throws Exception;
 	    
-	    List<CustomerWhitelist> getCustomerWhiteListByPage(Map<String,Object> map);
+	    List<Map<String,Object>> getCustomerWhiteListByPage(Map<String,Object> map);
 	    
-	    int insertByExcel(List<Map<String,Object>> list,String gridCode)throws Exception;
+	    Map<String,Object> insertByExcel(List<Map<String,Object>> list,String gridCode)throws Exception;
+	    boolean moveCustomerInfo(String idNumber,String type,String reason )throws Exception;
 
 	
 }

@@ -1,6 +1,7 @@
 package model;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -8,6 +9,7 @@ import java.io.Serializable;
  * @author Created by L.C.Y on 2018-9-20
  */
 @Data
+@Accessors(chain = true)
 public class ResidentInfo implements Serializable {
     private static final long serialVersionUID = -1748337587589363382L;
     private Long residentId;
@@ -28,7 +30,7 @@ public class ResidentInfo implements Serializable {
 
     private String relationship;
 
-    private Long householdId;
+    private String householdId;
 
     private String contact;
 
@@ -41,5 +43,15 @@ public class ResidentInfo implements Serializable {
     private Long createdAt;
 
     private Long updatedAt;
+
+    private Integer status;
+
+    private String gridCode;
+
+    // 关联使用
+    private String gridName;
+    private Long accountId;
+    private Long roleId;
+    private Long orgCode;
 
 }

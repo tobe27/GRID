@@ -1,7 +1,9 @@
 package dao;
 
 import java.util.List;
+import java.util.Map;
 
+import model.CustomerCreditDetail;
 import model.CustomerImage;
 
 public interface CustomerImageMapper {
@@ -17,4 +19,5 @@ public interface CustomerImageMapper {
 
     int updateByPrimaryKey(CustomerImage record);
     List<CustomerImage> getImageListByIdNumberAndType(CustomerImage record);
+    List<CustomerImage> getListByCreditdetailId(CustomerImage record);
 }

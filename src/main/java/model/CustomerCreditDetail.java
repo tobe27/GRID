@@ -1,13 +1,17 @@
 package model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
+import lombok.Data;
 import lombok.ToString;
-@ToString
-public class CustomerCreditDetail implements Serializable{
-    
-	private static final long serialVersionUID = 7619397825096921402L;
+import lombok.experimental.Accessors;
+@Accessors(chain = true)
+@Data
+public class CustomerCreditDetail implements Serializable {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6255350313687669703L;
 
 	private Long id;
 
@@ -17,145 +21,105 @@ public class CustomerCreditDetail implements Serializable{
 
     private String gridCode;
 
-    private Long phoneNumber;
-
     private String beginAt;
 
     private String endAt;
 
-    private BigDecimal interestRate;
-
-    private BigDecimal rental;
-
     private String comment;
-    private String approvalStatus;
-    private String postil;
-    private String attachFlag;
-    
-    
 
     private Long createdAt;
 
     private Long updatedAt;
 
-    public Long getId() {
-        return id;
-    }
+    private String approvalStatus;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private String postil;
 
-    public String getCustomerName() {
-        return customerName;
-    }
+    private String attachFlag;
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName == null ? null : customerName.trim();
-    }
+    private String customerId;
 
-    public String getIdNumber() {
-        return idNumber;
-    }
+    private String sex;
 
-    public void setIdNumber(String idNumber) {
-        this.idNumber = idNumber == null ? null : idNumber.trim();
-    }
+    private String spouseName;
 
-    public String getGridCode() {
-        return gridCode;
-    }
+    private String spouseIdNumber;
 
-    public void setGridCode(String gridCode) {
-        this.gridCode = gridCode == null ? null : gridCode.trim();
-    }
+    private String educationLevel;
 
-    public Long getPhoneNumber() {
-        return phoneNumber;
-    }
+    private String phoneNumber;
 
-    public void setPhoneNumber(Long phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
+    private String memberCount;
 
-    public String getBeginAt() {
-        return beginAt;
-    }
+    private String companyName;
 
-    public void setBeginAt(String beginAt) {
-        this.beginAt = beginAt == null ? null : beginAt.trim();
-    }
+    private String companyAddress;
 
-    public String getEndAt() {
-        return endAt;
-    }
+    private String nativeAddress;
 
-    public void setEndAt(String endAt) {
-        this.endAt = endAt == null ? null : endAt.trim();
-    }
+    private String residenceAddress;
 
-    public BigDecimal getInterestRate() {
-        return interestRate;
-    }
+    private String jnydName;
 
-    public void setInterestRate(BigDecimal interestRate) {
-        this.interestRate = interestRate;
-    }
+    private String jnydId;
 
-    public BigDecimal getRental() {
-        return rental;
-    }
+    private String rental;
 
-    public void setRental(BigDecimal rental) {
-        this.rental = rental;
-    }
+    private String deadline;
 
-    public String getComment() {
-        return comment;
-    }
+    private String rateType;
 
-    public void setComment(String comment) {
-        this.comment = comment == null ? null : comment.trim();
-    }
+    private String yearRate;
 
-    public Long getCreatedAt() {
-        return createdAt;
-    }
+    private String rateFloat;
 
-    public void setCreatedAt(Long createdAt) {
-        this.createdAt = createdAt;
-    }
+    private String rateUpdateDate;
 
-    public Long getUpdatedAt() {
-        return updatedAt;
-    }
+    private String disbursement;
 
-    public void setUpdatedAt(Long updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+    private String refundType;
 
-	public String getApprovalStatus() {
-		return approvalStatus;
-	}
+    private String creditUseType;
 
-	public void setApprovalStatus(String approvalStatus) {
-		this.approvalStatus = approvalStatus;
-	}
+    private String income;
 
-	public String getPostil() {
-		return postil;
-	}
+    private String familyIncome;
 
-	public void setPostil(String postil) {
-		this.postil = postil;
-	}
+    private String advisersFlag;
 
-	public String getAttachFlag() {
-		return attachFlag;
-	}
+    private String advisersIncome;
 
-	public void setAttachFlag(String attachFlag) {
-		this.attachFlag = attachFlag;
-	}
-    
+    private String advisersExpense;
+
+    private String advisersRental;
+
+    private String advisersName;
+
+    private String advisersComment;
+
+    private String trueCustomerInfo;
+
+    private String trueCustomerTalk;
+
+    private String staffName;
+
+    private String staffId;
+
+    private String talkDate;
+
+    private String gridName;
+
+    private String accountName;
+
+    private String accountId;
+
+    private String orgName;
+
+    private String orgCode;
+
+    private String status;
+
+    private String creditReport;
+
+   
 }

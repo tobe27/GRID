@@ -15,7 +15,7 @@ public class JWTTest {
         Map<String, Object> map = new HashMap<>();
         map.put("name", "name");
         String token = JwtUtil.createToken(map,1000);
-        System.out.println(token+":length:"+token.length());
+        System.out.println(token+":Length:"+token.length());
         System.out.println("************************");
         System.out.println("************************");
         System.out.println(JSON.toJSONString(JwtUtil.parseToken(token)));

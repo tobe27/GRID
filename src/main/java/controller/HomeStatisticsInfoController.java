@@ -12,6 +12,7 @@ import service.HomeStatisticsInfoService;
  * @author Created by L.C.Y on 2018-9-20
  */
 @RestController
+@RequestMapping("/home/statistics")
 public class HomeStatisticsInfoController {
     @Autowired
     HomeStatisticsInfoService infoService;
@@ -21,7 +22,7 @@ public class HomeStatisticsInfoController {
      * @param info
      * @return
      */
-    @RequestMapping(value = "/president/home/statistics",method = RequestMethod.GET)
+    @RequestMapping(value = "/president",method = RequestMethod.GET)
     public ResponseData listInfoForPresident(HomeStatisticsInfo info) throws Exception {
 
         return new ResponseData().success().data(infoService.listInfo(info));
@@ -33,7 +34,7 @@ public class HomeStatisticsInfoController {
      * @param info
      * @return
      */
-    @RequestMapping(value = "/middle/home/statistics",method = RequestMethod.GET)
+    @RequestMapping(value = "/middle",method = RequestMethod.GET)
     public ResponseData listInfoForMid(HomeStatisticsInfo info) throws Exception {
 
         return new ResponseData().success().data(infoService.listInfo(info));
@@ -45,7 +46,7 @@ public class HomeStatisticsInfoController {
      * @param info
      * @return
      */
-    @RequestMapping(value = "/basic/home/statistics",method = RequestMethod.GET)
+    @RequestMapping(value = "/basic",method = RequestMethod.GET)
     public ResponseData listInfoForBasic(HomeStatisticsInfo info) throws Exception {
 
         return new ResponseData().success().data(infoService.listInfo(info));

@@ -23,18 +23,25 @@
     and id != #{id,jdbcType=BIGINT}
   </if>
   </select>
-  <select id="getWhiteLists" parameterType="model.CustomerWhitelist" resultMap="BaseResultMap">
-  select * from customer_whitelist where 1=1 
+  <select id="getWhiteLists" parameterType="model.CustomerWhitelist" resultType="java.util.Map">
+  select w.id as id,w.customer_name as  customerName, w.id_number as idNumber ,w.phone_number as phoneNumber, w.grid_code as gridCode, w.comment as comment,w.created_at as createdAt,w.updated_at as updatedAt , w.adress as adress, g.grid_name as gridName 
+   from customer_whitelist w  left join grid_info g  on w.grid_code = g.grid_code  where 1=1 
+  
+   and w.grid_code in
+     <foreach item="item" index="index" collection="gridCodeList" 
+                         open="(" separator="," close=")">
+                        #{item}
+                </foreach>
   <if test="customerName != null">
-   and customer_name like  CONCAT('%',#{customerName},'%')
+   and w.customer_name like  CONCAT('%',#{customerName},'%')
   </if>
   <if test="idNumber != null">
-   and id_number like  CONCAT('%',#{idNumber},'%')
+   and w.id_number like  CONCAT('%',#{idNumber},'%')
   </if>
   <if test="gridCode != null">
-   and grid_code = #{gridCode}
+   and w.grid_code = #{gridCode}
   </if>
-   order by created_at desc
+   order by w.created_at desc
   </select>
   
   

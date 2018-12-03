@@ -3,10 +3,10 @@
 <mapper namespace="dao.FamilyInfoMapper">
   <resultMap id="BaseResultMap" type="model.FamilyInfo">
     <id column="family_id" jdbcType="BIGINT" property="familyId" />
-    <result column="household_id" jdbcType="BIGINT" property="householdId" />
+    <result column="household_id" jdbcType="VARCHAR" property="householdId" />
     <result column="population" jdbcType="INTEGER" property="population" />
     <result column="address" jdbcType="VARCHAR" property="address" />
-    <result column="postcode" jdbcType="INTEGER" property="postcode" />
+    <result column="postcode" jdbcType="VARCHAR" property="postcode" />
     <result column="local_credit" jdbcType="VARCHAR" property="localCredit" />
     <result column="is_harmony" jdbcType="VARCHAR" property="isHarmony" />
     <result column="social_evaluation" jdbcType="VARCHAR" property="socialEvaluation" />
@@ -14,23 +14,22 @@
     <result column="is_owe_tax" jdbcType="VARCHAR" property="isOweTax" />
     <result column="produce_capacity" jdbcType="VARCHAR" property="produceCapacity" />
     <result column="produce_scene" jdbcType="VARCHAR" property="produceScene" />
-    <result column="account_id" jdbcType="BIGINT" property="accountId" />
     <result column="insurance_type" jdbcType="VARCHAR" property="insuranceType" />
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+      <result column="real_name" jdbcType="VARCHAR" property="realName" />
   </resultMap>
 
   <sql id="Base_Column_List">
     family_id, household_id, population, address, postcode, local_credit, is_harmony, 
-    social_evaluation, is_self_entity, is_owe_tax, produce_capacity, produce_scene, account_id, 
+    social_evaluation, is_self_entity, is_owe_tax, produce_capacity, produce_scene,
     insurance_type, created_at, updated_at
   </sql>
 
-  <select id="getByHouseholdId" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from family_info
-    where household_id = #{householdId,jdbcType=BIGINT}
+  <select id="getByHouseholdId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select family.*
+    from family_info family
+    where family.household_id = #{householdId,jdbcType=BIGINT}
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
@@ -78,9 +77,6 @@
       <if test="produceScene != null">
         produce_scene,
       </if>
-      <if test="accountId != null">
-        account_id,
-      </if>
       <if test="insuranceType != null">
         insurance_type,
       </if>
@@ -96,7 +92,7 @@
         #{familyId,jdbcType=BIGINT},
       </if>
       <if test="householdId != null">
-        #{householdId,jdbcType=BIGINT},
+        #{householdId,jdbcType=VARCHAR},
       </if>
       <if test="population != null">
         #{population,jdbcType=INTEGER},
@@ -105,7 +101,7 @@
         #{address,jdbcType=VARCHAR},
       </if>
       <if test="postcode != null">
-        #{postcode,jdbcType=INTEGER},
+        #{postcode,jdbcType=VARCHAR},
       </if>
       <if test="localCredit != null">
         #{localCredit,jdbcType=VARCHAR},
@@ -128,9 +124,6 @@
       <if test="produceScene != null">
         #{produceScene,jdbcType=VARCHAR},
       </if>
-      <if test="accountId != null">
-        #{accountId,jdbcType=BIGINT},
-      </if>
       <if test="insuranceType != null">
         #{insuranceType,jdbcType=VARCHAR},
       </if>
@@ -147,7 +140,7 @@
     update family_info
     <set>
       <if test="householdId != null">
-        household_id = #{householdId,jdbcType=BIGINT},
+        household_id = #{householdId,jdbcType=VARCHAR},
       </if>
       <if test="population != null">
         population = #{population,jdbcType=INTEGER},
@@ -156,7 +149,7 @@
         address = #{address,jdbcType=VARCHAR},
       </if>
       <if test="postcode != null">
-        postcode = #{postcode,jdbcType=INTEGER},
+        postcode = #{postcode,jdbcType=VARCHAR},
       </if>
       <if test="localCredit != null">
         local_credit = #{localCredit,jdbcType=VARCHAR},
@@ -178,9 +171,6 @@
       </if>
       <if test="produceScene != null">
         produce_scene = #{produceScene,jdbcType=VARCHAR},
-      </if>
-      <if test="accountId != null">
-        account_id = #{accountId,jdbcType=BIGINT},
       </if>
       <if test="insuranceType != null">
         insurance_type = #{insuranceType,jdbcType=VARCHAR},

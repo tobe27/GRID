@@ -17,7 +17,7 @@ public interface CustomerWhitelistMapper {
     int updateByPrimaryKeySelective(CustomerWhitelist record);
 
     int updateByPrimaryKey(CustomerWhitelist record);
-List<CustomerWhitelist> getByIdOrIdnumber(CustomerWhitelist record);
+    List<CustomerWhitelist> getByIdOrIdnumber(CustomerWhitelist record);
     
-    List<CustomerWhitelist> getWhiteLists(Map<String,Object> map);
+    List<Map<String,Object>> getWhiteLists(Map<String,Object> map);
 }

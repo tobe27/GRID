@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.GridSenatorMapper">
+  <resultMap id="BaseResultMap" type="model.GridSenator">
+    <id column="senator_id" jdbcType="BIGINT" property="senatorId" />
+    <result column="senator_name" jdbcType="VARCHAR" property="senatorName" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="duty" jdbcType="VARCHAR" property="duty" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="is_formal" jdbcType="VARCHAR" property="isFormal" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="created_at" jdbcType="BIGINT" property="createdAt" />
+    <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+      <result column="grid_code" jdbcType="VARCHAR" property="gridCode" />
+  </resultMap>
+
+    <!--网格查询列表-->
+    <select id="listByGridCode" parameterType="model.GridSenator" resultMap="BaseResultMap">
+       SELECT senator.*
+       FROM grid_senator senator
+       JOIN grid_senator_relation relation on relation.senator_id = senator.senator_id
+       JOIN grid_info info on relation.grid_code = info.grid_code
+       WHERE info.grid_code = #{gridCode}
+       order by senator.created_at DESC
+    </select>
+
+
+    <!--列表-->
+  <select id="listByType" parameterType="model.GridSenator" resultMap="BaseResultMap">
+    select *
+    from grid_senator
+    where 1=1
+    <if test="type != null">
+        and type = #{type}
+    </if>
+      ORDER by created_at DESC
+  </select>
+
+    <!--详情-->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select *
+    from grid_senator
+    where senator_id = #{senatorId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from grid_senator
+    where senator_id = #{senatorId,jdbcType=BIGINT}
+  </delete>
+
+
+  <insert id="insertSelective" keyProperty="senatorId" useGeneratedKeys="true" parameterType="model.GridSenator">
+    insert into grid_senator
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="senatorId != null">
+        senator_id,
+      </if>
+      <if test="senatorName != null">
+        senator_name,
+      </if>
+      <if test="idNumber != null">
+        id_number,
+      </if>
+      <if test="phoneNumber != null">
+        phone_number,
+      </if>
+      <if test="duty != null">
+        duty,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="isFormal != null">
+        is_formal,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="senatorId != null">
+        #{senatorId,jdbcType=BIGINT},
+      </if>
+      <if test="senatorName != null">
+        #{senatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="duty != null">
+        #{duty,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isFormal != null">
+        #{isFormal,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="model.GridSenator">
+    update grid_senator
+    <set>
+      <if test="senatorName != null">
+        senator_name = #{senatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        id_number = #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="duty != null">
+        duty = #{duty,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isFormal != null">
+        is_formal = #{isFormal,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=BIGINT},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where senator_id = #{senatorId,jdbcType=BIGINT}
+  </update>
+</mapper>

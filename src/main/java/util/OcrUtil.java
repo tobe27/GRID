@@ -67,6 +67,7 @@ public class OcrUtil {
             JSONObject jsonObject = JSONObject.parseObject(result.toString());
             return jsonObject.getString("access_token");
         } catch (Exception e) {
+            logger.info("OCR鉴权异常"+e.getMessage());
             return null;
         }
 
@@ -119,6 +120,7 @@ public class OcrUtil {
             bufferedReader.close();
             return result.toString();
         } catch (Exception e) {
+            logger.info("OCR解析异常"+e.getMessage());
             throw new MyException("身份证OCR识别异常");
         }
     }

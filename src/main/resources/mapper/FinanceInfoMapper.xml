@@ -28,13 +28,17 @@
     <result column="other" jdbcType="VARCHAR" property="other" />
     <result column="created_at" jdbcType="BIGINT" property="createdAt" />
     <result column="updated_at" jdbcType="BIGINT" property="updatedAt" />
+      <result column="business_license" jdbcType="VARCHAR" property="businessLicense" />
+      <result column="is_farm_income" jdbcType="VARCHAR" property="isFarmIncome" />
+      <result column="is_business_income" jdbcType="VARCHAR" property="isBusinessIncome" />
   </resultMap>
 
   <sql id="Base_Column_List">
     finance_id, id_number, industry, career, company_name, company_address, work_year, 
     house_number, house_price, car_number, car_price, year_salary, shop_number, shop_price, 
     equipment_number, equipment_price, year_surplus, land_acreage, greenhouse_number, 
-    breed_type, breed_number, company_earnings, other, created_at, updated_at
+    breed_type, breed_number, company_earnings, other, created_at, updated_at, business_license,
+    is_farm_income, is_business_income
   </sql>
 
   <select id="getFinanceInfoByIdNumber" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -127,6 +131,15 @@
       <if test="updatedAt != null">
         updated_at,
       </if>
+        <if test="businessLicense != null">
+            business_license,
+        </if>
+        <if test="isFarmIncome != null">
+            is_farm_income,
+        </if>
+        <if test="isBusinessIncome != null">
+            is_business_income,
+        </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="financeId != null">
@@ -204,6 +217,15 @@
       <if test="updatedAt != null">
         #{updatedAt,jdbcType=BIGINT},
       </if>
+        <if test="businessLicense != null">
+            #{businessLicense,jdbcType=VARCHAR},
+        </if>
+        <if test="isFarmIncome != null">
+            #{isFarmIncome},
+        </if>
+        <if test="isBusinessIncome != null">
+            #{isBusinessIncome},
+        </if>
     </trim>
   </insert>
 
@@ -279,6 +301,15 @@
       <if test="updatedAt != null">
         updated_at = #{updatedAt,jdbcType=BIGINT},
       </if>
+        <if test="businessLicense != null">
+            business_license = #{businessLicense,jdbcType=VARCHAR},
+        </if>
+        <if test="isFarmIncome != null">
+            is_farm_income = #{isFarmIncome},
+        </if>
+        <if test="isBusinessIncome != null">
+            is_business_income = #{isBusinessIncome},
+        </if>
     </set>
     where id_number = #{idNumber,jdbcType=VARCHAR}
   </update>

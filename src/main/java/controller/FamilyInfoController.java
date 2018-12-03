@@ -51,7 +51,7 @@ public class FamilyInfoController {
      * @throws Exception
      */
     @RequestMapping(value = "/customer/family/{householdId}", method = RequestMethod.GET)
-    public ResponseData update(@PathVariable Long householdId) throws Exception {
+    public ResponseData update(@PathVariable String householdId) throws Exception {
         FamilyInfo info = familyInfoService.getByHouseholdId(householdId);
         if (info == null) {
             return new ResponseData().blank();
